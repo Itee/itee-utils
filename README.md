@@ -35,6 +35,10 @@ then you will be able to use like this:
 
 ## Release notes
 
+#### v1.0.1
+
+* Fix esm build name to be conforme with package declaration
+
 #### v1.0.0
 
 * Add globals utils functions
