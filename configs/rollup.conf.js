@@ -38,7 +38,7 @@ const strip       = require( 'rollup-plugin-strip' )
  */
 function CreateRollupConfiguration ( fileName, inputPath, outputPath, format, onProduction, wantSourceMap ) {
 
-    const _format        = format || 'umd'
+    const _format = (format === 'es') ? 'esm' : format
     const _onProduction  = onProduction || false
     const _wantSourceMap = wantSourceMap || false
 
