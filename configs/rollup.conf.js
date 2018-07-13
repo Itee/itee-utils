@@ -23,6 +23,7 @@ const nodeResolve = require( 'rollup-plugin-node-resolve' )
 const commonJs    = require( 'rollup-plugin-commonjs' )
 const uglify      = require( 'rollup-plugin-uglify-es' )
 const strip       = require( 'rollup-plugin-strip' )
+const builtins    = require( 'rollup-plugin-node-builtins' )
 
 /**
  * Will create an appropriate configuration object for rollup, related to the given arguments.
@@ -57,6 +58,7 @@ function CreateRollupConfiguration ( fileName, inputPath, outputPath, format, on
                     include: 'node_modules/**'
                 } ),
                 nodeResolve(),
+                builtins(),
                 onProduction && strip(),
                 onProduction && uglify()
             ],
