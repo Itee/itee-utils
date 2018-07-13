@@ -92,6 +92,16 @@ function isUndefined ( data ) {
 }
 
 /**
+ * Check if given data is null or undefined
+ *
+ * @param data {any} The data to check against the existence
+ * @returns {boolean} true if data is null or undefined, false otherwise.
+ */
+function isNullOrUndefined ( data ) {
+    return (isNull( data ) || isUndefined( data ))
+}
+
+/**
  * Check emptiness of given data
  *
  * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
@@ -299,11 +309,11 @@ function extend ( target, source ) {
 
     let output = undefined;
 
-    if ( isObject( target ) && (isNull( source ) || isUndefined( source )) ) {
+    if ( isObject( target ) && isNullOrUndefined( source ) ) {
 
         output = Object.assign( {}, target );
 
-    } else if ( (isNull( target ) || isUndefined( target )) && isObject( source ) ) {
+    } else if ( isNullOrUndefined( target ) && isObject( source ) ) {
 
         output = Object.assign( {}, source );
 
@@ -937,6 +947,122 @@ function removeDiacritics ( string ) {
  *
  */
 
+var fs = {};
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * Just an override of 'fs.existsSync' with more explicit name
+ *
+ * @param filePath the path to check
+ * @private
+ */
+function fileExistForPath ( filePath ) {
+
+    return fs.existsSync( filePath )
+
+}
+
+/**
+ * Check the file size against a limit ( 0 as default ).
+ * @param filePath
+ * @param limit
+ * @return {boolean} - True if below the limit or zero, false otherwise
+ * @private
+ */
+function fileIsEmpty ( filePath, limit ) {
+
+    const _limit   = limit || 0;
+    const fileSize = fs.statSync( filePath ).size;
+
+    return ( fileSize < _limit )
+
+}
+
+/**
+ * Allow to search all files under filePaths in a recursive way
+ *
+ * @param {Array.<string>|string} filePaths - The files paths where search files
+ * @returns {Array} - The paths of finded files
+ * @private
+ */
+function getFilesPathsUnder ( filePaths ) {
+
+    let files = [];
+
+    if ( Array.isArray( filePaths ) ) {
+
+        let filePath = undefined;
+        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+
+            filePath = filePaths[ pathIndex ];
+            checkStateOf( filePath );
+
+        }
+
+    } else {
+
+        checkStateOf( filePaths );
+
+    }
+
+    return files
+
+    function getFilesPathsUnderFolder ( folder ) {
+
+        fs.readdirSync( folder ).forEach( ( name ) => {
+
+            const filePath = path.resolve( folder, name );
+            checkStateOf( filePath );
+
+        } );
+
+    }
+
+    function checkStateOf ( filePath ) {
+
+        if ( !_fileExistForPath( filePath ) ) {
+            console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
+            return
+        }
+
+        const stats = fs.statSync( filePath );
+        if ( stats.isFile() ) {
+
+            files.push( filePath );
+
+        } else if ( stats.isDirectory() ) {
+
+            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) );
+
+        } else {
+
+            console.error( "Invalid stat object !" );
+
+        }
+
+    }
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ *
+ * @module sources/cores/cores
+ * @description This is the cores main export entry point.
+ * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
+ *
+ */
+
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [MIT]{@link https://opensource.org/licenses/MIT}
@@ -1365,6 +1491,9 @@ exports.createInterval = createInterval;
 exports.classNameify = classNameify;
 exports.diacriticsMap = diacriticsMap;
 exports.removeDiacritics = removeDiacritics;
+exports.fileExistForPath = fileExistForPath;
+exports.fileIsEmpty = fileIsEmpty;
+exports.getFilesPathsUnder = getFilesPathsUnder;
 exports.PI = PI;
 exports.PI_2 = PI_2;
 exports.PI_4 = PI_4;
