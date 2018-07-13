@@ -8,11 +8,4 @@
  *
  */
 
-export * from './arrays'
-export * from './booleans'
-export * from './functions'
-export * from './numbers'
-export * from './objects'
-export * from './strings'
-export * from './symbols'
-export * from './voids'
+export * from './files'
