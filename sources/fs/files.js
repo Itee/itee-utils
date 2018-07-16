@@ -9,6 +9,7 @@
  */
 
 import fs from 'fs'
+import path from 'path'
 
 /**
  * Just an override of 'fs.existsSync' with more explicit name
@@ -81,7 +82,7 @@ function getFilesPathsUnder ( filePaths ) {
 
     function checkStateOf ( filePath ) {
 
-        if ( !_fileExistForPath( filePath ) ) {
+        if ( !fileExistForPath( filePath ) ) {
             console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' )
             return
         }
