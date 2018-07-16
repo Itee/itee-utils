@@ -82,7 +82,7 @@ function getFilesPathsUnder ( filePaths ) {
 
     function checkStateOf ( filePath ) {
 
-        if ( !fileExistForPath( filePath ) ) {
+        if ( !fs.existsSync( filePath ) ) {
             console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' )
             return
         }
