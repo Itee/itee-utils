@@ -1,4 +1,6 @@
-define(['exports'], function (exports) { 'use strict';
+define(['exports', 'fs'], function (exports, fs) { 'use strict';
+
+  fs = fs && fs.hasOwnProperty('default') ? fs['default'] : fs;
 
   /**
    * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -945,8 +947,6 @@ define(['exports'], function (exports) { 'use strict';
    *
    */
 
-  var fs = {};
-
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1260,7 +1260,7 @@ define(['exports'], function (exports) { 'use strict';
 
       function checkStateOf ( filePath ) {
 
-          if ( !fileExistForPath( filePath ) ) {
+          if ( !fs.existsSync( filePath ) ) {
               console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
               return
           }
