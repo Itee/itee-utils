@@ -9,6 +9,7 @@
  */
 
 import fs from 'fs'
+import path from 'path'
 
 /**
  * Just an override of 'fs.existsSync' with more explicit name
