@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [MIT]{@link https://opensource.org/licenses/MIT}
@@ -943,8 +945,6 @@ function removeDiacritics ( string ) {
  *
  */
 
-var fs = {};
-
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1258,7 +1258,7 @@ function getFilesPathsUnder ( filePaths ) {
 
     function checkStateOf ( filePath ) {
 
-        if ( !fileExistForPath( filePath ) ) {
+        if ( !fs.existsSync( filePath ) ) {
             console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
             return
         }

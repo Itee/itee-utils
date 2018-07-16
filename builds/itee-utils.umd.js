@@ -1,8 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.Itee = global.Itee || {}, global.Itee.Utils = {})));
-}(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('fs')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'fs'], factory) :
+  (factory((global.Itee = global.Itee || {}, global.Itee.Utils = {}),null));
+}(this, (function (exports,fs) { 'use strict';
+
+  fs = fs && fs.hasOwnProperty('default') ? fs['default'] : fs;
 
   /**
    * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -949,8 +951,6 @@
    *
    */
 
-  var fs = {};
-
   // Copyright Joyent, Inc. and other Node contributors.
   //
   // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1264,7 +1264,7 @@
 
       function checkStateOf ( filePath ) {
 
-          if ( !fileExistForPath( filePath ) ) {
+          if ( !fs.existsSync( filePath ) ) {
               console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
               return
           }
