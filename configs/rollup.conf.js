@@ -47,64 +47,129 @@ function CreateRollupConfiguration ( fileName, inputPath, outputPath, format, on
     const inputFilePath  = path.join( inputPath, fileName + '.js' )
     const outputFilePath = path.join( outputPath, fileName + '.' + _format + fileExtension )
 
-    return {
-        inputOptions:  {
+    let rollupConfig = undefined
+    if ( _format === 'es' ) {
 
-            // core options
-            input:    inputFilePath,
-            external: [
-                'fs',
-                'path'
-            ],
-            plugins:  [
-                commonJs( {
-                    include: 'node_modules/**'
-                } ),
-                nodeResolve(),
-                builtins(),
-                onProduction && strip(),
-                onProduction && uglify()
-            ],
+        rollupConfig = {
+            inputOptions:  {
 
-            // advanced options
-            onwarn: function onWarn ( { loc, frame, message } ) {
-                if ( loc ) {
-                    process.stderr.write( `/!\\ WARNING: ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
-                } else {
-                    process.stderr.write( `/!\\ WARNING: ${message}\n` )
-                }
+                // core options
+                input:    inputFilePath,
+                external: [],
+                plugins:  [
+                    commonJs( {
+                        include: 'node_modules/**'
+                    } ),
+                    nodeResolve(),
+                    builtins(),
+                    onProduction && strip(),
+                    onProduction && uglify()
+                ],
+
+                // advanced options
+                onwarn: function onWarn ( { loc, frame, message } ) {
+                    if ( loc ) {
+                        process.stderr.write( `/!\\ WARNING: ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
+                    } else {
+                        process.stderr.write( `/!\\ WARNING: ${message}\n` )
+                    }
+                },
+                cache:  undefined,
+
+                // danger zone
+                acorn:         undefined,
+                context:       undefined,
+                moduleContext: {}
             },
-            cache:  undefined,
+            outputOptions: {
+                // core options
+                file:    outputFilePath,
+                format:  format,
+                name:    'Itee.Utils',
+                globals: {},
 
-            // danger zone
-            acorn:         undefined,
-            context:       undefined,
-            moduleContext: {}
-        },
-        outputOptions: {
-            // core options
-            file:    outputFilePath,
-            format:  format,
-            name:    'Itee.Utils',
-            globals: {},
+                // advanced options
+                paths:     {},
+                banner:    '',
+                footer:    '',
+                intro:     '',
+                outro:     '',
+                sourcemap: _wantSourceMap,
+                interop:   true,
 
-            // advanced options
-            paths:     {},
-            banner:    '',
-            footer:    '',
-            intro:     '',
-            outro:     '',
-            sourcemap: _wantSourceMap,
-            interop:   true,
+                // danger zone
+                exports: 'auto',
+                amd:     {},
+                indent:  '  ',
+                strict:  true
+            }
 
-            // danger zone
-            exports: 'auto',
-            amd:     {},
-            indent:  '  ',
-            strict:  true
+        }
+
+    } else {
+
+        rollupConfig = {
+            inputOptions:  {
+
+                // core options
+                input:    inputFilePath,
+                external: [
+                    'fs',
+                    'path'
+                ],
+                plugins:  [
+                    commonJs( {
+                        include: 'node_modules/**'
+                    } ),
+                    nodeResolve(),
+                    builtins(),
+                    onProduction && strip(),
+                    onProduction && uglify()
+                ],
+
+                // advanced options
+                onwarn: function onWarn ( { loc, frame, message } ) {
+                    if ( loc ) {
+                        process.stderr.write( `/!\\ WARNING: ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
+                    } else {
+                        process.stderr.write( `/!\\ WARNING: ${message}\n` )
+                    }
+                },
+                cache:  undefined,
+
+                // danger zone
+                acorn:         undefined,
+                context:       undefined,
+                moduleContext: {}
+            },
+            outputOptions: {
+                // core options
+                file:    outputFilePath,
+                format:  format,
+                name:    'Itee.Utils',
+                globals: {},
+
+                // advanced options
+                paths:     {},
+                banner:    '',
+                footer:    '',
+                intro:     '',
+                outro:     '',
+                sourcemap: _wantSourceMap,
+                interop:   true,
+
+                // danger zone
+                exports: 'auto',
+                amd:     {},
+                indent:  '  ',
+                strict:  true
+            }
+
         }
 
     }
+
+    return rollupConfig
 
 }
 
