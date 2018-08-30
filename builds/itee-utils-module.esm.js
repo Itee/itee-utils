@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [MIT]{@link https://opensource.org/licenses/MIT}
@@ -451,7 +448,7 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
  * @param path
  * @param interval
  */
-function createInterval ( particles, path$$1, interval ) {
+function createInterval ( particles, path, interval ) {
 
     var globalOffset = 0;
 
@@ -470,7 +467,7 @@ function createInterval ( particles, path$$1, interval ) {
             globalOffset += moveOffset;
         }
 
-        var pathLength       = path$$1.getLength();
+        var pathLength       = path.getLength();
         var localOffset      = globalOffset;
         var normalizedOffset = undefined;
         var particle         = undefined;
@@ -486,7 +483,7 @@ function createInterval ( particles, path$$1, interval ) {
                 normalizedOffset = 0;
             }
 
-            newPosition = path$$1.getPointAt( normalizedOffset );
+            newPosition = path.getPointAt( normalizedOffset );
             newPosition.y += 0.1;
 
             particle.position.copy( newPosition );
@@ -948,120 +945,6 @@ function removeDiacritics ( string ) {
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @file Todo
- *
- * @example Todo
- *
- */
-
-/**
- * Just an override of 'fs.existsSync' with more explicit name
- *
- * @param filePath the path to check
- * @private
- */
-function fileExistForPath ( filePath ) {
-
-    return fs.existsSync( filePath )
-
-}
-
-/**
- * Check the file size against a limit ( 0 as default ).
- * @param filePath
- * @param limit
- * @return {boolean} - True if below the limit or zero, false otherwise
- * @private
- */
-function fileIsEmpty ( filePath, limit ) {
-
-    const _limit   = limit || 0;
-    const fileSize = fs.statSync( filePath ).size;
-
-    return ( fileSize < _limit )
-
-}
-
-/**
- * Allow to search all files under filePaths in a recursive way
- *
- * @param {Array.<string>|string} filePaths - The files paths where search files
- * @returns {Array} - The paths of finded files
- * @private
- */
-function getFilesPathsUnder ( filePaths ) {
-
-    let files = [];
-
-    if ( Array.isArray( filePaths ) ) {
-
-        let filePath = undefined;
-        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
-
-            filePath = filePaths[ pathIndex ];
-            checkStateOf( filePath );
-
-        }
-
-    } else {
-
-        checkStateOf( filePaths );
-
-    }
-
-    return files
-
-    function getFilesPathsUnderFolder ( folder ) {
-
-        fs.readdirSync( folder ).forEach( ( name ) => {
-
-            const filePath = path.resolve( folder, name );
-            checkStateOf( filePath );
-
-        } );
-
-    }
-
-    function checkStateOf ( filePath ) {
-
-        if ( !fs.existsSync( filePath ) ) {
-            console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
-            return
-        }
-
-        const stats = fs.statSync( filePath );
-        if ( stats.isFile() ) {
-
-            files.push( filePath );
-
-        } else if ( stats.isDirectory() ) {
-
-            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) );
-
-        } else {
-
-            console.error( "Invalid stat object !" );
-
-        }
-
-    }
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/cores/cores
- * @description This is the cores main export entry point.
- * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
- *
- */
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [MIT]{@link https://opensource.org/licenses/MIT}
  *
  * @module sources/geomathics/trigonometries
@@ -1478,4 +1361,5 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
  * @description The main entry point for Itee-Utils, it contains all exports of the library
  */
 
-export { getRandomArbitrary, getRandomInt, uniq, extend, serializeObject, extendObject, createInterval, classNameify, diacriticsMap, removeDiacritics, fileExistForPath, fileIsEmpty, getFilesPathsUnder, PI, PI_2, PI_4, DEG_TO_RAD, RAD_TO_DEG, degreesToRadians, degreesFromRadians, radiansToDegrees, radiansFromDegrees, getYaw, getPitch, convertWebGLRotationToTopogicalYawPitch, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, celsiusToKelvin, celsiusToFahrenheit, fahrenheitToCelsius, fahrenheitToKelvin, kelvinToCelsius, kelvinToFahrenheit };
+export { getRandomArbitrary, getRandomInt, uniq, extend, serializeObject, extendObject, createInterval, classNameify, diacriticsMap, removeDiacritics, PI, PI_2, PI_4, DEG_TO_RAD, RAD_TO_DEG, degreesToRadians, degreesFromRadians, radiansToDegrees, radiansFromDegrees, getYaw, getPitch, convertWebGLRotationToTopogicalYawPitch, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, celsiusToKelvin, celsiusToFahrenheit, fahrenheitToCelsius, fahrenheitToKelvin, kelvinToCelsius, kelvinToFahrenheit };
+//# sourceMappingURL=itee-utils-module.esm.js.map
