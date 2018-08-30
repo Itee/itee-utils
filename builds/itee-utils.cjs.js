@@ -1518,3 +1518,4 @@ exports.fahrenheitToCelsius = fahrenheitToCelsius;
 exports.fahrenheitToKelvin = fahrenheitToKelvin;
 exports.kelvinToCelsius = kelvinToCelsius;
 exports.kelvinToFahrenheit = kelvinToFahrenheit;
+//# sourceMappingURL=itee-utils.cjs.js.map
