@@ -196,7 +196,7 @@ gulp.task( 'build', ( done ) => {
             outputPath:   path.join( __dirname, 'builds' ),
             environments: [ 'development', 'production' ],
             formats:      [ 'amd', 'cjs', 'es', 'iife', 'umd' ],
-            sourceMap:    false
+            sourceMap:    true
         }
 
         const argv = processArgv.slice( 3 ) // Ignore nodejs, script paths and gulp params
@@ -251,20 +251,20 @@ gulp.task( 'build', ( done ) => {
     function createBuildsConfigs ( options ) {
         'use strict'
 
-        let configs = []
-
-        for ( let formatIndex = 0, numberOfFormats = options.formats.length ; formatIndex < numberOfFormats ; ++formatIndex ) {
-            const format = options.formats[ formatIndex ]
-
-            for ( let envIndex = 0, numberOfEnvs = options.environments.length ; envIndex < numberOfEnvs ; ++envIndex ) {
-                const environment  = options.environments[ envIndex ]
-                const onProduction = (environment === 'production')
-
-                const config = require( './configs/rollup.conf' )( options.fileName, options.inputPath, options.outputPath, format, onProduction, options.sourceMap )
-
-                configs.push( config )
-            }
+        let defaultOptions = {
+            fileName:     'itee-utils',
+            inputPath:    path.join( __dirname, 'sources' ),
+            outputPath:   path.join( __dirname, 'builds' ),
+            environments: [ 'development', 'production' ],
+            formats:      [ 'amd', 'cjs', 'es', 'iife', 'umd' ],
+            sourceMap:    true
         }
+
+        let configs        = []
+        configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', true, options.sourceMap ) )
+        configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', false, options.sourceMap ) )
+        configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', true, options.sourceMap ) )
+        configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', false, options.sourceMap ) )
 
         return configs
 
