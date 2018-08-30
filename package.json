@@ -10,7 +10,7 @@
     "library"
   ],
   "main": "builds/itee-utils.cjs.js",
-  "module": "builds/itee-utils.esm.js",
+  "module": "builds/itee-utils-module.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Itee/itee-utils.git"
