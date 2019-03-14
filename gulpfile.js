@@ -112,11 +112,11 @@ gulp.task( 'lint', () => {
         'tests/**/*.js'
     ]
 
-    return gulp.src( filesToLint )
+    return gulp.src( filesToLint, { base: './' } )
                .pipe( eslint( {
                    allowInlineConfig: true,
                    globals:           [],
-                   fix:               false,
+                   fix:               true,
                    quiet:             false,
                    envs:              [],
                    configFile:        './configs/eslint.conf.js',
@@ -126,6 +126,7 @@ gulp.task( 'lint', () => {
                    useEslintrc:       false
                } ) )
                .pipe( eslint.format( 'stylish' ) )
+               .pipe( gulp.dest( '.' ) )
                .pipe( eslint.failAfterError() )
 
 } )
