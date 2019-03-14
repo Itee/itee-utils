@@ -348,15 +348,6 @@ gulp.task( 'build', ( done ) => {
     function createBuildsConfigs ( options ) {
         'use strict'
 
-        let defaultOptions = {
-            fileName:     'itee-utils',
-            inputPath:    path.join( __dirname, 'sources' ),
-            outputPath:   path.join( __dirname, 'builds' ),
-            environments: [ 'development', 'production' ],
-            formats:      [ 'amd', 'cjs', 'es', 'iife', 'umd' ],
-            sourceMap:    true
-        }
-
         let configs = []
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', true, options.sourceMap ) )
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', false, options.sourceMap ) )
