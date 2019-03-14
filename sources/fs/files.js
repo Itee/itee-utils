@@ -11,34 +11,69 @@
 import fs from 'fs'
 import path from 'path'
 
+//Todo: Move this stuff in IteeValidator !
 /**
  * Just an override of 'fs.existsSync' with more explicit name
  *
  * @param filePath the path to check
  * @private
  */
-function fileExistForPath ( filePath ) {
+function isValidPath ( path ) {
+    return fs.existsSync( path )
+}
 
-    return fs.existsSync( filePath )
+function isInvalidPath ( path ) {
+    return !isValidPath( path )
+}
 
+function isFile ( path ) {
+    return fs.statSync( path ).isFile()
+}
+
+function isNotFile ( path ) {
+    return !isFile( path )
+}
+
+function isDirectory ( path ) {
+    return fs.statSync( path ).isDirectory()
+}
+
+function isNotDirectory ( path ) {
+    return !isDirectory( path )
+}
+
+function isValidFilePath ( path ) {
+    return ( isValidPath( path ) && isFile( path ) )
+}
+
+function isInvalidFilePath ( path ) {
+    return !isValidFilePath( path )
+}
+
+function isValidDirectoryPath ( path ) {
+    return ( isValidPath( path ) && isDirectory( path ) )
+}
+
+function isInvalidDirectoryPath ( path ) {
+    return !isValidDirectoryPath( path )
 }
 
 /**
  * Check the file size against a limit ( 0 as default ).
  * @param filePath
- * @param limit
+ * @param threshold
  * @return {boolean} - True if below the limit or zero, false otherwise
  * @private
  */
-function fileIsEmpty ( filePath, limit ) {
-    'use strict'
-
-    const _limit   = limit || 0
-    const fileSize = fs.statSync( filePath ).size
-
-    return ( fileSize < _limit )
-
+function isEmptyFile ( filePath, threshold = 0 ) {
+    return ( fs.statSync( filePath ).size <= threshold )
 }
+
+function isNotEmptyFile ( filePath, threshold = 0 ) {
+    return !isEmptyFile( filePath, threshold )
+}
+
+// Todo-End
 
 /**
  * Allow to search all files under filePaths in a recursive way
@@ -106,4 +141,18 @@ function getFilesPathsUnder ( filePaths ) {
 
 }
 
-export { fileExistForPath, fileIsEmpty, getFilesPathsUnder }
+export {
+    isValidPath,
+    isInvalidPath,
+    isFile,
+    isNotFile,
+    isDirectory,
+    isNotDirectory,
+    isValidFilePath,
+    isInvalidFilePath,
+    isValidDirectoryPath,
+    isInvalidDirectoryPath,
+    isEmptyFile,
+    isNotEmptyFile,
+    getFilesPathsUnder
+}
