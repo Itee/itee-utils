@@ -7,7 +7,6 @@
  *
  */
 
-
 /**
  * Set the first char to upper case like a classname
  * @param word
@@ -22,7 +21,7 @@ export function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-export let diacriticsMap = (() => {
+export let diacriticsMap = ( () => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -401,7 +400,7 @@ export let diacriticsMap = (() => {
 
     return map
 
-})()
+} )()
 
 /**
  * @static
@@ -414,7 +413,7 @@ export function removeDiacritics ( string ) {
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, function ( a ) {
-        return diacriticsMap[ a ] || a;
-    } );
+        return diacriticsMap[ a ] || a
+    } )
 
 }

@@ -8,7 +8,7 @@
  *
  */
 
-import fs from 'fs'
+import fs   from 'fs'
 import path from 'path'
 
 //Todo: Move this stuff in IteeValidator !
@@ -88,11 +88,9 @@ function getFilesPathsUnder ( filePaths ) {
 
     if ( Array.isArray( filePaths ) ) {
 
-        let filePath = undefined
         for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
 
-            filePath = filePaths[ pathIndex ]
-            checkStateOf( filePath )
+            checkStateOf( filePaths[ pathIndex ] )
 
         }
 
@@ -118,7 +116,7 @@ function getFilesPathsUnder ( filePaths ) {
     function checkStateOf ( filePath ) {
 
         if ( !fs.existsSync( filePath ) ) {
-            console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' )
+            console.error( 'Invalid file path "' + filePath + '"' )
             return
         }
 
@@ -133,7 +131,7 @@ function getFilesPathsUnder ( filePaths ) {
 
         } else {
 
-            console.error( "Invalid stat object !" )
+            console.error( 'Invalid stat object !' )
 
         }
 
