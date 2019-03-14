@@ -29,22 +29,22 @@
 
 /* eslint-env node */
 
-const gulp   = require( 'gulp' )
-const util   = require( 'gulp-util' )
-const jsdoc  = require( 'gulp-jsdoc3' )
-const eslint = require( 'gulp-eslint' )
-const del    = require( 'del' )
-const rollup = require( 'rollup' )
-const path   = require( 'path' )
-
-const log     = util.log
-const colors  = util.colors
-const red     = colors.red
-const green   = colors.green
-const blue    = colors.blue
-const cyan    = colors.cyan
-const yellow  = colors.yellow
-const magenta = colors.magenta
+const gulp      = require( 'gulp' )
+const jsdoc     = require( 'gulp-jsdoc3' )
+const eslint    = require( 'gulp-eslint' )
+const del       = require( 'del' )
+const parseArgs = require( 'minimist' )
+const rollup    = require( 'rollup' )
+const path      = require( 'path' )
+const karma     = require( 'karma' )
+const log       = require( 'fancy-log' )
+const colors    = require( 'ansi-colors' )
+const red       = colors.red
+const green     = colors.green
+const blue      = colors.blue
+const cyan      = colors.cyan
+const yellow    = colors.yellow
+const magenta   = colors.magenta
 
 /**
  * @method npm run help ( default )
@@ -231,7 +231,7 @@ gulp.task( 'build-test', ( done ) => {
             s: true,
             t: true
         },
-        alias: {
+        alias:   {
             n: 'name',
             i: 'input',
             o: 'output',
@@ -357,7 +357,7 @@ gulp.task( 'build', ( done ) => {
             sourceMap:    true
         }
 
-        let configs        = []
+        let configs = []
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', true, options.sourceMap ) )
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', false, options.sourceMap ) )
         configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', true, options.sourceMap ) )
