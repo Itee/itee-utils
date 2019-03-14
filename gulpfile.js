@@ -29,22 +29,22 @@
 
 /* eslint-env node */
 
-const gulp   = require( 'gulp' )
-const util   = require( 'gulp-util' )
-const jsdoc  = require( 'gulp-jsdoc3' )
-const eslint = require( 'gulp-eslint' )
-const del    = require( 'del' )
-const rollup = require( 'rollup' )
-const path   = require( 'path' )
-
-const log     = util.log
-const colors  = util.colors
-const red     = colors.red
-const green   = colors.green
-const blue    = colors.blue
-const cyan    = colors.cyan
-const yellow  = colors.yellow
-const magenta = colors.magenta
+const gulp      = require( 'gulp' )
+const jsdoc     = require( 'gulp-jsdoc3' )
+const eslint    = require( 'gulp-eslint' )
+const del       = require( 'del' )
+const parseArgs = require( 'minimist' )
+const rollup    = require( 'rollup' )
+const path      = require( 'path' )
+const karma     = require( 'karma' )
+const log       = require( 'fancy-log' )
+const colors    = require( 'ansi-colors' )
+const red       = colors.red
+const green     = colors.green
+const blue      = colors.blue
+const cyan      = colors.cyan
+const yellow    = colors.yellow
+const magenta   = colors.magenta
 
 /**
  * @method npm run help ( default )
@@ -112,11 +112,11 @@ gulp.task( 'lint', () => {
         'tests/**/*.js'
     ]
 
-    return gulp.src( filesToLint )
+    return gulp.src( filesToLint, { base: './' } )
                .pipe( eslint( {
                    allowInlineConfig: true,
                    globals:           [],
-                   fix:               false,
+                   fix:               true,
                    quiet:             false,
                    envs:              [],
                    configFile:        './configs/eslint.conf.js',
@@ -126,6 +126,7 @@ gulp.task( 'lint', () => {
                    useEslintrc:       false
                } ) )
                .pipe( eslint.format( 'stylish' ) )
+               .pipe( gulp.dest( '.' ) )
                .pipe( eslint.failAfterError() )
 
 } )
@@ -155,7 +156,27 @@ gulp.task( 'doc', ( done ) => {
  * @description Will run unit tests using karma
  */
 gulp.task( 'unit', ( done ) => {
-    done()
+
+    const karmaServer = new karma.Server( {
+        configFile: `${__dirname}/configs/karma.units.conf.js`,
+        singleRun:  true
+    }, ( exitCode ) => {
+
+        if ( exitCode !== 0 ) {
+            done( `Karma server exit with code ${exitCode}` )
+        } else {
+            log( `Karma server exit with code ${exitCode}` )
+            done()
+        }
+
+    } )
+
+    karmaServer.on( 'browser_error', ( browser, error ) => {
+        log( red( error.message ) )
+    } )
+
+    karmaServer.start()
+
 } )
 
 /**
@@ -163,18 +184,94 @@ gulp.task( 'unit', ( done ) => {
  * @description Will run benchmarks using karma
  */
 gulp.task( 'bench', ( done ) => {
-    done()
+
+    const karmaServer = new karma.Server( {
+        configFile: `${__dirname}/configs/karma.benchs.conf.js`,
+        singleRun:  true
+    }, ( exitCode ) => {
+
+        if ( exitCode !== 0 ) {
+            done( `Karma server exit with code ${exitCode}` )
+        } else {
+            log( `Karma server exit with code ${exitCode}` )
+            done()
+        }
+
+    } )
+
+    karmaServer.on( 'browser_error', ( browser, error ) => {
+        log( red( error.message ) )
+    } )
+
+    karmaServer.start()
+
 } )
 
 /**
  * @method npm run test
  * @description Will run unit tests and benchmarks using karma
  */
-gulp.task( 'test', gulp.parallel( 'unit', 'bench' ) )
+gulp.task( 'test', gulp.series( 'unit', 'bench' ) )
 
 ///
 /// BUILDS
 ///
+
+gulp.task( 'build-test', ( done ) => {
+
+    const options = parseArgs( process.argv, {
+        string:  [ 'n', 'i', 'f', 'e' ],
+        boolean: [ 's', 't' ],
+        default: {
+            n: 'itee-validators',
+            i: path.join( __dirname, 'sources' ),
+            o: path.join( __dirname, 'builds' ),
+            f: 'esm,cjs,iife,umd',
+            e: 'dev',
+            s: true,
+            t: true
+        },
+        alias:   {
+            n: 'name',
+            i: 'input',
+            o: 'output',
+            f: 'format',
+            e: 'env',
+            s: 'sourcemap',
+            t: 'treeshake'
+        }
+    } )
+
+    const configs = require( './configs/rollup.test.conf' )( options )
+
+    nextBuild()
+
+    function nextBuild ( error ) {
+        'use strict'
+
+        if ( error ) {
+
+            done( error )
+
+        } else if ( configs.length === 0 ) {
+
+            done()
+
+        } else {
+
+            const config = configs.pop()
+            log( `Building ${config.output.file}` )
+
+            rollup.rollup( config )
+                  .then( ( bundle ) => { return bundle.write( config.output ) } )
+                  .then( () => { nextBuild() } )
+                  .catch( nextBuild )
+
+        }
+
+    }
+
+} )
 
 /**
  * @method npm run build
@@ -260,7 +357,7 @@ gulp.task( 'build', ( done ) => {
             sourceMap:    true
         }
 
-        let configs        = []
+        let configs = []
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', true, options.sourceMap ) )
         configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', false, options.sourceMap ) )
         configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', true, options.sourceMap ) )
@@ -322,7 +419,7 @@ gulp.task( 'build-auto', gulp.series( 'build', ( done ) => {
  * @method npm run release
  * @description Will perform a complet release of the library.
  */
-gulp.task( 'release', gulp.series( 'clean', gulp.parallel( 'lint', 'doc', 'test' ), 'build' ) )
+gulp.task( 'release', gulp.series( 'clean', 'lint', 'doc', 'build-test', 'test', 'build' ) )
 
 //---------
 
