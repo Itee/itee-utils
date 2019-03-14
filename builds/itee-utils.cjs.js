@@ -47,7 +47,7 @@ var path = _interopDefault(require('path'));
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 function getRandomArbitrary ( min = 0, max = 1 ) {
-    return Math.random() * (max - min) + min
+    return Math.random() * ( max - min ) + min
 }
 
 /**
@@ -55,194 +55,325 @@ function getRandomArbitrary ( min = 0, max = 1 ) {
  * Using Math.round() will give you a non-uniform distribution!
  */
 function getRandomInt ( min = 0, max = 1 ) {
-    return (Math.floor( Math.random() * (max - min + 1) ) + min)
+    return ( Math.floor( Math.random() * ( max - min + 1 ) ) + min )
 }
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids
- * @desc Export the validation methods about voids notions
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array or not
+ * @example
+ *
+ * import { isArray } from 'itee-validators'
+ *
+ * if( isArray( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
  */
 
+
+
+////////////////////
+
 /**
- * Check if given data is null
+ * Check if given data is not an array
  *
- * @param data {any} The data to check against the nullity
- * @returns {boolean} true if data is null, false otherwise.
+ * @param data {*} The data to check against the array type
+ * @returns {boolean} true if data is not array, false otherwise
  */
-function isNull ( data ) {
-    return (data === null)
+function isNotArray ( data ) {
+    return !Array.isArray( data )
 }
 
 /**
- * Check if given data is not null
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @param data {any} The data to check against the nullity
- * @returns {boolean} true if data is not null, false otherwise.
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
  */
-function isNotNull ( data ) {
-    return !isNull( data )
-}
 
 /**
- * Check if given data is undefined
+ * Check if given data is an empty array
  *
- * @param data {any} The data to check against the undefiness
- * @returns {boolean} true if data is undefined, false otherwise.
+ * @param data {*} The data to check against the empty array
+ * @returns {boolean} true if data is an empty array, false otherwise
  */
-function isUndefined ( data ) {
-    return (typeof data === 'undefined')
+function isEmptyArray ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+
+    return (data.length === 0)
+
 }
+
+/////
 
 /**
  * Check if given data is null or undefined
  *
- * @param data {any} The data to check against the existence
+ * @param data {*} The data to check against the existence
  * @returns {boolean} true if data is null or undefined, false otherwise.
  */
-function isNullOrUndefined ( data ) {
-    return (isNull( data ) || isUndefined( data ))
+function isNotDefined ( data ) {
+    return ((data === null) || (typeof data === 'undefined'))
 }
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/objects
+ * @desc Export function to validate if a value is an object
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is object, false otherwise
+ */
+function isObject ( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return (data.constructor === Object)
+}
+
+////
+
+/**
+ * Check if given data is not an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is not an object, false otherwise
+ */
+function isNotObject ( data ) {
+    return !isObject( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/strings
+ * @desc Export function to validate if a value is a string
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is a string, false otherwise.
+ */
+function isString ( data ) {
+    return (typeof data === 'string' || data instanceof String)
+}
+
+
+
+
+//////
+
+/**
+ * Check if given data is not a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is not a string, false otherwise.
+ */
+function isNotString ( data ) {
+    return !isString( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_booleans
+ * @description Export the validation methods about booleans
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/objects
+ * @desc Export function to validate if a value is an object
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an empty object
+ *
+ * @param data {*} The data to check against the emptiness of the object
+ * @returns {boolean} true if data is an empty object, false otherwise
+ */
+function isEmptyObject ( data ) {
+
+    if ( isNotObject( data ) ) { return false }
+
+    if ( data.length === 0 ) {
+        return true
+    }
+
+    // Otherwise, does it have any properties of its own?
+    for ( let key in data ) {
+        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/strings
+ * @desc Export function to validate if a value is a string
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an empty string
+ *
+ * @param data {*} The data to check against the emptiness of the string
+ * @returns {boolean} true if data is an empty string, false otherwise.
+ */
+function isEmptyString ( data ) {
+
+    if ( isNotString( data ) ) {
+        return false
+    }
+
+    return (data.length === 0)
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/voids
+ * @desc Export function to validate if a value is a void
+ * @example todo
+ *
+ */
 
 /**
  * Check emptiness of given data
  *
  * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
  *
- * @param data {any} The data to check against the emptiness
+ * @param data {*} The data to check against the emptiness
  * @returns {boolean} true if data is considered as empty, false otherwise.
  */
 function isEmpty ( data ) {
 
-    // null and undefined are consider as "empty"
-    if ( data === null ) {
-        return true;
-    }
-    if ( data === undefined ) {
-        return true;
-    }
+    if ( isNotDefined( data ) ) { return false }
+    if ( isEmptyString( data ) ) { return true}
+    if ( isEmptyArray( data ) ) { return true }
+    if ( isEmptyObject( data ) ) { return true }
 
-    // Assume if it has a length property with a non-zero value
-    // that that property is correct.
-    if ( data.length > 0 ) {
-        return false;
-    }
-    if ( data.length === 0 ) {
-        return true;
-    }
+    return false
 
-    // Otherwise, does it have any properties of its own?
-    for ( let key in data ) {
-        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
-            return false;
-        }
-    }
-
-    return true;
 }
+
+///
 
 /**
  * Check fullness of given data
  *
- * @param data {any} The data to check against the emptiness
+ * @param data {*} The data to check against the emptiness
  * @returns {boolean} true if data is considered as not empty, false otherwise.
  */
 function isNotEmpty ( data ) {
-    return !isEmpty( data );
+    return !isEmpty( data )
 }
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/objects
- * @desc Export the validation methods about objects
- * @requires {@link module:sources/cores/voids/isNull}
- * @requires {@link module:sources/cores/voids/isEmpty}
- */
-
-/**
- * Check if given data is an object
- *
- * @param data {any} The data to check against the object type
- * @returns {boolean} true if data is object, false otherwise
- */
-function isObject ( data ) {
-    return ( isNotNull( data ) && (typeof data === 'object') && !Array.isArray( data ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/cores/numbers
- * @desc Export the validation methods about numbers
+ * @module cores/numbers/isNumber
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
  *
  */
 
 /**
  * Check if given data is a number
  *
- * @param data {any} The data to check against the maximum safe integer state
+ * @param data {*} The data to check against the maximum safe integer state
  * @returns {boolean} true if data is a number, false otherwise.
  */
 function isNumber ( data ) {
-    return (typeof data === 'number' && !Number.isNaN( data ) )
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return (data.constructor === Number)
+
 }
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/cores
- * @desc This is the cores main export entry point.
+ * @file sources/cores/_cores
+ * @description This is the cores main export entry point.
  * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
  *
  */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/maths/maths
- * @desc This is the maths export entry point.
+ * @file sources/maths/_maths
+ * @description This is the maths export entry point.
  * It expose all exports of the ... sub-folder.
  *
  */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/physics/temperatures
- * @desc Export the validation methods about temperatures
- * @requires {@link module:sources/cores/numbers}
+ * @module physics/temperatues
+ * @desc Export constants about temperatures
+ * @example todo
+ *
  */
 
-// Todo: itee-physics
 const ABSOLUTE_ZERO_KELVIN     = 0.00000000045;
 const ABSOLUTE_ZERO_CELSIUS    = -273.14999999955;
 const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
 
 /**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isKelvin ( data ) {
-    return (isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN)
-}
-
-/**
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
  *
- * @param data
- * @return {boolean}
  */
-function isNotKelvin ( data ) {
-    return !isKelvin( data )
-}
 
 /**
  *
@@ -252,6 +383,8 @@ function isNotKelvin ( data ) {
 function isCelsius ( data ) {
     return (isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS)
 }
+
+///
 
 /**
  *
@@ -263,6 +396,16 @@ function isNotCelsius ( data ) {
 }
 
 /**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
  *
  * @param data
  * @return {boolean|*|boolean}
@@ -270,6 +413,8 @@ function isNotCelsius ( data ) {
 function isFahrenheit ( data ) {
     return (isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT)
 }
+
+///
 
 /**
  *
@@ -281,12 +426,45 @@ function isNotFahrenheit ( data ) {
 }
 
 /**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
+ *
+ * @param data
+ * @return {boolean|*|boolean}
+ */
+function isKelvin ( data ) {
+    return (isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN)
+}
+
+///
+
+
+/**
+ *
+ * @param data
+ * @return {boolean}
+ */
+function isNotKelvin ( data ) {
+    return !isKelvin( data )
+}
+
+///
+
+/**
  *
  * @param data
  * @return {boolean}
  */
 function isNotTemperature ( data ) {
-    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
+    return (isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ))
 }
 
 /**
@@ -300,8 +478,8 @@ function isNotTemperature ( data ) {
 function uniq ( a ) {
     var seen = {};
     return a.filter( function ( item ) {
-        return seen.hasOwnProperty( item ) ? false : (seen[ item ] = true);
-    } );
+        return seen.hasOwnProperty( item ) ? false : ( seen[ item ] = true )
+    } )
 }
 
 /**
@@ -314,11 +492,11 @@ function extend ( target, source ) {
 
     let output = undefined;
 
-    if ( isObject( target ) && isNullOrUndefined( source ) ) {
+    if ( isObject( target ) && isNotDefined( source ) ) {
 
         output = Object.assign( {}, target );
 
-    } else if ( isNullOrUndefined( target ) && isObject( source ) ) {
+    } else if ( isNotDefined( target ) && isObject( source ) ) {
 
         output = Object.assign( {}, source );
 
@@ -340,13 +518,13 @@ function extend ( target, source ) {
 
                 } else {
 
-                    Object.assign( output, { [key]: source[ key ] } );
+                    Object.assign( output, { [ key ]: source[ key ] } );
 
                 }
 
             } else {
 
-                Object.assign( output, { [key]: source[ key ] } );
+                Object.assign( output, { [ key ]: source[ key ] } );
 
             }
 
@@ -358,7 +536,7 @@ function extend ( target, source ) {
 
     }
 
-    return output;
+    return output
 
 }
 
@@ -439,11 +617,11 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Array ||
         ChildClass.constructor === Array && ParentClassOrObject.constructor === Object ) {
 
-        throw new Error( "Cannot perform extend of object with an array" )
+        throw new Error( 'Cannot perform extend of object with an array' )
 
     } else {
 
-        throw new Error( "Cannot perform extend given parameters..." )
+        throw new Error( 'Cannot perform extend given parameters...' )
 
     }
 
@@ -457,7 +635,7 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
  * @param path
  * @param interval
  */
-function createInterval ( particles, path$$1, interval ) {
+function createInterval ( particles, path, interval ) {
 
     var globalOffset = 0;
 
@@ -468,15 +646,13 @@ function createInterval ( particles, path$$1, interval ) {
 
         if ( globalOffset >= DELTA_BETWEEN_PARTICLE ) {
             globalOffset = 0;
-        }
-        else if ( globalOffset + moveOffset > DELTA_BETWEEN_PARTICLE ) { // Avoid final gap jump before new "loop"
+        } else if ( globalOffset + moveOffset > DELTA_BETWEEN_PARTICLE ) { // Avoid final gap jump before new "loop"
             globalOffset = DELTA_BETWEEN_PARTICLE;
-        }
-        else {
+        } else {
             globalOffset += moveOffset;
         }
 
-        var pathLength       = path$$1.getLength();
+        var pathLength       = path.getLength();
         var localOffset      = globalOffset;
         var normalizedOffset = undefined;
         var particle         = undefined;
@@ -492,7 +668,7 @@ function createInterval ( particles, path$$1, interval ) {
                 normalizedOffset = 0;
             }
 
-            newPosition = path$$1.getPointAt( normalizedOffset );
+            newPosition = path.getPointAt( normalizedOffset );
             newPosition.y += 0.1;
 
             particle.position.copy( newPosition );
@@ -514,7 +690,6 @@ function createInterval ( particles, path$$1, interval ) {
  *
  */
 
-
 /**
  * Set the first char to upper case like a classname
  * @param word
@@ -529,7 +704,7 @@ function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-let diacriticsMap = (() => {
+let diacriticsMap = ( () => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -908,7 +1083,7 @@ let diacriticsMap = (() => {
 
     return map
 
-})();
+} )();
 
 /**
  * @static
@@ -921,8 +1096,8 @@ function removeDiacritics ( string ) {
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, function ( a ) {
-        return diacriticsMap[ a ] || a;
-    } );
+        return diacriticsMap[ a ] || a
+    } )
 
 }
 
@@ -962,33 +1137,69 @@ function removeDiacritics ( string ) {
  *
  */
 
+//Todo: Move this stuff in IteeValidator !
 /**
  * Just an override of 'fs.existsSync' with more explicit name
  *
  * @param filePath the path to check
  * @private
  */
-function fileExistForPath ( filePath ) {
+function isValidPath ( path ) {
+    return fs.existsSync( path )
+}
 
-    return fs.existsSync( filePath )
+function isInvalidPath ( path ) {
+    return !isValidPath( path )
+}
 
+function isFile ( path ) {
+    return fs.statSync( path ).isFile()
+}
+
+function isNotFile ( path ) {
+    return !isFile( path )
+}
+
+function isDirectory ( path ) {
+    return fs.statSync( path ).isDirectory()
+}
+
+function isNotDirectory ( path ) {
+    return !isDirectory( path )
+}
+
+function isValidFilePath ( path ) {
+    return ( isValidPath( path ) && isFile( path ) )
+}
+
+function isInvalidFilePath ( path ) {
+    return !isValidFilePath( path )
+}
+
+function isValidDirectoryPath ( path ) {
+    return ( isValidPath( path ) && isDirectory( path ) )
+}
+
+function isInvalidDirectoryPath ( path ) {
+    return !isValidDirectoryPath( path )
 }
 
 /**
  * Check the file size against a limit ( 0 as default ).
  * @param filePath
- * @param limit
+ * @param threshold
  * @return {boolean} - True if below the limit or zero, false otherwise
  * @private
  */
-function fileIsEmpty ( filePath, limit ) {
-
-    const _limit   = limit || 0;
-    const fileSize = fs.statSync( filePath ).size;
-
-    return ( fileSize < _limit )
-
+function isEmptyFile ( filePath, threshold = 0 ) {
+    return ( fs.statSync( filePath ).size <= threshold )
 }
+
+function isNotEmptyFile ( filePath, threshold = 0 ) {
+    return !isEmptyFile( filePath, threshold )
+}
+
+// Todo-End
 
 /**
  * Allow to search all files under filePaths in a recursive way
@@ -1003,11 +1214,9 @@ function getFilesPathsUnder ( filePaths ) {
 
     if ( Array.isArray( filePaths ) ) {
 
-        let filePath = undefined;
         for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
 
-            filePath = filePaths[ pathIndex ];
-            checkStateOf( filePath );
+            checkStateOf( filePaths[ pathIndex ] );
 
         }
 
@@ -1033,7 +1242,7 @@ function getFilesPathsUnder ( filePaths ) {
     function checkStateOf ( filePath ) {
 
         if ( !fs.existsSync( filePath ) ) {
-            console.error( 'SchemaRegister: Invalid file path "' + filePath + '"' );
+            console.error( 'Invalid file path "' + filePath + '"' );
             return
         }
 
@@ -1048,7 +1257,7 @@ function getFilesPathsUnder ( filePaths ) {
 
         } else {
 
-            console.error( "Invalid stat object !" );
+            console.error( 'Invalid stat object !' );
 
         }
 
@@ -1077,8 +1286,8 @@ const PI   = Math.PI;
 const PI_2 = Math.PI / 2;
 const PI_4 = Math.PI / 4;
 
-const DEG_TO_RAD = (PI / 180);
-const RAD_TO_DEG = (180 / PI);
+const DEG_TO_RAD = ( PI / 180 );
+const RAD_TO_DEG = ( 180 / PI );
 
 /**
  *
@@ -1354,10 +1563,10 @@ function celsiusToKelvin ( celsius, precisionPointAt ) {
     if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return (celsius + KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( celsius + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -1373,10 +1582,10 @@ function celsiusToFahrenheit ( celsius, precisionPointAt ) {
     if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return (celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -1392,10 +1601,10 @@ function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
     if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return ((fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT).toFixed( _precisionPointAt )
+    return ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ).toFixed( _precisionPointAt )
 
 }
 
@@ -1411,10 +1620,10 @@ function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
     if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return (((fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT) + KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ) + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -1430,10 +1639,10 @@ function kelvinToCelsius ( kelvin, precisionPointAt ) {
     if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return (kelvin - KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( kelvin - KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -1449,10 +1658,10 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
     if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2);
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
-    return ((kelvin - KELVIN_CELSIUS_CONSTANTE) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( ( kelvin - KELVIN_CELSIUS_CONSTANTE ) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -1494,8 +1703,18 @@ exports.createInterval = createInterval;
 exports.classNameify = classNameify;
 exports.diacriticsMap = diacriticsMap;
 exports.removeDiacritics = removeDiacritics;
-exports.fileExistForPath = fileExistForPath;
-exports.fileIsEmpty = fileIsEmpty;
+exports.isValidPath = isValidPath;
+exports.isInvalidPath = isInvalidPath;
+exports.isFile = isFile;
+exports.isNotFile = isNotFile;
+exports.isDirectory = isDirectory;
+exports.isNotDirectory = isNotDirectory;
+exports.isValidFilePath = isValidFilePath;
+exports.isInvalidFilePath = isInvalidFilePath;
+exports.isValidDirectoryPath = isValidDirectoryPath;
+exports.isInvalidDirectoryPath = isInvalidDirectoryPath;
+exports.isEmptyFile = isEmptyFile;
+exports.isNotEmptyFile = isNotEmptyFile;
 exports.getFilesPathsUnder = getFilesPathsUnder;
 exports.PI = PI;
 exports.PI_2 = PI_2;
