@@ -1,3 +1,5 @@
 .idea/
 documentation/
 node_modules/
+/tests/itee-utils.benchs.js
+/tests/itee-utils.units.js

@@ -7,7 +7,7 @@
  */
 
 import {
-    isNullOrUndefined,
+    isNotDefined,
     isObject
 } from 'itee-validators'
 
@@ -28,11 +28,11 @@ export function extend ( target, source ) {
 
     let output = undefined
 
-    if ( isObject( target ) && isNullOrUndefined( source ) ) {
+    if ( isObject( target ) && isNotDefined( source ) ) {
 
         output = Object.assign( {}, target )
 
-    } else if ( isNullOrUndefined( target ) && isObject( source ) ) {
+    } else if ( isNotDefined( target ) && isObject( source ) ) {
 
         output = Object.assign( {}, source )
 
