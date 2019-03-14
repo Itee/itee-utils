@@ -7,17 +7,15 @@
  */
 
 import {
-    isNull,
-    isUndefined,
     isNullOrUndefined,
     isObject
 } from 'itee-validators'
 
 export function uniq ( a ) {
-    var seen = {};
+    var seen = {}
     return a.filter( function ( item ) {
-        return seen.hasOwnProperty( item ) ? false : (seen[ item ] = true);
-    } );
+        return seen.hasOwnProperty( item ) ? false : ( seen[ item ] = true )
+    } )
 }
 
 /**
@@ -56,13 +54,13 @@ export function extend ( target, source ) {
 
                 } else {
 
-                    Object.assign( output, { [key]: source[ key ] } )
+                    Object.assign( output, { [ key ]: source[ key ] } )
 
                 }
 
             } else {
 
-                Object.assign( output, { [key]: source[ key ] } )
+                Object.assign( output, { [ key ]: source[ key ] } )
 
             }
 
@@ -74,7 +72,7 @@ export function extend ( target, source ) {
 
     }
 
-    return output;
+    return output
 
 }
 
@@ -155,11 +153,11 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Array ||
         ChildClass.constructor === Array && ParentClassOrObject.constructor === Object ) {
 
-        throw new Error( "Cannot perform extend of object with an array" )
+        throw new Error( 'Cannot perform extend of object with an array' )
 
     } else {
 
-        throw new Error( "Cannot perform extend given parameters..." )
+        throw new Error( 'Cannot perform extend given parameters...' )
 
     }
 
@@ -175,7 +173,7 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
  */
 export function createInterval ( particles, path, interval ) {
 
-    var globalOffset = 0;
+    var globalOffset = 0
 
     setInterval( function () {
 
@@ -184,11 +182,9 @@ export function createInterval ( particles, path, interval ) {
 
         if ( globalOffset >= DELTA_BETWEEN_PARTICLE ) {
             globalOffset = 0
-        }
-        else if ( globalOffset + moveOffset > DELTA_BETWEEN_PARTICLE ) { // Avoid final gap jump before new "loop"
+        } else if ( globalOffset + moveOffset > DELTA_BETWEEN_PARTICLE ) { // Avoid final gap jump before new "loop"
             globalOffset = DELTA_BETWEEN_PARTICLE
-        }
-        else {
+        } else {
             globalOffset += moveOffset
         }
 
@@ -217,6 +213,6 @@ export function createInterval ( particles, path, interval ) {
 
         }
 
-    }, interval );
+    }, interval )
 
 }

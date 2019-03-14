@@ -9,8 +9,8 @@ export const PI   = Math.PI
 export const PI_2 = Math.PI / 2
 export const PI_4 = Math.PI / 4
 
-export const DEG_TO_RAD = (PI / 180)
-export const RAD_TO_DEG = (180 / PI)
+export const DEG_TO_RAD = ( PI / 180 )
+export const RAD_TO_DEG = ( 180 / PI )
 
 /**
  *

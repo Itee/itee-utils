@@ -18,6 +18,6 @@ export * from './trigonometries'
  * @returns {Number} - A random number between man and max
  * @private
  */
-function randomInt( min, max ) {
-    return Math.floor( Math.random() * (max - min + 1) ) + min
+function randomInt ( min, max ) {
+    return Math.floor( Math.random() * ( max - min + 1 ) ) + min
 }

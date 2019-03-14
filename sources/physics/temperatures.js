@@ -9,8 +9,8 @@
 
 import {
     isNotEmpty,
-    isNumber,
-    isNotTemperature
+    isNotTemperature,
+    isNumber
 } from 'itee-validators'
 
 export const FAHRENHEIT_CELSIUS_COEFFICIENT = 1.8
@@ -29,10 +29,10 @@ export function celsiusToKelvin ( celsius, precisionPointAt ) {
     if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return (celsius + KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( celsius + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -48,10 +48,10 @@ export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
     if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return (celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -67,10 +67,10 @@ export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
     if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return ((fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT).toFixed( _precisionPointAt )
+    return ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ).toFixed( _precisionPointAt )
 
 }
 
@@ -86,10 +86,10 @@ export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
     if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return (((fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT) + KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ) + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -105,10 +105,10 @@ export function kelvinToCelsius ( kelvin, precisionPointAt ) {
     if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return (kelvin - KELVIN_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( kelvin - KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }
 
@@ -124,9 +124,9 @@ export function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
     if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2)
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
 
     // Sets the decimal point for the temperature conversion equation
-    return ((kelvin - KELVIN_CELSIUS_CONSTANTE) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE).toFixed( _precisionPointAt )
+    return ( ( kelvin - KELVIN_CELSIUS_CONSTANTE ) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
 
 }

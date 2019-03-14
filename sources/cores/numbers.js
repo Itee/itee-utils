@@ -11,7 +11,7 @@
  * Returns a random number between min (inclusive) and max (exclusive)
  */
 export function getRandomArbitrary ( min = 0, max = 1 ) {
-    return Math.random() * (max - min) + min
+    return Math.random() * ( max - min ) + min
 }
 
 /**
@@ -19,6 +19,6 @@ export function getRandomArbitrary ( min = 0, max = 1 ) {
  * Using Math.round() will give you a non-uniform distribution!
  */
 export function getRandomInt ( min = 0, max = 1 ) {
-    return (Math.floor( Math.random() * (max - min + 1) ) + min)
+    return ( Math.floor( Math.random() * ( max - min + 1 ) ) + min )
 }
 
