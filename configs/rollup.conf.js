@@ -42,13 +42,14 @@ function CreateRollupConfiguration ( fileName, inputPath, outputPath, format, on
     const _format = (format === 'es') ? 'esm' : format
     const _onProduction  = onProduction || false
     const _wantSourceMap = wantSourceMap || false
+    const _fileName = (_format === 'esm') ? 'itee-utils' : fileName
 
     const fileExtension  = (_onProduction) ? '.min.js' : '.js'
-    const inputFilePath  = path.join( inputPath, fileName + '.js' )
-    const outputFilePath = path.join( outputPath, fileName + '.' + _format + fileExtension )
+    const inputFilePath  = path.join( inputPath, _fileName + '.js' )
+    const outputFilePath = path.join( outputPath, _fileName + '.' + _format + fileExtension )
 
     let rollupConfig = undefined
-    if ( _format === 'es' ) {
+    if ( _format === 'esm' ) {
 
         rollupConfig = {
             inputOptions:  {
