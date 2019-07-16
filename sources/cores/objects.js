@@ -216,3 +216,24 @@ export function createInterval ( particles, path, interval ) {
     }, interval )
 
 }
+
+export function toEnum ( enumValues ) {
+
+    return Object.freeze( Object.defineProperty( enumValues, 'toString', {
+        configurable: false,
+        enumerable:   false,
+        writable:     false,
+        value:        function _toString () {
+
+            const keys = Object.keys( this )
+            let result = ''
+            for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
+                result += `${keys[ index ]}, `
+            }
+            result = result.slice( 0, -2 )
+            return result
+
+        }
+    } ) )
+
+}

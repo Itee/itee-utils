@@ -6,3 +6,50 @@
  * @description Export the utilities methods about Arrays
  *
  */
+
+export function sortBy( propertyName, ascending = 'asc' ) {
+
+    const _propertyName = propertyName
+    let resultSorter = undefined
+
+    if ( ascending === 'asc') {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[_propertyName] < b[_propertyName] ) {
+                return -1
+            }
+
+            if ( a[_propertyName] > b[_propertyName] ) {
+                return 1
+            }
+
+            return 0
+
+        }
+
+    } else if( ascending === 'desc') {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[_propertyName] > b[_propertyName] ) {
+                return -1
+            }
+
+            if ( a[_propertyName] < b[_propertyName] ) {
+                return 1
+            }
+
+            return 0
+
+        }
+
+    } else {
+
+        throw "Invalid ascending !"
+
+    }
+
+    return resultSorter
+
+}
