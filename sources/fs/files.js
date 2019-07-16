@@ -12,7 +12,7 @@ import fs   from 'fs'
 import {
     isArray,
     isInvalidPath
-}           from 'itee-validators'
+}           from '../../node_modules/itee-validators/builds/itee-validators.cjs'
 import path from 'path'
 
 function getPathsUnder ( directoryPath ) {
