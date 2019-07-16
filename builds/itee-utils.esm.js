@@ -7,23 +7,52 @@
  *
  */
 
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/cores/booleans
- * @description Export the utilities methods about booleans
- *
- */
+function sortBy( propertyName, ascending = 'asc' ) {
 
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/cores/functions
- * @description Export the utilities methods about functions
- *
- */
+    const _propertyName = propertyName;
+    let resultSorter = undefined;
+
+    if ( ascending === 'asc') {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[_propertyName] < b[_propertyName] ) {
+                return -1
+            }
+
+            if ( a[_propertyName] > b[_propertyName] ) {
+                return 1
+            }
+
+            return 0
+
+        };
+
+    } else if( ascending === 'desc') {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[_propertyName] > b[_propertyName] ) {
+                return -1
+            }
+
+            if ( a[_propertyName] < b[_propertyName] ) {
+                return 1
+            }
+
+            return 0
+
+        };
+
+    } else {
+
+        throw "Invalid ascending !"
+
+    }
+
+    return resultSorter
+
+}
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -101,7 +130,7 @@ function isEmptyArray ( data ) {
 
     if ( isNotArray( data ) ) { return false }
 
-    return (data.length === 0)
+    return ( data.length === 0 )
 
 }
 
@@ -114,7 +143,7 @@ function isEmptyArray ( data ) {
  * @returns {boolean} true if data is null or undefined, false otherwise.
  */
 function isNotDefined ( data ) {
-    return ((data === null) || (typeof data === 'undefined'))
+    return ( ( data === null ) || ( typeof data === 'undefined' ) )
 }
 
 /**
@@ -137,7 +166,7 @@ function isObject ( data ) {
 
     if ( isNotDefined( data ) ) { return false }
 
-    return (data.constructor === Object)
+    return ( data.constructor === Object )
 }
 
 ////
@@ -169,9 +198,8 @@ function isNotObject ( data ) {
  * @returns {boolean} true if data is a string, false otherwise.
  */
 function isString ( data ) {
-    return (typeof data === 'string' || data instanceof String)
+    return ( typeof data === 'string' || data instanceof String )
 }
-
 
 
 
@@ -191,8 +219,32 @@ function isNotString ( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @file sources/cores/_booleans
- * @description Export the validation methods about booleans
+ * @module cores/numbers/isNumber
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a number
+ *
+ * @param data {*} The data to check against the maximum safe integer state
+ * @returns {boolean} true if data is a number, false otherwise.
+ */
+function isNumber ( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return ( data.constructor === Number )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_numbers
+ * @description Export the validation methods about numbers
  *
  */
 
@@ -235,6 +287,14 @@ function isEmptyObject ( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
+ * @file sources/cores/_objects
+ * @description Export the validation methods about objects
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
  * @module cores/strings
  * @desc Export function to validate if a value is a string
  * @example todo
@@ -253,9 +313,17 @@ function isEmptyString ( data ) {
         return false
     }
 
-    return (data.length === 0)
+    return ( data.length === 0 )
 
 }
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_symbols
+ * @description Export the validation methods about symbols
+ */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -302,25 +370,11 @@ function isNotEmpty ( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module cores/numbers/isNumber
- * @desc Export function to validate if a value is a finite number
- * @example todo
+ * @file sources/cores/_cores
+ * @description This is the cores main export entry point.
+ * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
  *
  */
-
-/**
- * Check if given data is a number
- *
- * @param data {*} The data to check against the maximum safe integer state
- * @returns {boolean} true if data is a number, false otherwise.
- */
-function isNumber ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-
-    return (data.constructor === Number)
-
-}
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -372,7 +426,7 @@ const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
  * @return {boolean|*|boolean}
  */
 function isCelsius ( data ) {
-    return (isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS)
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS )
 }
 
 ///
@@ -402,7 +456,7 @@ function isNotCelsius ( data ) {
  * @return {boolean|*|boolean}
  */
 function isFahrenheit ( data ) {
-    return (isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT)
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT )
 }
 
 ///
@@ -432,11 +486,10 @@ function isNotFahrenheit ( data ) {
  * @return {boolean|*|boolean}
  */
 function isKelvin ( data ) {
-    return (isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN)
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN )
 }
 
 ///
-
 
 /**
  *
@@ -455,7 +508,7 @@ function isNotKelvin ( data ) {
  * @return {boolean}
  */
 function isNotTemperature ( data ) {
-    return (isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ))
+    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
 }
 
 /**
@@ -669,6 +722,27 @@ function createInterval ( particles, path, interval ) {
         }
 
     }, interval );
+
+}
+
+function toEnum ( enumValues ) {
+
+    return Object.freeze( Object.defineProperty( enumValues, 'toString', {
+        configurable: false,
+        enumerable:   false,
+        writable:     false,
+        value:        function _toString () {
+
+            const keys = Object.keys( this );
+            let result = '';
+            for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
+                result += `${keys[ index ]}, `;
+            }
+            result = result.slice( 0, -2 );
+            return result
+
+        }
+    } ) )
 
 }
 
@@ -1092,33 +1166,2633 @@ function removeDiacritics ( string ) {
 
 }
 
+var fs = {};
+
+function unwrapExports (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var iteeValidators_cjs = createCommonjsModule(function (module, exports) {
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var fs$1 = _interopDefault(fs);
+
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/symbols
- * @description Export the utilities methods about symbols
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array or not
+ * @example
+ *
+ * import { isArray } from 'itee-validators'
+ *
+ * if( isArray( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is an array
+ *
+ * @param data {*} The data to check against the array type
+ * @returns {boolean} true if data is array, false otherwise
+ */
+function isArray ( data ) {
+    return Array.isArray( data )
+}
+
+
+
+////////////////////
+
+/**
+ * Check if given data is not an array
+ *
+ * @param data {*} The data to check against the array type
+ * @returns {boolean} true if data is not array, false otherwise
+ */
+function isNotArray ( data ) {
+    return !Array.isArray( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an empty array
+ *
+ * @param data {*} The data to check against the empty array
+ * @returns {boolean} true if data is an empty array, false otherwise
+ */
+function isEmptyArray ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+
+    return ( data.length === 0 )
+
+}
+
+///////
+
+/**
+ * Check if given data is not an empty array
+ *
+ * @param data {*} The data to check against the empty array
+ * @returns {boolean} true if data is not an empty array, false otherwise
+ */
+function isNotEmptyArray ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+
+    return ( data.length > 0 )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an array of array
+ *
+ * @param data {*} The data to check against the array of array type
+ * @returns {boolean} true if data is an array of array, false otherwise
+ */
+function isArrayOfArray ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotArray( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+////////
+
+/**
+ * Check if given data is not an array of array
+ *
+ * @param data {*} The data to check against the array of array type
+ * @returns {boolean} true if data is not an array of array, false otherwise
+ */
+function isNotArrayOfArray ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+    if ( isEmptyArray( data ) ) { return true }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isArray( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an array with multiples values
+ *
+ * @param data {*} The data to check against the single valued array
+ * @returns {boolean} true if data is an array with multiples values, false otherwise
+ */
+function isArrayOfMultiElement ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+
+    return ( data.length > 1 )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/voids
+ * @desc Export function to validate if a value is a void
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is null
+ *
+ * @param data {*} The data to check against the nullity
+ * @returns {boolean} true if data is null, false otherwise.
+ */
+function isNull ( data ) {
+    return ( data === null )
+}
+
+///
+
+/**
+ * Check if given data is not null
+ *
+ * @param data {*} The data to check against the nullity
+ * @returns {boolean} true if data is not null, false otherwise.
+ */
+function isNotNull ( data ) {
+    return ( data !== null )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is not an empty array where all values are null
+ *
+ * @param data {*} The data to check against the array of array type
+ * @returns {boolean} true if data is not an empty array where all values are null, false otherwise
+ */
+function isArrayOfNull ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotNull( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+/////
+
+/**
+ * Check if given data is not an empty array where all values are not null
+ *
+ * @param data {*} The data to check against the array of array type
+ * @returns {boolean} true if data is not an empty array where all values are not null, false otherwise
+ */
+function isNotArrayOfNull ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+    if ( isEmptyArray( data ) ) { return true }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotNull( data[ index ] ) ) {
+            return true
+        }
+    }
+
+    return false
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/voids
+ * @desc Export function to validate if a value is a void
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined ( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
+
+/////
+
+/**
+ * Check if given data is null or undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is null or undefined, false otherwise.
+ */
+function isNotDefined ( data ) {
+    return ( ( data === null ) || ( typeof data === 'undefined' ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/objects
+ * @desc Export function to validate if a value is an object
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is object, false otherwise
+ */
+function isObject ( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return ( data.constructor === Object )
+}
+
+////
+
+/**
+ * Check if given data is not an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is not an object, false otherwise
+ */
+function isNotObject ( data ) {
+    return !isObject( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an array where all values are of object type
+ *
+ * @param data {*} The data to check against the array of object type
+ * @returns {boolean} true if data is an array where all values are of object type, false otherwise
+ */
+function isArrayOfObject ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotObject( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+////
+
+/**
+ * Check if given data is not an array where all values are of object type
+ *
+ * @param data {*} The data to check against the array of object type
+ * @returns {boolean} true if data is not an array where all values are of object type, false otherwise
+ */
+function isNotArrayOfObject ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+    if ( isEmptyArray( data ) ) { return true }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotObject( data[ index ] ) ) {
+            return true
+        }
+    }
+
+    return false
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an array with a single value
+ *
+ * @param data {*} The data to check against the single valued array
+ * @returns {boolean} true if data is an array with a single value, false otherwise
+ */
+function isArrayOfSingleElement ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+
+    if ( data.length !== 1 ) {
+        return false
+    }
+
+    return true
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/strings
+ * @desc Export function to validate if a value is a string
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is a string, false otherwise.
+ */
+function isString ( data ) {
+    return ( typeof data === 'string' || data instanceof String )
+}
+
+
+
+//////
+
+/**
+ * Check if given data is not a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is not a string, false otherwise.
+ */
+function isNotString ( data ) {
+    return !isString( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is not an empty array where all values are string
+ *
+ * @param data {*} The data to check against the array of strings
+ * @returns {boolean} true if data is not an empty array where all values are string, false otherwise
+ */
+function isArrayOfString ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotString( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+
+
+/////
+
+/**
+ * Check if given data is not an empty array where all values are not string
+ *
+ * @param data {*} The data to check against the array of strings
+ * @returns {boolean} true if data is not an empty array where all values are not string, false otherwise
+ */
+function isNotArrayOfString ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+    if ( isEmptyArray( data ) ) { return true }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotString( data[ index ] ) ) {
+            return true
+        }
+    }
+
+    return false
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/voids
+ * @desc Export function to validate if a value is a void
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is undefined
+ *
+ * @param data {*} The data to check against the undefiness
+ * @returns {boolean} true if data is undefined, false otherwise.
+ */
+function isUndefined ( data ) {
+    return ( typeof data === 'undefined' )
+}
+
+///
+
+/**
+ * Check if given data is defined
+ *
+ * @param data {*} The data to check against the undefiness
+ * @returns {boolean} true if data is defined, false otherwise.
+ */
+function isNotUndefined ( data ) {
+    return ( typeof data !== 'undefined' )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/arrays
+ * @desc Export function to validate if a value is an array of array or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is not an empty array where all values are undefined
+ *
+ * @param data {*} The data to check against the array of undefined
+ * @returns {boolean} true if data is not an empty array where all values are undefined, false otherwise
+ */
+function isArrayOfUndefined ( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotUndefined( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+////
+
+/**
+ * Check if given data is not an empty array where all values are defined
+ *
+ * @param data {*} The data to check against the array of undefined
+ * @returns {boolean} true if data is not an empty array where all values are defined, false otherwise
+ */
+function isNotArrayOfUndefined ( data ) {
+
+    if ( isNotArray( data ) ) { return true }
+    if ( isEmptyArray( data ) ) { return true }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotUndefined( data[ index ] ) ) {
+            return true
+        }
+    }
+
+    return false
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_arrays
+ * @description Export the validation methods about Arrays
+ */
+
+//todo: isArrayOfNumbers
+//todo: isArrayOfBooleans
+//todo: isArrayOfFunctions
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/booleans
+ * @desc Export function to validate if a value is a boolean or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a boolean
+ *
+ * @param data {*} The data to check against the booleaness
+ * @returns {boolean} true if data is a boolean, false otherwise.
+ */
+function isBoolean ( data ) {
+    return ( typeof data === 'boolean' )
+}
+
+
+
+//////
+
+/**
+ * Check if given data is not a boolean
+ *
+ * @param data {*} The data to check against the booleaness
+ * @returns {boolean} true if data is not a boolean, false otherwise.
+ */
+function isNotBoolean ( data ) {
+    return ( typeof data !== 'boolean' )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isTrue ( value ) {
+    return ( isBoolean( value ) && ( value === true ) )
+}
+
+function isFalse ( value ) {
+    return ( isBoolean( value ) && ( value === false ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_booleans
+ * @description Export the validation methods about booleans
+ *
  */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids
- * @description Export the utilities methods about voids notions
+ * @module cores/functions
+ * @desc Export function to validate if a value is a function or not
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a function
+ *
+ * @param data {*} The data to check against the functionality
+ * @returns {boolean} true if data is a function, false otherwise.
+ */
+function isFunction ( data ) {
+    return ( typeof data === 'function' )
+}
+
+///
+
+/**
+ * Check if given data is not a function
+ *
+ * @param data {*} The data to check against the functionality
+ * @returns {boolean} true if data is not a function, false otherwise.
+ */
+function isNotFunction ( data ) {
+    return ( typeof data !== 'function' )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_functions
+ * @description Export the validation methods about functions
+ *
  */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/cores
+ * @module cores/numbers/isZero
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is zero
+ *
+ * @param data {*} The data to check against the zero value
+ * @returns {boolean} true if data is zero, false otherwise
+ */
+function isZero ( data ) {
+    return ( data === 0 )
+}
+
+/**
+ * Check if the given data is a positive zero
+ *
+ * @param data {*} The data to check against the positive zero value
+ * @returns {boolean} true if data is a positive zero, false otherwise
+ */
+function isZeroPositive ( data ) {
+    return ( data === 0 && ( 1 / data ) === Number.POSITIVE_INFINITY )
+}
+
+/**
+ * Check if the given data is a negative zero
+ *
+ * @param data {*} The data to check against the negative zero value
+ * @returns {boolean} true if data is a negative zero, false otherwise
+ */
+function isZeroNegative ( data ) {
+    return ( data === 0 && ( 1 / data ) === Number.NEGATIVE_INFINITY )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/numbers/isNumber
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a number
+ *
+ * @param data {*} The data to check against the maximum safe integer state
+ * @returns {boolean} true if data is a number, false otherwise.
+ */
+function isNumber ( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return ( data.constructor === Number )
+
+}
+
+
+
+/**
+ * Check if the data is a positive number
+ *
+ * @param data {*} The data to check against the positivity
+ * @returns {boolean} true if data is a positive number, false otherwise.
+ */
+function isNumberPositive ( data ) {
+
+    if ( isNotNumber( data ) ) { return false }
+
+    return ( data > 0 || isZeroPositive( data ) || isInfinitePositive( data ) )
+
+}
+
+/**
+ * Check if the data is a negative number
+ *
+ * @param data {*} The data to check against the negativity
+ * @returns {boolean} true if data is a negative number, false otherwise.
+ */
+function isNumberNegative ( data ) {
+    return ( isNumber( data ) && data < 0 )
+}
+
+//////
+
+/**
+ * Check if given data is not a number
+ *
+ * @param data {*} The data to check against the number type
+ * @returns {boolean} true if data is not of type number or not a number, false otherwise.
+ */
+function isNotNumber ( data ) {
+    return !( isNumber( data ) )
+}
+
+/////////
+
+//Todo: isInRange(x, y, value, xInclusive, yInclusive)
+//Todo: isInRangeZeroOne(value, zeroInclusive, oneInclusive) //inclusive
+
+/////////
+
+/**
+ * Check if the given data is an integer number
+ *
+ * @param data {*} The data to check against the integer state
+ * @returns {boolean} true if data is an integer, false otherwise
+ */
+function isInteger ( data ) {
+    return Number.isInteger( data )
+}
+
+
+
+////////
+
+/**
+ * Check if given data is a floating point number
+ *
+ * @param data {*} The data to check against the floating point
+ * @returns {boolean} true if data is a float, false otherwise
+ */
+function isFloat ( data ) {
+
+    if ( isNotNumber( data ) ) { return false }
+    if ( Number.isNaN( data ) ) { return false }
+    if ( isInfinite( data ) ) { return false}
+
+    return data % 1 !== 0
+
+}
+
+
+
+////////
+
+/**
+ * Check if given data is not a number
+ *
+ * @param data {*} The data to check against the maximum safe integer state
+ * @returns {boolean} true if data is not a number, false otherwise.
+ */
+function isNaN ( data ) {
+    return Number.isNaN( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/numbers/isInfinite
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is an infinite number
+ *
+ * @param data {*} The data to check against the infinite state
+ * @returns {boolean} true if data is infinite, false otherwise
+ */
+function isInfinite ( data ) {
+
+    if ( isNotNumber( data ) ) { return false }
+    if ( Number.isNaN( data ) ) { return false }
+
+    return !Number.isFinite( data )
+}
+
+/**
+ * Check if the given data is an infinite negative number
+ *
+ * @param data {*} The data to check against the negative infinite state
+ * @returns {boolean} true if data is negative infinite, false otherwise
+ */
+function isInfiniteNegative ( data ) {
+    return ( data === Number.NEGATIVE_INFINITY )
+}
+
+/**
+ * Check if the given data is an infinite positive number
+ *
+ * @param data {*} The data to check against the positive infinite state
+ * @returns {boolean} true if data is positive infinite, false otherwise
+ */
+function isInfinitePositive ( data ) {
+    return ( data === Number.POSITIVE_INFINITY )
+}
+
+///
+
+/**
+ * Check if the given data is a finite number
+ *
+ * @param data {*} The data to check against the finite state
+ * @returns {boolean} true if data is finite, false otherwise
+ */
+function isFinite ( data ) {
+    return Number.isFinite( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/numbers/isMax
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is a maximum positive number
+ *
+ * @param data {*} The data to check against the positive maximum state
+ * @returns {boolean} true if data is positive maximum, false otherwise
+ */
+function isMaxPositive ( data ) {
+    return ( data === Number.MAX_VALUE )
+}
+
+/**
+ * Check if the given data is a maximum negative number
+ *
+ * @param data {*} The data to check against the maximum infinite state
+ * @returns {boolean} true if data is negative maximum, false otherwise
+ */
+function isMaxNegative ( data ) {
+    return ( data === -Number.MAX_VALUE )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/numbers/isMin
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is a minimum positive number
+ *
+ * @param data {*} The data to check against the positive minimum state
+ * @returns {boolean} true if data is positive minimum, false otherwise
+ */
+function isMinPositive ( data ) {
+    return ( data === Number.MIN_VALUE )
+}
+
+/**
+ * Check if the given data is a minimum negative number
+ *
+ * @param data {*} The data to check against the minimum infinite state
+ * @returns {boolean} true if data is negative minimum, false otherwise
+ */
+function isMinNegative ( data ) {
+    return ( data === -Number.MIN_VALUE )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/numbers/isSafeInteger
+ * @desc Export function to validate if a value is a finite number
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is a maximum safe integer number
+ *
+ * @param data {*} The data to check against the maximum safe integer state
+ * @returns {boolean} true if data is a maximum safe integer, false otherwise
+ */
+function isMaxSafeInteger ( data ) {
+    return ( data === Number.MAX_SAFE_INTEGER )
+}
+
+/**
+ * Check if the given data is a minimum safe integer number
+ *
+ * @param data {*} The data to check against the minimum safe integer state
+ * @returns {boolean} true if data is a minimum safe integer, false otherwise
+ */
+function isMinSafeInteger ( data ) {
+    return ( data === Number.MIN_SAFE_INTEGER )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_numbers
+ * @description Export the validation methods about numbers
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/objects
+ * @desc Export function to validate if a value is an object
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an empty object
+ *
+ * @param data {*} The data to check against the emptiness of the object
+ * @returns {boolean} true if data is an empty object, false otherwise
+ */
+function isEmptyObject ( data ) {
+
+    if ( isNotObject( data ) ) { return false }
+
+    if ( data.length === 0 ) {
+        return true
+    }
+
+    // Otherwise, does it have any properties of its own?
+    for ( let key in data ) {
+        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+////
+
+/**
+ * Check if given data is not an empty object
+ *
+ * @param data {*} The data to check against the emptiness of the object
+ * @returns {boolean} true if data is not an empty object, false otherwise
+ */
+function isNotEmptyObject ( data ) {
+    return !( isEmptyObject( data ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_objects
+ * @description Export the validation methods about objects
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/strings
+ * @desc Export function to validate if a value is a string
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is an empty string
+ *
+ * @param data {*} The data to check against the emptiness of the string
+ * @returns {boolean} true if data is an empty string, false otherwise.
+ */
+function isEmptyString ( data ) {
+
+    if ( isNotString( data ) ) {
+        return false
+    }
+
+    return ( data.length === 0 )
+
+}
+
+////
+
+/**
+ * Check if given data is not an empty string
+ *
+ * @param data {*} The data to check against the emptiness of the string
+ * @returns {boolean} true if data is not an empty string, false otherwise.
+ */
+function isNotEmptyString ( data ) {
+
+    return !( isEmptyString( data ) )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/strings
+ * @desc Export function to validate if a value is a string
+ * @example todo
+ *
+ */
+
+/**
+ * Check if the given data is a blank string
+ *
+ * @param data {*} The data to check against the blankness of the string
+ * @returns {boolean} true if data is a blank string, false otherwise.
+ */
+function isBlankString ( data ) {
+
+    if ( isNotString( data ) ) { return false }
+    if ( isEmptyString( data ) ) { return false }
+
+    return ( !/\S/.test( data ) )
+}
+
+////
+
+/**
+ * Check if the given data is not a blank string
+ *
+ * @param data {*} The data to check against the blankness of the string
+ * @returns {boolean} true if data is not a blank string, false otherwise.
+ */
+function isNotBlankString ( data ) {
+
+    return !( isBlankString( data ) )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_strings
+ * @description Export the validation methods about strings
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/symbols
+ * @desc Export function to validate if a value is a symbol
+ * @example todo
+ *
+ */
+
+/**
+ * Check if given data is a symbol
+ *
+ * @param data {*} The data to check against the symbol type
+ * @returns {boolean} true if data is a symbol, false otherwise.
+ */
+function isSymbol ( data ) {
+    return ( typeof data === 'symbol' )
+}
+
+/////
+
+/**
+ * Check if given data is not a symbol
+ *
+ * @param data {*} The data to check against the symbol type
+ * @returns {boolean} true if data is not a symbol, false otherwise.
+ */
+function isNotSymbol ( data ) {
+    return ( typeof data !== 'symbol' )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_symbols
+ * @description Export the validation methods about symbols
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/voids
+ * @desc Export function to validate if a value is a void
+ * @example todo
+ *
+ */
+
+/**
+ * Check emptiness of given data
+ *
+ * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
+ *
+ * @param data {*} The data to check against the emptiness
+ * @returns {boolean} true if data is considered as empty, false otherwise.
+ */
+function isEmpty ( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+    if ( isEmptyString( data ) ) { return true}
+    if ( isEmptyArray( data ) ) { return true }
+    if ( isEmptyObject( data ) ) { return true }
+
+    return false
+
+}
+
+///
+
+/**
+ * Check fullness of given data
+ *
+ * @param data {*} The data to check against the emptiness
+ * @returns {boolean} true if data is considered as not empty, false otherwise.
+ */
+function isNotEmpty ( data ) {
+    return !isEmpty( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_voids
+ * @description Export the validation methods about voids notions like null or undefined
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module cores/cores
+ * @description Export the Validator singleton instance that allow to validate complex data structure
+ * @example
+ *
+ const validator = Itee.Validators.Validator
+
+ // Using unique function for One registered type
+ // Usefull when a simple data structure is used multiple times
+ validator.add( 'ColorType', color => {
+
+                const r = color.r
+                if ( color.r === undefined || Itee.Validators.isNotNumber( r ) ) {
+                    return false
+                }
+
+                const g = color.g
+                if ( color.g === undefined || Itee.Validators.isNotNumber( g ) ) {
+                    return false
+                }
+
+                const b = color.b
+                if ( color.b === undefined || Itee.Validators.isNotNumber( b ) ) {
+                    return false
+                }
+
+                return true
+            } )
+
+ // Using schema composition
+ // Usefull for design validation schema faster and based on previous declared validation types
+ validator.add( 'Range_0_255', ( value ) => {
+
+                if ( Itee.Validators.isNotNumber( value ) ) {
+                    return false
+                }
+
+                return !(value < 0 || value > 255)
+
+            } )
+
+ validator.add( 'ColorSchema', {
+                r: {
+                    required: true,
+                    type:     'Range_0_255'
+                },
+                g: {
+                    required: true,
+                    type:     'Range_0_255'
+                },
+                b: {
+                    required: true,
+                    type:     'Range_0_255'
+                }
+            } )
+
+ validator.add( 'ColorStructure', {
+                color_from_type: {
+                    type: 'ColorType'
+                },
+                col_from_schema: {
+                    type: 'ColorSchema'
+                },
+                col_from_fn:     {
+                    // Inner function
+	                // Usefull for specific validation requirement that cannot match other previous validation schema or type
+                    fn: function ColorValidator ( color ) {
+
+                        const r = color.r
+                        if ( color.r === undefined || Itee.Validators.isNotNumber( r ) ) {
+                            return false
+                        }
+
+                        const g = color.g
+                        if ( color.g === undefined || Itee.Validators.isNotNumber( g ) ) {
+                            return false
+                        }
+
+                        const b = color.b
+                        if ( color.b === undefined || Itee.Validators.isNotNumber( b ) ) {
+                            return false
+                        }
+
+                        return true
+                    }
+                }
+            } )
+
+ // The data to validate
+ const colorStruct = {
+                color_from_type: {
+                    r: 0,
+                    g: 1,
+                    b: 2
+                },
+                col_from_schema: {
+                    r: 10,
+                    g: 20,
+                    b: 30
+                },
+                col_from_fn:     {
+                    r: 0,
+                    g: 127,
+                    b: 255
+                }
+            }
+
+ // Execute
+
+ try {
+
+    if ( validator.check( colorStruct, 'ColorStructure' ) ) {
+        alert( 'ColorStructure is valid !' )
+    } else {
+        alert( validator.errors )
+    }
+
+} catch ( err ) {
+    alert( err )
+}
+ *
+ */
+
+class Validator {
+
+    constructor () {
+
+        /**
+         * The validators store, by default it contains validators for Boolean, Number, Integer, Float, Array, String, Object, Symbol and Function
+         *
+         * @type {(function|object)}
+         */
+        this.validators = {
+            Boolean:  isBoolean,
+            Number:   isNumber,
+            Integer:  isInteger,
+            Float:    isFloat,
+            Array:    isArray,
+            String:   isString,
+            Object:   isObject,
+            Symbol:   isSymbol,
+            Function: isFunction
+        };
+
+        /**
+         * The list of errors occured during the check
+         *
+         * @type {Array.<string>}
+         */
+        this.errors = [];
+
+    }
+
+    /**
+     * Add a new validator schema to the validator instance
+     *
+     * @param type {string} - A string that represent the type of data to validate
+     * @param validator {(function|object)} - A function or validation schema that represent the type of data to validate
+     */
+    add ( type, validator ) {
+
+        if ( isNotString( type ) ) { throw new TypeError( `Validator: Expect type to be a string` ) }
+        if ( isNotFunction( validator ) && isNotObject( validator ) ) { throw new TypeError( `Validator: Expect validator to be an object or a function` ) }
+        if ( isDefined( this.validators[ type ] ) ) { throw new TypeError( `Validator: a validator is already defined for type '${type}'` ) }
+
+        this.validators[ type ] = validator;
+
+    }
+
+    /**
+     * To remove a registered type
+     *
+     * @param type {string} - The type to remove
+     */
+    remove ( type ) {
+
+        delete this.validators[ type ];
+
+    }
+
+    /**
+     * Allow to known the available types store in current validator instance
+     *
+     * @return {Array.<string>} - The list of registered type
+     */
+    getAvalaibleTypes () {
+
+        const availablesTypes = [];
+
+        for ( let key in this.validators ) {
+            availablesTypes.push( key );
+        }
+
+        return availablesTypes
+
+    }
+
+    /**
+     * Will perform a deep structural comparison between the given data and the validation schema of the given type
+     *
+     * @param data {*} - The data to validate
+     * @param type {string} - The type of the validation schema to apply
+     * @param breakOnError {boolean} - Return on first validation error ( true by default )
+     * @return {boolean} - Return true is the data is validated, false otherwise
+     */
+    check ( data, type, breakOnError = true ) {
+
+        const validator = this.validators[ type ];
+        if ( isNotDefined( validator ) ) {
+            throw new TypeError( `Validator: Unable to find schema validation of type '${type}'` )
+        }
+
+        let result = true;
+        if ( isFunction( validator ) ) {
+
+            result = validator( data );
+
+        } else if ( isObject( validator ) ) {
+
+            let subResult = true;
+            for ( let key in validator ) {
+
+                const subValidator = validator[ key ];
+                if ( isNotDefined( subValidator ) ) {
+                    throw new TypeError( `Validator: Missing validator for key '${key}' of type '${type}'` )
+                }
+
+                const value      = data[ key ];
+                const isRequired = subValidator.required;
+                if ( isNotDefined( value ) ) {
+                    if ( isRequired ) {
+                        subResult = false;
+                    } else {
+                        continue
+                    }
+                }
+
+                // In case of overriden validation function check it first
+                let validatorFunction = subValidator.fn;
+                if ( isDefined( validatorFunction ) ) {
+
+                    if ( isNotFunction( validatorFunction ) ) {
+                        throw new TypeError( `Validator: Invalid validation function for '${key}' with type '${type}'` )
+                    }
+
+                    subResult = validatorFunction( value );
+
+                } else {
+
+                    subResult = this.check( value, subValidator.type, breakOnError );
+
+                }
+
+                if ( subResult === false ) {
+
+                    this.errors.push( `Validator: Invalid property '${key}' of type '${subValidator.type}' with value '${value}' in object of type '${type}'` );
+                    result = false;
+                    if ( breakOnError ) {
+                        break
+                    }
+
+                }
+
+            }
+
+        } else {
+
+            throw new TypeError( `Validator: Unknown validator of type '${type}'` )
+
+        }
+
+        return result
+
+    }
+
+}
+
+/**
+ * The singleton instance
+ *
+ * @type {Validator}
+ */
+exports.Validator = undefined;
+if ( isNotDefined( exports.Validator ) ) {
+    exports.Validator = new Validator();
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isArrayBuffer ( data ) {
+    return ( data instanceof ArrayBuffer )
+}
+
+function isNotArrayBuffer ( data ) {
+    return !isArrayBuffer( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isBigInt64Array ( data ) {
+    return ( data instanceof BigInt64Array )
+}
+
+function isNotBigInt64Array ( data ) {
+    return !isBigInt64Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isBigUint64Array ( data ) {
+    return ( data instanceof BigUint64Array )
+}
+
+function isNotBigUint64Array ( data ) {
+    return !isBigUint64Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isFloat32Array ( data ) {
+    return ( data instanceof Float32Array )
+}
+
+function isNotFloat32Array ( data ) {
+    return !isFloat32Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isFloat64Array ( data ) {
+    return ( data instanceof Float64Array )
+}
+
+function isNotFloat64Array ( data ) {
+    return !isFloat64Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isInt16Array ( data ) {
+    return ( data instanceof Int16Array )
+}
+
+function isNotInt16Array ( data ) {
+    return !isInt16Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isInt32Array ( data ) {
+    return ( data instanceof Int32Array )
+}
+
+function isNotInt32Array ( data ) {
+    return !isInt32Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isInt8Array ( data ) {
+    return ( data instanceof Int8Array )
+}
+
+function isNotInt8Array ( data ) {
+    return !isInt8Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isUint16Array ( data ) {
+    return ( data instanceof Uint16Array )
+}
+
+function isNotUint16Array ( data ) {
+    return !isUint16Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isUint32Array ( data ) {
+    return ( data instanceof Uint32Array )
+}
+
+function isNotUint32Array ( data ) {
+    return !isUint32Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isUint8Array ( data ) {
+    return ( data instanceof Uint8Array )
+}
+
+function isNotUint8Array ( data ) {
+    return !isUint8Array( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isUint8ClampedArray ( data ) {
+    return ( data instanceof Uint8ClampedArray )
+}
+
+function isNotUint8ClampedArray ( data ) {
+    return !isUint8ClampedArray( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_cores
  * @description This is the cores main export entry point.
  * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
  *
  */
 
-var fs = {};
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/cores/_cores
+ * @description This is the cores main export entry point.
+ * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/maths/_maths
+ * @description This is the maths export entry point.
+ * It expose all exports of the ... sub-folder.
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export constants about temperatures
+ * @example todo
+ *
+ */
+
+const ABSOLUTE_ZERO_KELVIN     = 0.00000000045;
+const ABSOLUTE_ZERO_CELSIUS    = -273.14999999955;
+const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
+ *
+ * @param data
+ * @return {boolean|*|boolean}
+ */
+function isCelsius ( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS )
+}
+
+///
+
+/**
+ *
+ * @param data
+ * @return {boolean}
+ */
+function isNotCelsius ( data ) {
+    return !isCelsius( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
+ *
+ * @param data
+ * @return {boolean|*|boolean}
+ */
+function isFahrenheit ( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT )
+}
+
+///
+
+/**
+ *
+ * @param data
+ * @return {boolean}
+ */
+function isNotFahrenheit ( data ) {
+    return !isFahrenheit( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
+ *
+ * @param data
+ * @return {boolean|*|boolean}
+ */
+function isKelvin ( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN )
+}
+
+///
+
+/**
+ *
+ * @param data
+ * @return {boolean}
+ */
+function isNotKelvin ( data ) {
+    return !isKelvin( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module physics/temperatues
+ * @desc Export function to validate if a value is a temperature
+ * @example todo
+ *
+ */
+
+/**
+ *
+ * @param data
+ * @return {boolean|*|boolean}
+ */
+function isTemperature ( data ) {
+    return ( isKelvin( data ) || isCelsius( data ) || isFahrenheit( data ) )
+}
+
+///
+
+/**
+ *
+ * @param data
+ * @return {boolean}
+ */
+function isNotTemperature ( data ) {
+    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/physics/_temperatures
+ * @description Export the validation methods about temperatures
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/physics/_physics
+ * @description This is the physics export entry point.
+ * It expose all exports of the temperatures sub-folder.
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isBlockDevicePath ( path ) {
+    return fs$1.statSync( path ).isBlockDevice()
+}
+
+function isNotBlockDevicePath ( path ) {
+    return !isBlockDevicePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * Just an override of 'fs.existsSync' with more explicit name
+ *
+ * @param filePath the path to check
+ */
+function isValidPath ( path ) {
+    return fs$1.existsSync( path )
+}
+
+function isInvalidPath ( path ) {
+    return !isValidPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidBlockDevicePath ( path ) {
+    return ( isValidPath( path ) && isBlockDevicePath( path ) )
+}
+
+function isInvalidBlockDevicePath ( path ) {
+    return !isValidBlockDevicePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isCharacterDevicePath ( path ) {
+    return fs$1.statSync( path ).isCharacterDevice()
+}
+
+function isNotCharacterDevicePath ( path ) {
+    return !isCharacterDevicePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidCharacterDevicePath ( path ) {
+    return ( isValidPath( path ) && isCharacterDevicePath( path ) )
+}
+
+function isInvalidCharacterDevicePath ( path ) {
+    return !isValidCharacterDevicePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isDirectoryPath ( path ) {
+    return fs$1.statSync( path ).isDirectory()
+}
+
+function isNotDirectoryPath ( path ) {
+    return !isDirectoryPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isEmptyDirectory ( directoryPath ) {
+    return ( fs$1.readdirSync( directoryPath ).length === 0 )
+}
+
+function isNotEmptyDirectory ( directoryPath ) {
+    return !isEmptyDirectory( directoryPath )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidDirectoryPath ( path ) {
+    return ( isValidPath( path ) && isDirectoryPath( path ) )
+}
+
+function isInvalidDirectoryPath ( path ) {
+    return !isValidDirectoryPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isFIFOPath ( path ) {
+    return fs$1.statSync( path ).isFIFO()
+}
+
+function isNotFIFOPath ( path ) {
+    return !isFIFOPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidFIFOPath ( path ) {
+    return ( isValidPath( path ) && isFIFOPath( path ) )
+}
+
+function isInvalidFIFOPath ( path ) {
+    return !isValidFIFOPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * Check the file size against a limit ( 0 as default ).
+ * @param filePath
+ * @param threshold
+ * @return {boolean} - True if below the limit or zero, false otherwise
+ * @private
+ */
+function isEmptyFile ( filePath, threshold = 0 ) {
+    return ( fs$1.statSync( filePath ).size <= threshold )
+}
+
+function isNotEmptyFile ( filePath, threshold = 0 ) {
+    return !isEmptyFile( filePath, threshold )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isFilePath ( path ) {
+    return fs$1.statSync( path ).isFile()
+}
+
+function isNotFilePath ( path ) {
+    return !isFilePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidFilePath ( path ) {
+    return ( isValidPath( path ) && isFilePath( path ) )
+}
+
+function isInvalidFilePath ( path ) {
+    return !isValidFilePath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isSocketPath ( path ) {
+    return fs$1.statSync( path ).isSocket()
+}
+
+function isNotSocketPath ( path ) {
+    return !isSocketPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidSocketPath ( path ) {
+    return ( isValidPath( path ) && isSocketPath( path ) )
+}
+
+function isInvalidSocketPath ( path ) {
+    return !isValidSocketPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isSymbolicLinkPath ( path ) {
+    return fs$1.statSync( path ).isSymbolicLink()
+}
+
+function isNotSymbolicLinkPath ( path ) {
+    return !isSymbolicLinkPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+function isValidSymbolicLinkPath ( path ) {
+    return ( isValidPath( path ) && isSymbolicLinkPath( path ) )
+}
+
+function isInvalidSymbolicLinkPath ( path ) {
+    return !isValidSymbolicLinkPath( path )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file Todo
+ *
+ * @example Todo
+ *
+ */
+
+/**
+ * __________________________________________________________________________________________________________________________________________________________________________________________________
+ * _/\\\\\\\\\\\________________________________________________________/\\\________/\\\_________________/\\\\\\__________________/\\\_______________________________________________________________
+ * _\/////\\\///________________________________________________________\/\\\_______\/\\\________________\////\\\_________________\/\\\______________________________________________________________
+ * ______\/\\\_________/\\\______________________________________________\//\\\______/\\\____________________\/\\\_____/\\\________\/\\\_____________________/\\\____________________________________
+ * _______\/\\\______/\\\\\\\\\\\_____/\\\\\\\\______/\\\\\\\\_____________\//\\\____/\\\____/\\\\\\\\\_______\/\\\____\///_________\/\\\___/\\\\\\\\\_____/\\\\\\\\\\\_____/\\\\\_____/\\/\\\\\\\___
+ * ________\/\\\_____\////\\\////____/\\\/////\\\___/\\\/////\\\_____________\//\\\__/\\\____\////////\\\______\/\\\_____/\\\___/\\\\\\\\\__\////////\\\___\////\\\////____/\\\///\\\__\/\\\/////\\\_
+ * _________\/\\\________\/\\\_______/\\\\\\\\\\\___/\\\\\\\\\\\_______________\//\\\/\\\_______/\\\\\\\\\\_____\/\\\____\/\\\__/\\\////\\\____/\\\\\\\\\\_____\/\\\_______/\\\__\//\\\_\/\\\___\///_
+ * __________\/\\\________\/\\\_/\\__\//\\///////___\//\\///////_________________\//\\\\\_______/\\\/////\\\_____\/\\\____\/\\\_\/\\\__\/\\\___/\\\/////\\\_____\/\\\_/\\__\//\\\__/\\\__\/\\\_______
+ * ________/\\\\\\\\\\\____\//\\\\\____\//\\\\\\\\\\__\//\\\\\\\\\\________________\//\\\_______\//\\\\\\\\/\\__/\\\\\\\\\_\/\\\_\//\\\\\\\/\\_\//\\\\\\\\/\\____\//\\\\\____\///\\\\\/___\/\\\______
+ * ________\///////////______\/////______\//////////____\//////////__________________\///_________\////////\//__\/////////__\///___\///////\//___\////////\//______\/////_______\/////_____\///______
+ * __________________________________________________________________________________________________________________________________________________________________________________________________
+ *
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @file sources/itee-validators
+ * @description This is the main entry point to bundle the itee validators package.
+ * It expose all exports of the cores, maths and physics sub-folder.
+ *
+ */
+// #endif
+
+exports.isArray = isArray;
+exports.isNotArray = isNotArray;
+exports.isArrayOfArray = isArrayOfArray;
+exports.isNotArrayOfArray = isNotArrayOfArray;
+exports.isArrayOfMultiElement = isArrayOfMultiElement;
+exports.isArrayOfNull = isArrayOfNull;
+exports.isNotArrayOfNull = isNotArrayOfNull;
+exports.isArrayOfObject = isArrayOfObject;
+exports.isNotArrayOfObject = isNotArrayOfObject;
+exports.isArrayOfSingleElement = isArrayOfSingleElement;
+exports.isArrayOfString = isArrayOfString;
+exports.isNotArrayOfString = isNotArrayOfString;
+exports.isArrayOfUndefined = isArrayOfUndefined;
+exports.isNotArrayOfUndefined = isNotArrayOfUndefined;
+exports.isEmptyArray = isEmptyArray;
+exports.isNotEmptyArray = isNotEmptyArray;
+exports.isBoolean = isBoolean;
+exports.isNotBoolean = isNotBoolean;
+exports.isTrue = isTrue;
+exports.isFalse = isFalse;
+exports.isFunction = isFunction;
+exports.isNotFunction = isNotFunction;
+exports.isInfinite = isInfinite;
+exports.isInfiniteNegative = isInfiniteNegative;
+exports.isInfinitePositive = isInfinitePositive;
+exports.isFinite = isFinite;
+exports.isMaxPositive = isMaxPositive;
+exports.isMaxNegative = isMaxNegative;
+exports.isMinPositive = isMinPositive;
+exports.isMinNegative = isMinNegative;
+exports.isNumber = isNumber;
+exports.isNumberPositive = isNumberPositive;
+exports.isNumberNegative = isNumberNegative;
+exports.isNotNumber = isNotNumber;
+exports.isInteger = isInteger;
+exports.isFloat = isFloat;
+exports.isNaN = isNaN;
+exports.isMaxSafeInteger = isMaxSafeInteger;
+exports.isMinSafeInteger = isMinSafeInteger;
+exports.isZero = isZero;
+exports.isZeroPositive = isZeroPositive;
+exports.isZeroNegative = isZeroNegative;
+exports.isEmptyObject = isEmptyObject;
+exports.isNotEmptyObject = isNotEmptyObject;
+exports.isObject = isObject;
+exports.isNotObject = isNotObject;
+exports.isBlankString = isBlankString;
+exports.isNotBlankString = isNotBlankString;
+exports.isEmptyString = isEmptyString;
+exports.isNotEmptyString = isNotEmptyString;
+exports.isString = isString;
+exports.isNotString = isNotString;
+exports.isSymbol = isSymbol;
+exports.isNotSymbol = isNotSymbol;
+exports.isArrayBuffer = isArrayBuffer;
+exports.isNotArrayBuffer = isNotArrayBuffer;
+exports.isBigInt64Array = isBigInt64Array;
+exports.isNotBigInt64Array = isNotBigInt64Array;
+exports.isBigUint64Array = isBigUint64Array;
+exports.isNotBigUint64Array = isNotBigUint64Array;
+exports.isFloat32Array = isFloat32Array;
+exports.isNotFloat32Array = isNotFloat32Array;
+exports.isFloat64Array = isFloat64Array;
+exports.isNotFloat64Array = isNotFloat64Array;
+exports.isInt16Array = isInt16Array;
+exports.isNotInt16Array = isNotInt16Array;
+exports.isInt32Array = isInt32Array;
+exports.isNotInt32Array = isNotInt32Array;
+exports.isInt8Array = isInt8Array;
+exports.isNotInt8Array = isNotInt8Array;
+exports.isUint16Array = isUint16Array;
+exports.isNotUint16Array = isNotUint16Array;
+exports.isUint32Array = isUint32Array;
+exports.isNotUint32Array = isNotUint32Array;
+exports.isUint8Array = isUint8Array;
+exports.isNotUint8Array = isNotUint8Array;
+exports.isUint8ClampedArray = isUint8ClampedArray;
+exports.isNotUint8ClampedArray = isNotUint8ClampedArray;
+exports.isDefined = isDefined;
+exports.isNotDefined = isNotDefined;
+exports.isEmpty = isEmpty;
+exports.isNotEmpty = isNotEmpty;
+exports.isNull = isNull;
+exports.isNotNull = isNotNull;
+exports.isUndefined = isUndefined;
+exports.isNotUndefined = isNotUndefined;
+exports.ABSOLUTE_ZERO_KELVIN = ABSOLUTE_ZERO_KELVIN;
+exports.ABSOLUTE_ZERO_CELSIUS = ABSOLUTE_ZERO_CELSIUS;
+exports.ABSOLUTE_ZERO_FAHRENHEIT = ABSOLUTE_ZERO_FAHRENHEIT;
+exports.isCelsius = isCelsius;
+exports.isNotCelsius = isNotCelsius;
+exports.isFahrenheit = isFahrenheit;
+exports.isNotFahrenheit = isNotFahrenheit;
+exports.isKelvin = isKelvin;
+exports.isNotKelvin = isNotKelvin;
+exports.isTemperature = isTemperature;
+exports.isNotTemperature = isNotTemperature;
+exports.isBlockDevicePath = isBlockDevicePath;
+exports.isNotBlockDevicePath = isNotBlockDevicePath;
+exports.isValidBlockDevicePath = isValidBlockDevicePath;
+exports.isInvalidBlockDevicePath = isInvalidBlockDevicePath;
+exports.isCharacterDevicePath = isCharacterDevicePath;
+exports.isNotCharacterDevicePath = isNotCharacterDevicePath;
+exports.isValidCharacterDevicePath = isValidCharacterDevicePath;
+exports.isInvalidCharacterDevicePath = isInvalidCharacterDevicePath;
+exports.isDirectoryPath = isDirectoryPath;
+exports.isNotDirectoryPath = isNotDirectoryPath;
+exports.isEmptyDirectory = isEmptyDirectory;
+exports.isNotEmptyDirectory = isNotEmptyDirectory;
+exports.isValidDirectoryPath = isValidDirectoryPath;
+exports.isInvalidDirectoryPath = isInvalidDirectoryPath;
+exports.isFIFOPath = isFIFOPath;
+exports.isNotFIFOPath = isNotFIFOPath;
+exports.isValidFIFOPath = isValidFIFOPath;
+exports.isInvalidFIFOPath = isInvalidFIFOPath;
+exports.isEmptyFile = isEmptyFile;
+exports.isNotEmptyFile = isNotEmptyFile;
+exports.isFilePath = isFilePath;
+exports.isNotFilePath = isNotFilePath;
+exports.isValidFilePath = isValidFilePath;
+exports.isInvalidFilePath = isInvalidFilePath;
+exports.isValidPath = isValidPath;
+exports.isInvalidPath = isInvalidPath;
+exports.isSocketPath = isSocketPath;
+exports.isNotSocketPath = isNotSocketPath;
+exports.isValidSocketPath = isValidSocketPath;
+exports.isInvalidSocketPath = isInvalidSocketPath;
+exports.isSymbolicLinkPath = isSymbolicLinkPath;
+exports.isNotSymbolicLinkPath = isNotSymbolicLinkPath;
+exports.isValidSymbolicLinkPath = isValidSymbolicLinkPath;
+exports.isInvalidSymbolicLinkPath = isInvalidSymbolicLinkPath;
+
+});
+
+unwrapExports(iteeValidators_cjs);
+var iteeValidators_cjs_1 = iteeValidators_cjs.Validator;
+var iteeValidators_cjs_2 = iteeValidators_cjs.isArray;
+var iteeValidators_cjs_3 = iteeValidators_cjs.isNotArray;
+var iteeValidators_cjs_4 = iteeValidators_cjs.isArrayOfArray;
+var iteeValidators_cjs_5 = iteeValidators_cjs.isNotArrayOfArray;
+var iteeValidators_cjs_6 = iteeValidators_cjs.isArrayOfMultiElement;
+var iteeValidators_cjs_7 = iteeValidators_cjs.isArrayOfNull;
+var iteeValidators_cjs_8 = iteeValidators_cjs.isNotArrayOfNull;
+var iteeValidators_cjs_9 = iteeValidators_cjs.isArrayOfObject;
+var iteeValidators_cjs_10 = iteeValidators_cjs.isNotArrayOfObject;
+var iteeValidators_cjs_11 = iteeValidators_cjs.isArrayOfSingleElement;
+var iteeValidators_cjs_12 = iteeValidators_cjs.isArrayOfString;
+var iteeValidators_cjs_13 = iteeValidators_cjs.isNotArrayOfString;
+var iteeValidators_cjs_14 = iteeValidators_cjs.isArrayOfUndefined;
+var iteeValidators_cjs_15 = iteeValidators_cjs.isNotArrayOfUndefined;
+var iteeValidators_cjs_16 = iteeValidators_cjs.isEmptyArray;
+var iteeValidators_cjs_17 = iteeValidators_cjs.isNotEmptyArray;
+var iteeValidators_cjs_18 = iteeValidators_cjs.isBoolean;
+var iteeValidators_cjs_19 = iteeValidators_cjs.isNotBoolean;
+var iteeValidators_cjs_20 = iteeValidators_cjs.isTrue;
+var iteeValidators_cjs_21 = iteeValidators_cjs.isFalse;
+var iteeValidators_cjs_22 = iteeValidators_cjs.isFunction;
+var iteeValidators_cjs_23 = iteeValidators_cjs.isNotFunction;
+var iteeValidators_cjs_24 = iteeValidators_cjs.isInfinite;
+var iteeValidators_cjs_25 = iteeValidators_cjs.isInfiniteNegative;
+var iteeValidators_cjs_26 = iteeValidators_cjs.isInfinitePositive;
+var iteeValidators_cjs_27 = iteeValidators_cjs.isFinite;
+var iteeValidators_cjs_28 = iteeValidators_cjs.isMaxPositive;
+var iteeValidators_cjs_29 = iteeValidators_cjs.isMaxNegative;
+var iteeValidators_cjs_30 = iteeValidators_cjs.isMinPositive;
+var iteeValidators_cjs_31 = iteeValidators_cjs.isMinNegative;
+var iteeValidators_cjs_32 = iteeValidators_cjs.isNumber;
+var iteeValidators_cjs_33 = iteeValidators_cjs.isNumberPositive;
+var iteeValidators_cjs_34 = iteeValidators_cjs.isNumberNegative;
+var iteeValidators_cjs_35 = iteeValidators_cjs.isNotNumber;
+var iteeValidators_cjs_36 = iteeValidators_cjs.isInteger;
+var iteeValidators_cjs_37 = iteeValidators_cjs.isFloat;
+var iteeValidators_cjs_38 = iteeValidators_cjs.isNaN;
+var iteeValidators_cjs_39 = iteeValidators_cjs.isMaxSafeInteger;
+var iteeValidators_cjs_40 = iteeValidators_cjs.isMinSafeInteger;
+var iteeValidators_cjs_41 = iteeValidators_cjs.isZero;
+var iteeValidators_cjs_42 = iteeValidators_cjs.isZeroPositive;
+var iteeValidators_cjs_43 = iteeValidators_cjs.isZeroNegative;
+var iteeValidators_cjs_44 = iteeValidators_cjs.isEmptyObject;
+var iteeValidators_cjs_45 = iteeValidators_cjs.isNotEmptyObject;
+var iteeValidators_cjs_46 = iteeValidators_cjs.isObject;
+var iteeValidators_cjs_47 = iteeValidators_cjs.isNotObject;
+var iteeValidators_cjs_48 = iteeValidators_cjs.isBlankString;
+var iteeValidators_cjs_49 = iteeValidators_cjs.isNotBlankString;
+var iteeValidators_cjs_50 = iteeValidators_cjs.isEmptyString;
+var iteeValidators_cjs_51 = iteeValidators_cjs.isNotEmptyString;
+var iteeValidators_cjs_52 = iteeValidators_cjs.isString;
+var iteeValidators_cjs_53 = iteeValidators_cjs.isNotString;
+var iteeValidators_cjs_54 = iteeValidators_cjs.isSymbol;
+var iteeValidators_cjs_55 = iteeValidators_cjs.isNotSymbol;
+var iteeValidators_cjs_56 = iteeValidators_cjs.isArrayBuffer;
+var iteeValidators_cjs_57 = iteeValidators_cjs.isNotArrayBuffer;
+var iteeValidators_cjs_58 = iteeValidators_cjs.isBigInt64Array;
+var iteeValidators_cjs_59 = iteeValidators_cjs.isNotBigInt64Array;
+var iteeValidators_cjs_60 = iteeValidators_cjs.isBigUint64Array;
+var iteeValidators_cjs_61 = iteeValidators_cjs.isNotBigUint64Array;
+var iteeValidators_cjs_62 = iteeValidators_cjs.isFloat32Array;
+var iteeValidators_cjs_63 = iteeValidators_cjs.isNotFloat32Array;
+var iteeValidators_cjs_64 = iteeValidators_cjs.isFloat64Array;
+var iteeValidators_cjs_65 = iteeValidators_cjs.isNotFloat64Array;
+var iteeValidators_cjs_66 = iteeValidators_cjs.isInt16Array;
+var iteeValidators_cjs_67 = iteeValidators_cjs.isNotInt16Array;
+var iteeValidators_cjs_68 = iteeValidators_cjs.isInt32Array;
+var iteeValidators_cjs_69 = iteeValidators_cjs.isNotInt32Array;
+var iteeValidators_cjs_70 = iteeValidators_cjs.isInt8Array;
+var iteeValidators_cjs_71 = iteeValidators_cjs.isNotInt8Array;
+var iteeValidators_cjs_72 = iteeValidators_cjs.isUint16Array;
+var iteeValidators_cjs_73 = iteeValidators_cjs.isNotUint16Array;
+var iteeValidators_cjs_74 = iteeValidators_cjs.isUint32Array;
+var iteeValidators_cjs_75 = iteeValidators_cjs.isNotUint32Array;
+var iteeValidators_cjs_76 = iteeValidators_cjs.isUint8Array;
+var iteeValidators_cjs_77 = iteeValidators_cjs.isNotUint8Array;
+var iteeValidators_cjs_78 = iteeValidators_cjs.isUint8ClampedArray;
+var iteeValidators_cjs_79 = iteeValidators_cjs.isNotUint8ClampedArray;
+var iteeValidators_cjs_80 = iteeValidators_cjs.isDefined;
+var iteeValidators_cjs_81 = iteeValidators_cjs.isNotDefined;
+var iteeValidators_cjs_82 = iteeValidators_cjs.isEmpty;
+var iteeValidators_cjs_83 = iteeValidators_cjs.isNotEmpty;
+var iteeValidators_cjs_84 = iteeValidators_cjs.isNull;
+var iteeValidators_cjs_85 = iteeValidators_cjs.isNotNull;
+var iteeValidators_cjs_86 = iteeValidators_cjs.isUndefined;
+var iteeValidators_cjs_87 = iteeValidators_cjs.isNotUndefined;
+var iteeValidators_cjs_88 = iteeValidators_cjs.ABSOLUTE_ZERO_KELVIN;
+var iteeValidators_cjs_89 = iteeValidators_cjs.ABSOLUTE_ZERO_CELSIUS;
+var iteeValidators_cjs_90 = iteeValidators_cjs.ABSOLUTE_ZERO_FAHRENHEIT;
+var iteeValidators_cjs_91 = iteeValidators_cjs.isCelsius;
+var iteeValidators_cjs_92 = iteeValidators_cjs.isNotCelsius;
+var iteeValidators_cjs_93 = iteeValidators_cjs.isFahrenheit;
+var iteeValidators_cjs_94 = iteeValidators_cjs.isNotFahrenheit;
+var iteeValidators_cjs_95 = iteeValidators_cjs.isKelvin;
+var iteeValidators_cjs_96 = iteeValidators_cjs.isNotKelvin;
+var iteeValidators_cjs_97 = iteeValidators_cjs.isTemperature;
+var iteeValidators_cjs_98 = iteeValidators_cjs.isNotTemperature;
+var iteeValidators_cjs_99 = iteeValidators_cjs.isBlockDevicePath;
+var iteeValidators_cjs_100 = iteeValidators_cjs.isNotBlockDevicePath;
+var iteeValidators_cjs_101 = iteeValidators_cjs.isValidBlockDevicePath;
+var iteeValidators_cjs_102 = iteeValidators_cjs.isInvalidBlockDevicePath;
+var iteeValidators_cjs_103 = iteeValidators_cjs.isCharacterDevicePath;
+var iteeValidators_cjs_104 = iteeValidators_cjs.isNotCharacterDevicePath;
+var iteeValidators_cjs_105 = iteeValidators_cjs.isValidCharacterDevicePath;
+var iteeValidators_cjs_106 = iteeValidators_cjs.isInvalidCharacterDevicePath;
+var iteeValidators_cjs_107 = iteeValidators_cjs.isDirectoryPath;
+var iteeValidators_cjs_108 = iteeValidators_cjs.isNotDirectoryPath;
+var iteeValidators_cjs_109 = iteeValidators_cjs.isEmptyDirectory;
+var iteeValidators_cjs_110 = iteeValidators_cjs.isNotEmptyDirectory;
+var iteeValidators_cjs_111 = iteeValidators_cjs.isValidDirectoryPath;
+var iteeValidators_cjs_112 = iteeValidators_cjs.isInvalidDirectoryPath;
+var iteeValidators_cjs_113 = iteeValidators_cjs.isFIFOPath;
+var iteeValidators_cjs_114 = iteeValidators_cjs.isNotFIFOPath;
+var iteeValidators_cjs_115 = iteeValidators_cjs.isValidFIFOPath;
+var iteeValidators_cjs_116 = iteeValidators_cjs.isInvalidFIFOPath;
+var iteeValidators_cjs_117 = iteeValidators_cjs.isEmptyFile;
+var iteeValidators_cjs_118 = iteeValidators_cjs.isNotEmptyFile;
+var iteeValidators_cjs_119 = iteeValidators_cjs.isFilePath;
+var iteeValidators_cjs_120 = iteeValidators_cjs.isNotFilePath;
+var iteeValidators_cjs_121 = iteeValidators_cjs.isValidFilePath;
+var iteeValidators_cjs_122 = iteeValidators_cjs.isInvalidFilePath;
+var iteeValidators_cjs_123 = iteeValidators_cjs.isValidPath;
+var iteeValidators_cjs_124 = iteeValidators_cjs.isInvalidPath;
+var iteeValidators_cjs_125 = iteeValidators_cjs.isSocketPath;
+var iteeValidators_cjs_126 = iteeValidators_cjs.isNotSocketPath;
+var iteeValidators_cjs_127 = iteeValidators_cjs.isValidSocketPath;
+var iteeValidators_cjs_128 = iteeValidators_cjs.isInvalidSocketPath;
+var iteeValidators_cjs_129 = iteeValidators_cjs.isSymbolicLinkPath;
+var iteeValidators_cjs_130 = iteeValidators_cjs.isNotSymbolicLinkPath;
+var iteeValidators_cjs_131 = iteeValidators_cjs.isValidSymbolicLinkPath;
+var iteeValidators_cjs_132 = iteeValidators_cjs.isInvalidSymbolicLinkPath;
 
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1363,69 +4037,9 @@ var substr = 'ab'.substr(-1) === 'b' ?
  *
  */
 
-//Todo: Move this stuff in IteeValidator !
-/**
- * Just an override of 'fs.existsSync' with more explicit name
- *
- * @param filePath the path to check
- * @private
- */
-function isValidPath ( path ) {
-    return fs.existsSync( path )
+function getPathsUnder ( directoryPath ) {
+    return fs.readdirSync( directoryPath )
 }
-
-function isInvalidPath ( path ) {
-    return !isValidPath( path )
-}
-
-function isFile ( path ) {
-    return fs.statSync( path ).isFile()
-}
-
-function isNotFile ( path ) {
-    return !isFile( path )
-}
-
-function isDirectory ( path ) {
-    return fs.statSync( path ).isDirectory()
-}
-
-function isNotDirectory ( path ) {
-    return !isDirectory( path )
-}
-
-function isValidFilePath ( path ) {
-    return ( isValidPath( path ) && isFile( path ) )
-}
-
-function isInvalidFilePath ( path ) {
-    return !isValidFilePath( path )
-}
-
-function isValidDirectoryPath ( path ) {
-    return ( isValidPath( path ) && isDirectory( path ) )
-}
-
-function isInvalidDirectoryPath ( path ) {
-    return !isValidDirectoryPath( path )
-}
-
-/**
- * Check the file size against a limit ( 0 as default ).
- * @param filePath
- * @param threshold
- * @return {boolean} - True if below the limit or zero, false otherwise
- * @private
- */
-function isEmptyFile ( filePath, threshold = 0 ) {
-    return ( fs.statSync( filePath ).size <= threshold )
-}
-
-function isNotEmptyFile ( filePath, threshold = 0 ) {
-    return !isEmptyFile( filePath, threshold )
-}
-
-// Todo-End
 
 /**
  * Allow to search all files under filePaths in a recursive way
@@ -1434,72 +4048,38 @@ function isNotEmptyFile ( filePath, threshold = 0 ) {
  * @returns {Array} - The paths of finded files
  * @private
  */
-function getFilesPathsUnder ( filePaths ) {
+function getFilesPathsUnder ( paths ) {
 
-    let files = [];
+    const _paths = ( iteeValidators_cjs_2( paths ) ) ? paths : [ paths ];
+    let files    = [];
 
-    if ( Array.isArray( filePaths ) ) {
+    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
 
-        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+        const localPath = _paths[ pathIndex ];
 
-            checkStateOf( filePaths[ pathIndex ] );
-
+        if ( iteeValidators_cjs_124( localPath ) ) {
+            console.error( `The path "${localPath}" is not valid !` );
+            continue
         }
 
-    } else {
+        const stats = fs.statSync( localPath );
+        if ( stats.isFile() ) {
 
-        checkStateOf( filePaths );
+            files.push( localPath );
+
+        } else if ( stats.isDirectory() ) {
+
+            const subPaths      = getPathsUnder( localPath );
+            const subFilesPaths = subPaths.forEach( ( name ) => { getFilesPathsUnder( path.resolve( localPath, name ) ); } );
+            Array.prototype.push.apply( files, subFilesPaths );
+
+        }
 
     }
 
     return files
 
-    function getFilesPathsUnderFolder ( folder ) {
-
-        fs.readdirSync( folder ).forEach( ( name ) => {
-
-            const filePath = path.resolve( folder, name );
-            checkStateOf( filePath );
-
-        } );
-
-    }
-
-    function checkStateOf ( filePath ) {
-
-        if ( !fs.existsSync( filePath ) ) {
-            console.error( 'Invalid file path "' + filePath + '"' );
-            return
-        }
-
-        const stats = fs.statSync( filePath );
-        if ( stats.isFile() ) {
-
-            files.push( filePath );
-
-        } else if ( stats.isDirectory() ) {
-
-            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) );
-
-        } else {
-
-            console.error( 'Invalid stat object !' );
-
-        }
-
-    }
-
 }
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/cores/cores
- * @description This is the cores main export entry point.
- * It expose all exports of the voids, booleans, numbers, symbols, strings, arrays, objects and functions validators.
- *
- */
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -1759,15 +4339,6 @@ function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [MIT]{@link https://opensource.org/licenses/MIT}
  *
- * @module sources/geometries/_geomathries
- * @description This is the geometries/mathematique export entry point.
- * It expose all exports of the geometries sub-files.
- */
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
  * @module sources/physics/temperatures
  * @description Export the utilities methods about temperatures
  * @requires {@link module:sources/cores/numbers}
@@ -1891,33 +4462,5 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
 }
 
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/physics/physics
- * @description This is the physics export entry point.
- * It expose all exports of the temperatures sub-folder.
- *
- */
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/physics/physics
- * @description This is the physics export entry point.
- * It expose all exports of the temperatures sub-folder.
- *
- */
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- *
- * @module sources/itee-util
- * @description The main entry point for Itee-Utils, it contains all exports of the library
- */
-
-export { getRandomArbitrary, getRandomInt, uniq, extend, serializeObject, extendObject, createInterval, classNameify, diacriticsMap, removeDiacritics, isValidPath, isInvalidPath, isFile, isNotFile, isDirectory, isNotDirectory, isValidFilePath, isInvalidFilePath, isValidDirectoryPath, isInvalidDirectoryPath, isEmptyFile, isNotEmptyFile, getFilesPathsUnder, PI, PI_2, PI_4, DEG_TO_RAD, RAD_TO_DEG, degreesToRadians, degreesFromRadians, radiansToDegrees, radiansFromDegrees, getYaw, getPitch, convertWebGLRotationToTopogicalYawPitch, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, celsiusToKelvin, celsiusToFahrenheit, fahrenheitToCelsius, fahrenheitToKelvin, kelvinToCelsius, kelvinToFahrenheit };
+export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, diacriticsMap, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, getFilesPathsUnder, getPitch, getRandomArbitrary, getRandomInt, getYaw, kelvinToCelsius, kelvinToFahrenheit, radiansFromDegrees, radiansToDegrees, removeDiacritics, serializeObject, sortBy, toEnum, uniq };
 //# sourceMappingURL=itee-utils.esm.js.map
