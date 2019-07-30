@@ -5,8 +5,9 @@
  * @license MIT
  */
 
-const commonJs    = require( 'rollup-plugin-commonjs' )
-const nodeResolve = require( 'rollup-plugin-node-resolve' )
+const packageInfos = require( '../package' )
+const commonJs     = require( 'rollup-plugin-commonjs' )
+const nodeResolve  = require( 'rollup-plugin-node-resolve' )
 
 function CreateTestsBuildsConfigs ( /*options*/ ) {
     'use strict'
@@ -14,35 +15,35 @@ function CreateTestsBuildsConfigs ( /*options*/ ) {
     return [
 
         {
-            input:     'tests/units/main.units.js',
+            input:     `tests/units/${packageInfos.name}.units.js`,
             plugins:   [
                 commonJs( {
                     include: 'node_modules/**'
                 } ),
                 nodeResolve()
             ],
-            treeshake: false,
+            treeshake: true,
             output:    {
                 indent: '\t',
                 format: 'iife',
-                name:   'Itee.Utils',
-                file:   'tests/itee-utils.units.js'
+                name:   'Itee.Units',
+                file:   `tests/builds/${packageInfos.name}.units.js`
             }
         },
         {
-            input:     'tests/benchmarks/main.benchs.js',
+            input:     `tests/benchmarks/${packageInfos.name}.benchs.js`,
             plugins:   [
                 commonJs( {
                     include: 'node_modules/**'
                 } ),
                 nodeResolve()
             ],
-            treeshake: false,
+            treeshake: true,
             output:    {
                 indent: '\t',
                 format: 'iife',
-                name:   'Itee.Utils',
-                file:   'tests/itee-utils.benchs.js'
+                name:   'Itee.Benchs',
+                file:   `tests/builds/${packageInfos.name}.benchs.js`
             }
         }
     ]
