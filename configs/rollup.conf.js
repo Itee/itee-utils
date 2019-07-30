@@ -8,170 +8,111 @@
  * Use npm run help to display all available build options.
  *
  * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
- * @requires {@link module: [rollup-plugin-buble]{@link https://github.com/rollup/rollup-plugin-buble}}
- * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
- * @requires {@link module: [rollup-plugin-commonjs]{@link https://github.com/rollup/rollup-plugin-commonjs}}
- * @requires {@link module: [rollup-plugin-replace]{@link https://github.com/rollup/rollup-plugin-replace}}
- * @requires {@link module: [rollup-plugin-uglify-es]{@link https://github.com/TrySound/rollup-plugin-uglify}}
+ * @requires {@link module: [rollup-plugin-re]{@link https://github.com/jetiny/rollup-plugin-re}}
+ * @requires {@link module: [rollup-plugin-uglify-es]{@link https://github.com/ezekielchentnik/rollup-plugin-uglify-es}}
  *
  */
-
-/* eslint-env node */
 
 const path        = require( 'path' )
-const nodeResolve = require( 'rollup-plugin-node-resolve' )
 const commonJs    = require( 'rollup-plugin-commonjs' )
+const nodeResolve = require( 'rollup-plugin-node-resolve' )
+const replace     = require( 'rollup-plugin-re' )
 const uglify      = require( 'rollup-plugin-uglify-es' )
-const strip       = require( 'rollup-plugin-strip' )
-const builtins    = require( 'rollup-plugin-node-builtins' )
 
 /**
- * Will create an appropriate configuration object for rollup, related to the given arguments.
- *
- *
- * @param fileName
- * @param inputPath
- * @param outputPath
- * @param {string} format - The desired module format output. Available values are: 'es', 'cjs', 'amd', 'iife' and 'umd'
- * @param {boolean} onProduction - The building environment. True for production, developement otherwise.
- * @param {boolean} wantSourceMap - Set to true if sourcemap must be include in the output.
- * @returns {object} The rollup configuration
+ * @generator
+ * @param options
+ * @return {Array}
  */
-function CreateRollupConfiguration ( fileName, inputPath, outputPath, format, onProduction, wantSourceMap ) {
+function CreateBuildsConfigs ( options ) {
+    'use strict'
 
-    const _format = (format === 'es') ? 'esm' : format
-    const _onProduction  = onProduction || false
-    const _wantSourceMap = wantSourceMap || false
-    const _fileName = (_format === 'esm') ? 'itee-utils' : fileName
+    const name      = options.name
+    const input     = options.input
+    const output    = options.output
+    const formats   = options.format.split( ',' )
+    const envs      = options.env.split( ',' )
+    const sourcemap = options.sourcemap
+    const treeshake = options.treeshake
+    const fileName  = path.basename( input, '.js' )
 
-    const fileExtension  = (_onProduction) ? '.min.js' : '.js'
-    const inputFilePath  = path.join( inputPath, _fileName + '.js' )
-    const outputFilePath = path.join( outputPath, _fileName + '.' + _format + fileExtension )
+    const configs = []
 
-    let rollupConfig = undefined
-    if ( _format === 'esm' ) {
+    for ( let formatIndex = 0, numberOfFormats = formats.length ; formatIndex < numberOfFormats ; ++formatIndex ) {
 
-        rollupConfig = {
-            inputOptions:  {
+        for ( let envIndex = 0, numberOfEnvs = envs.length ; envIndex < numberOfEnvs ; envIndex++ ) {
 
-                // core options
-                input:    inputFilePath,
-                external: [],
-                plugins:  [
-                    commonJs( {
-                        include: 'node_modules/**'
-                    } ),
-                    nodeResolve(),
-                    builtins(),
-                    onProduction && strip(),
-                    onProduction && uglify()
-                ],
+            const env            = envs[ envIndex ]
+            const prod           = ( env.includes( 'prod' ) )
+            const format         = formats[ formatIndex ]
+            const buildForNodeJS = ( format === 'cjs' )
+            const outputPath     = ( prod ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
 
-                // advanced options
-                onwarn: function onWarn ( { loc, frame, message } ) {
-                    if ( loc ) {
-                        process.stderr.write( `/!\\ WARNING: ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
-                    } else {
-                        process.stderr.write( `/!\\ WARNING: ${message}\n` )
-                    }
-                },
-                cache:  undefined,
-
-                // danger zone
-                acorn:         undefined,
-                context:       undefined,
-                moduleContext: {}
-            },
-            outputOptions: {
-                // core options
-                file:    outputFilePath,
-                format:  format,
-                name:    'Itee.Utils',
-                globals: {},
-
-                // advanced options
-                paths:     {},
-                banner:    '',
-                footer:    '',
-                intro:     '',
-                outro:     '',
-                sourcemap: _wantSourceMap,
-                interop:   true,
-
-                // danger zone
-                exports: 'auto',
-                amd:     {},
-                indent:  '  ',
-                strict:  true
-            }
-
-        }
-
-    } else {
-
-        rollupConfig = {
-            inputOptions:  {
-
-                // core options
-                input:    inputFilePath,
-                external: [
+            configs.push( {
+                input:    input,
+                external: ( buildForNodeJS ) ? [
                     'fs',
                     'path'
-                ],
-                plugins:  [
+                ] : [],
+                plugins: [
+                    replace( {
+                        defines: {
+                            IS_REMOVE: false,
+                            IS_NODE:   buildForNodeJS
+                        }
+                    } ),
                     commonJs( {
                         include: 'node_modules/**'
                     } ),
-                    nodeResolve(),
-                    builtins(),
-                    onProduction && strip(),
-                    onProduction && uglify()
+                    nodeResolve( {
+                        preferBuiltins: true
+                    } ),
+                    prod && uglify()
                 ],
+                onwarn: ( { loc, frame, message } ) => {
 
-                // advanced options
-                onwarn: function onWarn ( { loc, frame, message } ) {
+                    // Ignore some errors
+                    if ( message.includes( 'Circular dependency' ) ) { return }
+                    if ( message.includes( 'plugin uglify is deprecated' ) ) { return }
+
                     if ( loc ) {
-                        process.stderr.write( `/!\\ WARNING: ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
+                        process.stderr.write( `/!\\ ${loc.file} (${loc.line}:${loc.column}) ${frame} ${message}\n` )
                     } else {
-                        process.stderr.write( `/!\\ WARNING: ${message}\n` )
+                        process.stderr.write( `/!\\ ${message}\n` )
                     }
                 },
-                cache:  undefined,
+                treeshake: treeshake,
+                output:    {
+                    // core options
+                    file:    outputPath,
+                    format:  format,
+                    name:    name,
+                    globals: {},
 
-                // danger zone
-                acorn:         undefined,
-                context:       undefined,
-                moduleContext: {}
-            },
-            outputOptions: {
-                // core options
-                file:    outputFilePath,
-                format:  format,
-                name:    'Itee.Utils',
-                globals: {},
+                    // advanced options
+                    paths:     {},
+                    banner:    '',
+                    footer:    '',
+                    intro:     '',
+                    outro:     '',
+                    sourcemap: sourcemap,
+                    interop:   true,
 
-                // advanced options
-                paths:     {},
-                banner:    '',
-                footer:    '',
-                intro:     '',
-                outro:     '',
-                sourcemap: _wantSourceMap,
-                interop:   true,
-
-                // danger zone
-                exports: 'auto',
-                amd:     {},
-                indent:  '  ',
-                strict:  true
-            }
+                    // danger zone
+                    exports: 'auto',
+                    amd:     {},
+                    indent:  '\t',
+                    strict:  true
+                }
+            } )
 
         }
 
     }
 
-    return rollupConfig
+    return configs
 
 }
 
-module.exports = CreateRollupConfiguration
+module.exports = CreateBuildsConfigs
+

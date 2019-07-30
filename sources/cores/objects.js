@@ -12,10 +12,10 @@ import {
 } from 'itee-validators'
 
 export function uniq ( a ) {
-    var seen = {}
-    return a.filter( function ( item ) {
-        return seen.hasOwnProperty( item ) ? false : ( seen[ item ] = true )
-    } )
+
+    const seen = {}
+    return a.filter( item => Object.prototype.hasOwnProperty.call(seen, item) ? false : ( seen[ item ] = true ) )
+
 }
 
 /**
@@ -126,7 +126,7 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
         //Object Concatenation Inheritance
         for ( let attribute in ParentClassOrObject ) {
 
-            if ( ChildClass.hasOwnProperty( attribute ) ) { // We are sure that obj[key] belongs to the object and was not inherited.
+            if ( Object.prototype.hasOwnProperty.call(ChildClass, attribute) ) { // We are sure that obj[key] belongs to the object and was not inherited.
 
                 if ( ParentClassOrObject[ attribute ].constructor === Object || ParentClassOrObject[ attribute ].constructor === Array ) {
 

@@ -10,6 +10,8 @@
 
 /* eslint-env node */
 
+const packageInfos = require( '../package' )
+
 /**
  * Will assign an appropriate configuration object about benchmarks for karma.
  *
@@ -20,16 +22,14 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
     config.set( {
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '../',
+        basePath: '../tests/',
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: [ 'benchmark' ],
 
         // list of files / patterns to load in the browser
-        files: [
-            'tests/itee-utils.benchs.js'
-        ],
+        files: [ `builds/${packageInfos.name}.benchs.js` ],
 
         // list of files to exclude
         exclude: [],
@@ -54,10 +54,10 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
             //                hzUnits: chalk.italic.dim,
             //                suite: chalk.bold.magenta
             //            },
-            decorator:        "*",
+            decorator:        '*',
             terminalWidth:    60,
             hzWidth:          4,
-            hzUnits:          "ops/sec",
+            hzUnits:          'ops/sec',
             browserWidth:     40,
             showBrowser:      false,
             showSuiteSummary: true
@@ -81,8 +81,10 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [ 'Chrome' ],
-        //        browsers: ['Chrome', 'Firefox', 'Safari', 'IE'],
+        browsers: [ 'Firefox' ],
+        //        browsers: [ 'Chrome' ],
+        //        browsers: [ 'Edge' ],
+        //        browsers: [ 'Firefox', 'Chrome', 'Edge' ],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits

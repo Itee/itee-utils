@@ -4,6 +4,8 @@
  *
  */
 
+/* global suite, benchmark */
+
 const IteeUtilsSuite = suite( 'Itee#Utils', () => {
 
     benchmark(

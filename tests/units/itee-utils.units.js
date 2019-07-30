@@ -6,9 +6,11 @@
 
 /* global describe, expect, it */
 
+/*
 const root = typeof window !== 'undefined' ? window :
     typeof global !== 'undefined' ? global :
         Function( 'return this' )()
+*/
 
 describe( 'Itee#Utils', () => {
 

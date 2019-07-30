@@ -7,7 +7,10 @@
  */
 
 export * from './cores/_cores'
-export * from './fs/_fs'
 export * from './geomathics/_geomathics'
 export * from './physics/_physics'
 export * from './testings/_testings'
+
+// #if IS_NODE
+export * from './fs/_fs'
+// #endif

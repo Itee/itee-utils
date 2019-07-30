@@ -28,9 +28,29 @@ function CreateEslintConfiguration () {
         plugins:       [
             "mocha"
         ],
-        rules:         {
+        rules: {
+            'no-multiple-empty-lines':  [ 1, { 'max': 2 } ],
+            'no-mixed-spaces-and-tabs': 'off',
             'mocha/no-exclusive-tests': 'error',
-            'no-console':               'off',
+            'no-console':               'warn',
+            'no-multi-spaces':          [
+                'error', {
+                    exceptions: {
+                        'ImportDeclaration':  true,
+                        'VariableDeclarator': true
+                    }
+                }
+            ],
+            'key-spacing': [
+                'error', {
+                    'align': {
+                        'beforeColon': false,
+                        'afterColon':  true,
+                        'on':          'value'
+                    }
+                }
+            ]
+
         }
     }
 
