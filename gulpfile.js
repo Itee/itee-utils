@@ -220,30 +220,7 @@ gulp.task( 'test', gulp.series( 'unit', 'bench' ) )
 
 gulp.task( 'build-test', ( done ) => {
 
-    const options = parseArgs( process.argv, {
-        string:  [ 'n', 'i', 'f', 'e' ],
-        boolean: [ 's', 't' ],
-        default: {
-            n: 'itee-validators',
-            i: path.join( __dirname, 'sources' ),
-            o: path.join( __dirname, 'builds' ),
-            f: 'esm,cjs,iife,umd',
-            e: 'dev',
-            s: true,
-            t: true
-        },
-        alias:   {
-            n: 'name',
-            i: 'input',
-            o: 'output',
-            f: 'format',
-            e: 'env',
-            s: 'sourcemap',
-            t: 'treeshake'
-        }
-    } )
-
-    const configs = require( './configs/rollup.test.conf' )( options )
+    const configs = require( './configs/rollup.test.conf' )()
 
     nextBuild()
 
@@ -280,120 +257,60 @@ gulp.task( 'build-test', ( done ) => {
  */
 gulp.task( 'build', ( done ) => {
 
-    const options = processArguments( process.argv )
-    const configs = createBuildsConfigs( options )
+    const options = parseArgs( process.argv, {
+        string:  [ 'n', 'i', 'f', 'e' ],
+        boolean: [ 's', 't' ],
+        default: {
+            n: 'Itee.Utils',
+            i: path.join( __dirname, 'sources/itee-utils.js' ),
+            o: path.join( __dirname, 'builds' ),
+            f: 'esm,cjs,iife,umd',
+            e: 'dev,prod',
+            s: true,
+            t: true
+        },
+        alias: {
+            n: 'name',
+            i: 'input',
+            o: 'output',
+            f: 'format',
+            e: 'env',
+            s: 'sourcemap',
+            t: 'treeshake'
+        }
+    } )
+
+    const configs = require( './configs/rollup.conf' )( options )
 
     nextBuild()
 
-    function processArguments ( processArgv ) {
+    function nextBuild ( error ) {
         'use strict'
 
-        let defaultOptions = {
-            fileName:     'itee-utils',
-            inputPath:    path.join( __dirname, 'sources' ),
-            outputPath:   path.join( __dirname, 'builds' ),
-            environments: [ 'development', 'production' ],
-            formats:      [ 'amd', 'cjs', 'es', 'iife', 'umd' ],
-            sourceMap:    true
-        }
+        if ( error ) {
 
-        const argv = processArgv.slice( 3 ) // Ignore nodejs, script paths and gulp params
-        argv.forEach( argument => {
+            done( error )
 
-            if ( argument.indexOf( '-n' ) > -1 || argument.indexOf( '--name' ) > -1 ) {
+        } else if ( configs.length === 0 ) {
 
-                defaultOptions.fileName = argument.split( ':' )[ 1 ]
-
-            } else if ( argument.indexOf( '-i' ) > -1 || argument.indexOf( '--input' ) > -1 ) {
-
-                defaultOptions.inputPath = argument.split( ':' )[ 1 ]
-
-            } else if ( argument.indexOf( '-o' ) > -1 || argument.indexOf( '--output' ) > -1 ) {
-
-                defaultOptions.outputPath = argument.split( ':' )[ 1 ]
-
-            } else if ( argument.indexOf( '-f' ) > -1 || argument.indexOf( '--format' ) > -1 ) {
-
-                const splits    = argument.split( ':' )
-                const splitPart = splits[ 1 ]
-
-                defaultOptions.formats = []
-                defaultOptions.formats.push( splitPart )
-
-            } else if ( argument.indexOf( '-d' ) > -1 || argument.indexOf( '--dev' ) > -1 ) {
-
-                defaultOptions.environments = []
-                defaultOptions.environments.push( 'development' )
-
-            } else if ( argument.indexOf( '-p' ) > -1 || argument.indexOf( '--prod' ) > -1 ) {
-
-                defaultOptions.environments = []
-                defaultOptions.environments.push( 'production' )
-
-            } else if ( argument.indexOf( '-s' ) > -1 || argument.indexOf( '--sourcemap' ) > -1 ) {
-
-                defaultOptions.sourceMap = true
-
-            } else {
-
-                throw new Error( `Build Script: invalid argument ${argument}. Type \`npm run help build\` to display available argument.` )
-
-            }
-
-        } )
-
-        return defaultOptions
-
-    }
-
-    function createBuildsConfigs ( options ) {
-        'use strict'
-
-        let configs = []
-        configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', true, options.sourceMap ) )
-        configs.push( require( './configs/rollup.conf' )( 'itee-utils', options.inputPath, options.outputPath, 'cjs', false, options.sourceMap ) )
-        configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', true, options.sourceMap ) )
-        configs.push( require( './configs/rollup.conf' )( 'itee-utils-module', options.inputPath, options.outputPath, 'esm', false, options.sourceMap ) )
-
-        return configs
-
-    }
-
-    function nextBuild () {
-        'use strict'
-
-        if ( configs.length === 0 ) {
             done()
-            return
+
+        } else {
+
+            const config = configs.pop()
+            log( `Building ${config.output.file}` )
+
+            rollup.rollup( config )
+                  .then( ( bundle ) => { return bundle.write( config.output ) } )
+                  .then( () => { nextBuild() } )
+                  .catch( nextBuild )
+
         }
-
-        build( configs.pop(), nextBuild )
-
-    }
-
-    function build ( config, done ) {
-
-        log( `Building ${config.outputOptions.file}` )
-
-        rollup.rollup( config.inputOptions )
-              .then( ( bundle ) => {
-
-                  bundle.write( config.outputOptions )
-                        .catch( ( error ) => {
-                            log( red( error ) )
-                            done()
-                        } )
-
-                  done()
-              } )
-              .catch( ( error ) => {
-                  log( red( error ) )
-                  done()
-              } )
 
     }
 
 } )
+
 
 /**
  * Add watcher to assets javascript files and run build-js on file change
