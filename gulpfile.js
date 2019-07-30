@@ -94,6 +94,7 @@ gulp.task( 'clean', () => {
 
     return del( [
         './builds',
+        './tests/builds',
         './documentation'
     ] )
 
