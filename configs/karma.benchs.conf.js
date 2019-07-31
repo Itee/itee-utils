@@ -1,20 +1,17 @@
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module config/karmaBenchConfiguration
- *
+ * @module Config-Karma-Benchs
  * @description The file manage the karma configuration for run benchmarks that are under `tests/benchmarks` folder
- *
  */
-
-/* eslint-env node */
 
 const packageInfos = require( '../package' )
 
 /**
  * Will assign an appropriate configuration object about benchmarks for karma.
  *
+ * @generator
  * @param {object} config - The karma configuration object to extend
  */
 function CreateKarmaBenchmarkConfiguration ( config ) {
@@ -86,19 +83,26 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         //        browsers: [ 'Edge' ],
         //        browsers: [ 'Firefox', 'Chrome', 'Edge' ],
 
+        // Format assertion errors and stack traces. Useful for removing vendors and compiled sources. Return an empty line '' to remove it.
+        formatError: () => '',
+
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous
-        concurrency: 1,
+        concurrency: 4,
 
         // If, during test execution, Karma does not receive any message from a browser
         browserNoActivityTimeout: 60000,
+        browserDisconnectTimeout: 60000,
 
         // If browser does not capture in given timeout [ms], kill it
-        captureTimeout: 60000
+        captureTimeout: 60000,
+
+        // How long will Karma wait for browser process to terminate before sending a SIGKILL signal.
+        processKillTimeout: 360000
 
     } )
 

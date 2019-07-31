@@ -1,20 +1,17 @@
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module config/karmaUnitsConfiguration
- *
+ * @module Config-Karma-Units
  * @description The file manage the karma configuration for run units tests that are under `tests/units` folder
- *
  */
-
-/* eslint-env node */
 
 const packageInfos = require( '../package' )
 
 /**
  * Will assign an appropriate configuration object about unit tests for karma.
  *
+ * @generator
  * @param {object} config - The karma configuration object to extend
  */
 function CreateKarmaUnitsConfiguration ( config ) {
@@ -87,10 +84,14 @@ function CreateKarmaUnitsConfiguration ( config ) {
         concurrency: 4,
 
         // If, during test execution, Karma does not receive any message from a browser
-        browserNoActivityTimeout: 5000,
+        browserNoActivityTimeout: 60000,
+        browserDisconnectTimeout: 60000,
 
         // If browser does not capture in given timeout [ms], kill it
-        captureTimeout: 5000
+        captureTimeout: 60000,
+
+        // How long will Karma wait for browser process to terminate before sending a SIGKILL signal.
+        processKillTimeout: 360000
 
     } )
 
