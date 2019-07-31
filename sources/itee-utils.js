@@ -7,7 +7,7 @@
  */
 
 export * from './cores/_cores'
-export * from './fs/_fs'
+export * from './file-system/_file-system'
 export * from './geomathics/_geomathics'
 export * from './physics/_physics'
 export * from './testings/_testings'
