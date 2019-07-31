@@ -34,7 +34,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "itee-validators": "^3.1.0"
+    "itee-validators": "^4.0.0"
   },
   "devDependencies": {
     "ansi-colors": "^4.1.1",
