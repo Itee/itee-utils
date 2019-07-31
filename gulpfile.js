@@ -1,7 +1,8 @@
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
- * @module gulpfile
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module Building
  *
  * @description The gulp tasks file. It allow to run some tasks from command line interface.<br>
  * The available tasks are:
@@ -10,21 +11,27 @@
  * <li>clean</li>
  * <li>lint</li>
  * <li>doc</li>
+ * <li>unit</li>
+ * <li>bench</li>
  * <li>test</li>
+ * <li>build-test</li>
  * <li>build</li>
  * <li>release</li>
  * </ul>
  * You could find a complet explanation about these tasks using: <b>npm run help</b>.
  *
  * @requires {@link module: [gulp]{@link https://github.com/gulpjs/gulp}}
- * @requires {@link module: [gulp-util]{@link https://github.com/gulpjs/gulp-util}}
  * @requires {@link module: [gulp-jsdoc3]{@link https://github.com/mlucool/gulp-jsdoc3}}
  * @requires {@link module: [gulp-eslint]{@link https://github.com/adametry/gulp-eslint}}
- * @requires {@link module: [gulp-inject-string]{@link https://github.com/mikehazell/gulp-inject-string}}
- * @requires {@link module: [gulp-replace]{@link https://github.com/lazd/gulp-replace}}
  * @requires {@link module: [del]{@link https://github.com/sindresorhus/del}}
- * @requires {@link module: [run-sequence]{@link https://github.com/OverZealous/run-sequence}}
+ * @requires {@link module: [minimist]{@link https://github.com/substack/minimist}}
  * @requires {@link module: [rollup]{@link https://github.com/rollup/rollup}}
+ * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
+ * @requires {@link module: [karma]{@link https://github.com/karma-runner/karma}}
+ * @requires {@link module: [fancy-log]{@link https://github.com/js-cli/fancy-log}}
+ * @requires {@link module: [ansi-colors]{@link https://github.com/doowb/ansi-colors}}
+ *
+ *
  */
 
 /* eslint-env node */
@@ -48,6 +55,7 @@ const magenta   = colors.magenta
 
 /**
  * @method npm run help ( default )
+ * @global
  * @description Will display the help in console
  */
 gulp.task( 'help', ( done ) => {
@@ -88,6 +96,7 @@ gulp.task( 'help', ( done ) => {
 
 /**
  * @method npm run clean
+ * @global
  * @description Will delete builds and temporary folders
  */
 gulp.task( 'clean', () => {
@@ -102,6 +111,7 @@ gulp.task( 'clean', () => {
 
 /**
  * @method npm run lint
+ * @global
  * @description Will lint the sources files and try to fix the style when possible
  */
 gulp.task( 'lint', () => {
@@ -134,6 +144,7 @@ gulp.task( 'lint', () => {
 
 /**
  * @method npm run doc
+ * @global
  * @description Will generate this documentation
  */
 gulp.task( 'doc', ( done ) => {
@@ -154,6 +165,7 @@ gulp.task( 'doc', ( done ) => {
 
 /**
  * @method npm run unit
+ * @global
  * @description Will run unit tests using karma
  */
 gulp.task( 'unit', ( done ) => {
@@ -182,6 +194,7 @@ gulp.task( 'unit', ( done ) => {
 
 /**
  * @method npm run bench
+ * @global
  * @description Will run benchmarks using karma
  */
 gulp.task( 'bench', ( done ) => {
@@ -210,14 +223,16 @@ gulp.task( 'bench', ( done ) => {
 
 /**
  * @method npm run test
+ * @global
  * @description Will run unit tests and benchmarks using karma
  */
 gulp.task( 'test', gulp.series( 'unit', 'bench' ) )
 
-///
-/// BUILDS
-///
-
+/**
+ * @method npm run build-test
+ * @global
+ * @description Will build itee client tests.
+ */
 gulp.task( 'build-test', ( done ) => {
 
     const configs = require( './configs/rollup.test.conf' )()
@@ -253,7 +268,8 @@ gulp.task( 'build-test', ( done ) => {
 
 /**
  * @method npm run build
- * @description Will build itee client module using optional arguments, running clean and _extendThree tasks before. See help to further informations.
+ * @global
+ * @description Will build itee client module using optional arguments. See help to further informations.
  */
 gulp.task( 'build', ( done ) => {
 
@@ -326,7 +342,8 @@ gulp.task( 'build-auto', gulp.series( 'build', ( done ) => {
 
 /**
  * @method npm run release
- * @description Will perform a complet release of the library.
+ * @global
+ * @description Will perform a complet release of the library including 'clean', 'lint', 'doc', 'build-test', 'test' and finally 'build'.
  */
 gulp.task( 'release', gulp.series( 'clean', 'lint', 'doc', 'build-test', 'test', 'build' ) )
 
