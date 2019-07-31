@@ -331,19 +331,6 @@ gulp.task( 'build', ( done ) => {
 
 } )
 
-
-/**
- * Add watcher to assets javascript files and run build-js on file change
- */
-gulp.task( 'build-auto', gulp.series( 'build', ( done ) => {
-
-    log( 'Add watcher to javascript files !' )
-
-    gulp.watch( './sources/**/*.js', [ 'build' ] )
-    done()
-
-} ) )
-
 /**
  * @method npm run release
  * @global
