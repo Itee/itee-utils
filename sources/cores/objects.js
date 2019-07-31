@@ -1,6 +1,6 @@
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [MIT]{@link https://opensource.org/licenses/MIT}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
  * @module sources/cores/objects
  * @description Export the utilities methods about objects
@@ -14,7 +14,7 @@ import {
 export function uniq ( a ) {
 
     const seen = {}
-    return a.filter( item => Object.prototype.hasOwnProperty.call(seen, item) ? false : ( seen[ item ] = true ) )
+    return a.filter( item => Object.prototype.hasOwnProperty.call( seen, item ) ? false : ( seen[ item ] = true ) )
 
 }
 
@@ -110,15 +110,15 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
         // Normal Inheritance
-        ChildClass.prototype             = new ParentClassOrObject()
-        ChildClass.prototype.parent      = ParentClassOrObject.prototype
+        ChildClass.prototype = new ParentClassOrObject()
+        ChildClass.prototype.parent = ParentClassOrObject.prototype
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Object ) {
 
         // Pure Virtual Inheritance
-        ChildClass.prototype             = ParentClassOrObject
-        ChildClass.prototype.parent      = ParentClassOrObject
+        ChildClass.prototype = ParentClassOrObject
+        ChildClass.prototype.parent = ParentClassOrObject
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Object ) {
@@ -126,7 +126,7 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
         //Object Concatenation Inheritance
         for ( let attribute in ParentClassOrObject ) {
 
-            if ( Object.prototype.hasOwnProperty.call(ChildClass, attribute) ) { // We are sure that obj[key] belongs to the object and was not inherited.
+            if ( Object.prototype.hasOwnProperty.call( ChildClass, attribute ) ) { // We are sure that obj[key] belongs to the object and was not inherited.
 
                 if ( ParentClassOrObject[ attribute ].constructor === Object || ParentClassOrObject[ attribute ].constructor === Array ) {
 
@@ -196,7 +196,7 @@ export function createInterval ( particles, path, interval ) {
 
         for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
-            particle         = particles.children[ i ]
+            particle = particles.children[ i ]
             normalizedOffset = localOffset / pathLength
 
             // End of path ( last particle could go to void, but got an error with getPointAt)

@@ -2,18 +2,15 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @file Todo
- *
- * @example Todo
+ * @module sources/file-system/files
+ * @description This is the files main export entry point.
+ * It expose all exports of the files validators.
  *
  */
 
-import fs   from 'fs'
-import {
-    isArray,
-    isInvalidPath
-}           from '../../node_modules/itee-validators/builds/itee-validators.cjs'
-import path from 'path'
+import fs                from 'fs'
+import path              from 'path'
+import { isArray, isInvalidPath }       from 'itee-validators'
 
 function getPathsUnder ( directoryPath ) {
     return fs.readdirSync( directoryPath )

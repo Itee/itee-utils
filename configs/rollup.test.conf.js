@@ -1,27 +1,26 @@
 /**
-
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @author Itee <valcketristan@gmail.com>
- * @license MIT
+ * @module Config-Rollup-Test
+ * @description The file manage the rollup configuration for build tests
  */
 
 const packageInfos = require( '../package' )
-const commonJs     = require( 'rollup-plugin-commonjs' )
-const nodeResolve  = require( 'rollup-plugin-node-resolve' )
 
-function CreateTestsBuildsConfigs ( /*options*/ ) {
+/**
+ * Will create an appropriate configuration object for rollup, related to the given arguments.
+ *
+ * @generator
+ * @return {Array.<json>} An array of rollup configuration
+ */
+function CreateTestsRollupConfigs ( /*options*/ ) {
     'use strict'
 
     return [
-
         {
             input:     `tests/units/${packageInfos.name}.units.js`,
-            plugins:   [
-                commonJs( {
-                    include: 'node_modules/**'
-                } ),
-                nodeResolve()
-            ],
+            plugins:   [],
             treeshake: true,
             output:    {
                 indent: '\t',
@@ -32,12 +31,7 @@ function CreateTestsBuildsConfigs ( /*options*/ ) {
         },
         {
             input:     `tests/benchmarks/${packageInfos.name}.benchs.js`,
-            plugins:   [
-                commonJs( {
-                    include: 'node_modules/**'
-                } ),
-                nodeResolve()
-            ],
+            plugins:   [],
             treeshake: true,
             output:    {
                 indent: '\t',
@@ -50,4 +44,4 @@ function CreateTestsBuildsConfigs ( /*options*/ ) {
 
 }
 
-module.exports = CreateTestsBuildsConfigs
+module.exports = CreateTestsRollupConfigs

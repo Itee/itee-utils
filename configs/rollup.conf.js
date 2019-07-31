@@ -2,29 +2,35 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module config/rollupConfiguration
- *
+ * @module Config-Rollup
  * @description The file manage the rollup configuration for build the library using differents arguments. It allow to build with two type of environment (dev and prod), and differents output format.
  * Use npm run help to display all available build options.
  *
+ * @requires {@link module: [rollup-plugin-node-builtins]{@link https://github.com/calvinmetcalf/rollup-plugin-node-builtins}}
+ * @requires {@link module: [rollup-plugin-commonjs]{@link https://github.com/rollup/rollup-plugin-commonjs}}
+ * @requires {@link module: [rollup-plugin-json]{@link https://github.com/rollup/rollup-plugin-json}}
+ * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
  * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
  * @requires {@link module: [rollup-plugin-re]{@link https://github.com/jetiny/rollup-plugin-re}}
  * @requires {@link module: [rollup-plugin-uglify-es]{@link https://github.com/ezekielchentnik/rollup-plugin-uglify-es}}
- *
  */
 
-const path        = require( 'path' )
-const commonJs    = require( 'rollup-plugin-commonjs' )
-const nodeResolve = require( 'rollup-plugin-node-resolve' )
-const replace     = require( 'rollup-plugin-re' )
-const uglify      = require( 'rollup-plugin-uglify-es' )
+const builtins = require( 'rollup-plugin-node-builtins' )
+const commonjs = require( 'rollup-plugin-commonjs' )
+const json     = require( 'rollup-plugin-json' )
+const path     = require( 'path' )
+const replace  = require( 'rollup-plugin-re' )
+const resolve  = require( 'rollup-plugin-node-resolve' )
+const uglify   = require( 'rollup-plugin-uglify-es' )
 
 /**
+ * Will create an appropriate configuration object for rollup, related to the given arguments.
+ *
  * @generator
  * @param options
- * @return {Array}
+ * @return {Array.<json>} An array of rollup configuration
  */
-function CreateBuildsConfigs ( options ) {
+function CreateRollupConfigs ( options ) {
     'use strict'
 
     const name      = options.name
@@ -42,34 +48,36 @@ function CreateBuildsConfigs ( options ) {
 
         for ( let envIndex = 0, numberOfEnvs = envs.length ; envIndex < numberOfEnvs ; envIndex++ ) {
 
-            const env            = envs[ envIndex ]
-            const prod           = ( env.includes( 'prod' ) )
-            const format         = formats[ formatIndex ]
-            const buildForNodeJS = ( format === 'cjs' )
-            const outputPath     = ( prod ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
+            const env        = envs[ envIndex ]
+            const prod       = ( env.includes( 'prod' ) )
+            const format     = formats[ formatIndex ]
+            const outputPath = ( prod ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
 
             configs.push( {
-                input:    input,
-                external: ( buildForNodeJS ) ? [
+                input:     input,
+                external:  ( [ 'esm', 'cjs' ].includes( format ) ) ? [
                     'fs',
-                    'path'
+                    'path',
                 ] : [],
-                plugins: [
+                plugins:   [
                     replace( {
                         defines: {
-                            IS_REMOVE: false,
-                            IS_NODE:   buildForNodeJS
+                            IS_REMOVE: prod
                         }
                     } ),
-                    commonJs( {
+                    commonjs( {
                         include: 'node_modules/**'
                     } ),
-                    nodeResolve( {
+                    resolve( {
                         preferBuiltins: true
+                    } ),
+                    json( {} ),
+                    ( [ 'iife', 'umd' ].includes( format ) ) && builtins( {
+                        fs: true
                     } ),
                     prod && uglify()
                 ],
-                onwarn: ( { loc, frame, message } ) => {
+                onwarn:    ( { loc, frame, message } ) => {
 
                     // Ignore some errors
                     if ( message.includes( 'Circular dependency' ) ) { return }
@@ -114,5 +122,5 @@ function CreateBuildsConfigs ( options ) {
 
 }
 
-module.exports = CreateBuildsConfigs
+module.exports = CreateRollupConfigs
 
