@@ -36,22 +36,23 @@
 
 /* eslint-env node */
 
-const gulp      = require( 'gulp' )
-const jsdoc     = require( 'gulp-jsdoc3' )
-const eslint    = require( 'gulp-eslint' )
-const del       = require( 'del' )
-const parseArgs = require( 'minimist' )
-const rollup    = require( 'rollup' )
-const path      = require( 'path' )
-const karma     = require( 'karma' )
-const log       = require( 'fancy-log' )
-const colors    = require( 'ansi-colors' )
-const red       = colors.red
-const green     = colors.green
-const blue      = colors.blue
-const cyan      = colors.cyan
-const yellow    = colors.yellow
-const magenta   = colors.magenta
+const packageInfos = require( './package.json' )
+const gulp         = require( 'gulp' )
+const jsdoc        = require( 'gulp-jsdoc3' )
+const eslint       = require( 'gulp-eslint' )
+const del          = require( 'del' )
+const parseArgs    = require( 'minimist' )
+const rollup       = require( 'rollup' )
+const path         = require( 'path' )
+const karma        = require( 'karma' )
+const log          = require( 'fancy-log' )
+const colors       = require( 'ansi-colors' )
+const red          = colors.red
+const green        = colors.green
+const blue         = colors.blue
+const cyan         = colors.cyan
+const yellow       = colors.yellow
+const magenta      = colors.magenta
 
 /**
  * @method npm run help ( default )
@@ -60,35 +61,35 @@ const magenta   = colors.magenta
  */
 gulp.task( 'help', ( done ) => {
 
+    log( '' )
     log( '====================================================' )
-    log( '|                                                  |' )
-    log( '|                Itee Client - HELP                |' )
-    log( '|                                                  |' )
+    log( '|                      HELP                        |' )
+    log( '|                   Itee Utils                     |' )
+    log( `|                     v${packageInfos.version}                       |` )
     log( '====================================================' )
     log( '' )
     log( 'Available commands are:' )
-    log( blue( 'npm run' ), cyan( 'help' ), ' - Display this help.' )
-    log( blue( 'npm run' ), cyan( 'clean' ), ' - Will delete builds and temporary folders.' )
-    log( blue( 'npm run' ), cyan( 'lint' ), ' - Will run the eslint in pedantic mode with auto fix when possible.' )
-    log( blue( 'npm run' ), cyan( 'doc' ), ' - Will run jsdoc, and create documentation under `documentation` folder, using the docdash theme' )
-    log( blue( 'npm run' ), cyan( 'test' ), ' - Will run the test framworks (unit and bench), and create reports under `test/report` folder, using the mochawesome theme' )
-    log( blue( 'npm run' ), cyan( 'unit' ), ' - Will run the karma server for unit tests.', red( '( /!\\ Deprecated: will be remove as soon as test script is fixed !!! )' ) )
-    log( blue( 'npm run' ), cyan( 'bench' ), ' - Will run the karma server for benchmarks.', red( '( /!\\ Deprecated: will be remove as soon as test script is fixed !!! )' ) )
-    log( blue( 'npm run' ), cyan( 'build' ), yellow( '--' ), green( '<options>' ), ' - Will build the application for development and/or production environments.', yellow( 'Note: The two dash are only required if you provide options !' ) )
-    log( '  The available options are:' )
-    log( '      ', green( '-d' ), 'or', green( '--dev' ), ' - to build in development environment' )
-    log( '      ', green( '-p' ), 'or', green( '--prod' ), ' - to build in production environment' )
-    log( '       (in case no environment is provide both will be compile)' )
-    log( '' )
-    log( '      ', green( '-f:' ), magenta( '<format>' ), 'or', green( '--format:' ), magenta( '<format>' ), ' - to specify the output build type.' )
-    log( '       where format could be any of:', magenta( 'amd' ), magenta( 'cjs' ), magenta( 'es' ), magenta( 'iife' ), magenta( 'umd' ) )
-    log( '' )
-    log( '      ', green( '-s' ), 'or', green( '--sourcemap' ), ' - to build with related source map' )
-    log( '' )
-    log( blue( 'npm run' ), cyan( 'release' ), ' - Will run all the lint, test stuff, and if succeed will build the application in both environments.' )
+    log( '\t', blue( 'npm run' ), cyan( 'help' ), ' - Display this help.' )
+    log( '\t', blue( 'npm run' ), cyan( 'clean' ), ' - Will delete builds and temporary folders.' )
+    log( '\t', blue( 'npm run' ), cyan( 'lint' ), ' - Will run the eslint in pedantic mode with auto fix when possible.' )
+    log( '\t', blue( 'npm run' ), cyan( 'doc' ), ' - Will run jsdoc, and create documentation under `documentation` folder, using the docdash theme' )
+    log( '\t', blue( 'npm run' ), cyan( 'test' ), ' - Will run the test framworks (unit and bench), and create reports under `documentation/report` folder, using the mochawesome theme' )
+    log( '\t', blue( 'npm run' ), cyan( 'unit' ), ' - Will run the karma server for unit tests.' )
+    log( '\t', blue( 'npm run' ), cyan( 'bench' ), ' - Will run the karma server for benchmarks.' )
+    log( '\t', blue( 'npm run' ), cyan( 'build' ), yellow( '--' ), green( '<options>' ), ' - Will build the application for development and/or production environments.', yellow( 'Note: The two dash are only required if you provide options !' ) )
+    log( '\t\t The available', green( '<options>' ), 'are:' )
+    log( '\t\t\t', green( '-n' ), 'or', green( '--name' ), ' - The export name of the builded application', red( '(required for UMD module)' ), cyan( '[Default: ""]' ), '.' )
+    log( '\t\t\t', green( '-i' ), 'or', green( '--input' ), ' - The main file path to build', cyan( '[Default: "sources/main.js"]' ), '.' )
+    log( '\t\t\t', green( '-o' ), 'or', green( '--output' ), ' - The folder where output the build', cyan( '[Default: "builds"]' ), '.' )
+    log( '\t\t\t', green( '-f:' ), magenta( '<format>' ), 'or', green( '--format:' ), magenta( '<format>' ), ' - to specify the output build type. Where format could be any of:', magenta( 'amd' ), magenta( 'cjs' ), magenta( 'es' ), magenta( 'iife' ), magenta( 'umd' ), cyan( '[Default: "amd,cjs,es,iife,umd"]' ), '.' )
+    log( '\t\t\t', green( '-e:' ), magenta( '<env>' ), 'or', green( '--env:' ), magenta( '<env>' ), ' - to specify the build environment. Where env could be any of:', magenta( 'dev' ), magenta( 'prod' ), cyan( '[Default: "dev"]' ), '.' )
+    log( '\t\t\t', green( '-s' ), 'or', green( '--sourcemap' ), ' - to build with related source map', cyan( '[Default: true]' ), '.' )
+    log( '\t\t\t', green( '-t' ), 'or', green( '--treeshake' ), ' - allow to perform treeshaking when building', cyan( '[Default: true]' ), '.' )
+    log( '\t', blue( 'npm run' ), cyan( 'release' ), ' - Will run all the lint, test stuff, and if succeed will build the application.' )
     log( '' )
     log( 'In case you have', blue( 'gulp' ), 'installed globally, you could use also:' )
-    log( blue( 'gulp' ), cyan( 'command' ), ' - It will perform the command like using "npm run" but with less characters to type... Because you\'re a developer, right ?' )
+    log( '\t', blue( 'gulp' ), cyan( 'command' ), ' - It will perform the command like using "npm run" but with less characters to type... Because you\'re a developer, right ?' )
+    log( '' )
 
     done()
 
@@ -101,11 +102,13 @@ gulp.task( 'help', ( done ) => {
  */
 gulp.task( 'clean', () => {
 
-    return del( [
+    const filesToClean = [
         './builds',
         './tests/builds',
         './documentation'
-    ] )
+    ]
+
+    return del( filesToClean )
 
 } )
 
@@ -116,11 +119,12 @@ gulp.task( 'clean', () => {
  */
 gulp.task( 'lint', () => {
 
-    // Todo: split between source and test with differents env
     const filesToLint = [
         'gulpfile.js',
-        'sources/**/*',
-        'tests/**/*.js'
+        'configs/**/*.js',
+        'sources/**/*.js',
+        'tests/**/*.js',
+        '!tests/builds/*.js'
     ]
 
     return gulp.src( filesToLint, { base: './' } )
@@ -149,8 +153,8 @@ gulp.task( 'lint', () => {
  */
 gulp.task( 'doc', ( done ) => {
 
-    const config = require( './configs/jsdoc.conf' )
-    const files  = [
+    const config     = require( './configs/jsdoc.conf' )
+    const filesToDoc = [
         'README.md',
         'gulpfile.js',
         './configs/*.js',
@@ -158,7 +162,7 @@ gulp.task( 'doc', ( done ) => {
         './tests/**/*.js'
     ]
 
-    gulp.src( files, { read: false } )
+    gulp.src( filesToDoc, { read: false } )
         .pipe( jsdoc( config, done ) )
 
 } )
@@ -278,7 +282,7 @@ gulp.task( 'build', ( done ) => {
         boolean: [ 's', 't' ],
         default: {
             n: 'Itee.Utils',
-            i: path.join( __dirname, 'sources/itee-utils.js' ),
+            i: path.join( __dirname, 'sources', `${packageInfos.name}.js` ),
             o: path.join( __dirname, 'builds' ),
             f: 'esm,cjs,iife,umd',
             e: 'dev,prod',
