@@ -240,15 +240,15 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value: function _includes ( key ) {
+            value:        function _includes ( key ) {
                 return Object.values( this ).includes( key )
             }
         },
-        types:    {
+        types: {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value: function _types () {
+            value:        function _types () {
                 return Object.keys( this )
             }
         }
