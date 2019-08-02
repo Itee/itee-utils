@@ -12,7 +12,7 @@
  * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
  * @requires {@link module: [rollup-plugin-re]{@link https://github.com/jetiny/rollup-plugin-re}}
  * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
- * @requires {@link module: [rollup-plugin-uglify-es]{@link https://github.com/ezekielchentnik/rollup-plugin-uglify-es}}
+ * @requires {@link module: [rollup-plugin-terser]{@link https://github.com/TrySound/rollup-plugin-terser}}
  */
 
 const builtins = require( 'rollup-plugin-node-builtins' )
@@ -21,7 +21,7 @@ const json     = require( 'rollup-plugin-json' )
 const path     = require( 'path' )
 const replace  = require( 'rollup-plugin-re' )
 const resolve  = require( 'rollup-plugin-node-resolve' )
-const uglify   = require( 'rollup-plugin-uglify-es' )
+const terser   = require( 'rollup-plugin-terser' ).terser
 
 /**
  * Will create an appropriate configuration object for rollup, related to the given arguments.
@@ -54,12 +54,12 @@ function CreateRollupConfigs ( options ) {
             const outputPath = ( prod ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
 
             configs.push( {
-                input:     input,
-                external:  ( [ 'esm', 'cjs' ].includes( format ) ) ? [
+                input:    input,
+                external: ( [ 'esm', 'cjs' ].includes( format ) ) ? [
                     'fs',
-                    'path',
+                    'path'
                 ] : [],
-                plugins:   [
+                plugins: [
                     replace( {
                         defines: {
                             IS_REMOVE: prod
@@ -75,9 +75,9 @@ function CreateRollupConfigs ( options ) {
                     ( [ 'iife', 'umd' ].includes( format ) ) && builtins( {
                         fs: true
                     } ),
-                    prod && uglify()
+                    prod && terser()
                 ],
-                onwarn:    ( { loc, frame, message } ) => {
+                onwarn: ( { loc, frame, message } ) => {
 
                     // Ignore some errors
                     if ( message.includes( 'Circular dependency' ) ) { return }
