@@ -2,8 +2,11 @@
   "name": "itee-utils",
   "version": "3.0.1",
   "description": "A library of utility functions use in various Itee projects",
-  "author": "Itee",
-  "license": "MIT",
+  "author": {
+    "name": "Itee (Tristan Valcke)",
+    "url": "https://github.com/Itee"
+  },
+  "license": "BSD-3-Clause",
   "keywords": [
     "itee",
     "utils",
@@ -31,7 +34,7 @@
     "test": "gulp test",
     "build": "gulp build",
     "release": "gulp release",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release --dry-run --no-ci"
   },
   "dependencies": {
     "itee-validators": "^4.0.0"
@@ -42,7 +45,6 @@
     "chai": "^4.2.0",
     "cz-conventional-changelog": "^3.0.2",
     "del": "^5.0.0",
-    "docdash": "^1.1.1",
     "eslint-plugin-mocha": "^6.0.0",
     "fancy-log": "^1.3.3",
     "gulp": "^4.0.2",
@@ -53,6 +55,7 @@
     "karma-benchmarkjs-reporter": "^1.0.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.0.0",
+    "karma-edge-launcher": "^0.4.2",
     "karma-firefox-launcher": "^1.1.0",
     "karma-htmlfile-reporter": "^0.3.8",
     "karma-mocha": "^1.3.0",
@@ -74,6 +77,9 @@
     }
   },
   "optionalDependencies": {
-    "leveldown": "^5.1.1"
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
+    "leveldown": "^5.1.1",
+    "semantic-release": "^15.13.19"
   }
 }

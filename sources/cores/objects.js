@@ -110,15 +110,15 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
         // Normal Inheritance
-        ChildClass.prototype = new ParentClassOrObject()
-        ChildClass.prototype.parent = ParentClassOrObject.prototype
+        ChildClass.prototype             = new ParentClassOrObject()
+        ChildClass.prototype.parent      = ParentClassOrObject.prototype
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Object ) {
 
         // Pure Virtual Inheritance
-        ChildClass.prototype = ParentClassOrObject
-        ChildClass.prototype.parent = ParentClassOrObject
+        ChildClass.prototype             = ParentClassOrObject
+        ChildClass.prototype.parent      = ParentClassOrObject
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Object ) {
@@ -196,7 +196,7 @@ export function createInterval ( particles, path, interval ) {
 
         for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
-            particle = particles.children[ i ]
+            particle         = particles.children[ i ]
             normalizedOffset = localOffset / pathLength
 
             // End of path ( last particle could go to void, but got an error with getPointAt)
@@ -219,20 +219,38 @@ export function createInterval ( particles, path, interval ) {
 
 export function toEnum ( enumValues ) {
 
-    return Object.freeze( Object.defineProperty( enumValues, 'toString', {
-        configurable: false,
-        enumerable:   false,
-        writable:     false,
-        value:        function _toString () {
+    return Object.freeze( Object.defineProperties( enumValues, {
+        toString: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value:        function _toString () {
 
-            const keys = Object.keys( this )
-            let result = ''
-            for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-                result += `${keys[ index ]}, `
+                const keys = Object.keys( this )
+                let result = ''
+                for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
+                    result += `${keys[ index ]}, `
+                }
+                result = result.slice( 0, -2 )
+                return result
+
             }
-            result = result.slice( 0, -2 )
-            return result
-
+        },
+        includes: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value: function _includes ( key ) {
+                return Object.values( this ).includes( key )
+            }
+        },
+        types:    {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value: function _types () {
+                return Object.keys( this )
+            }
         }
     } ) )
 

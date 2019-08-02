@@ -9,7 +9,7 @@
 const IteeUtilsSuite = suite( 'Itee#Utils', () => {
 
     benchmark(
-        'isArray()',
+        'isBenching()',
         function () {
 
             return true

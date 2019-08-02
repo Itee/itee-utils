@@ -8,9 +8,12 @@
  *
  */
 
-import fs                from 'fs'
-import path              from 'path'
-import { isArray, isInvalidPath }       from 'itee-validators'
+import fs   from 'fs'
+import {
+    isArray,
+    isInvalidPath
+}           from 'itee-validators'
+import path from 'path'
 
 function getPathsUnder ( directoryPath ) {
     return fs.readdirSync( directoryPath )
