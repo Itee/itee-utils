@@ -15,6 +15,10 @@ before_script: npm run clean && npm run build-test
 
 jobs:
   include:
+    - stage: test-deploy
+      if: branch = dev
+      node_js: "12"
+      script: npm run release && npx semantic-release --dry-run
     - stage: deploy
       if: branch = master
       node_js: "12"
