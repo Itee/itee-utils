@@ -2,8 +2,11 @@
   "name": "itee-utils",
   "version": "3.0.1",
   "description": "A library of utility functions use in various Itee projects",
-  "author": "Itee",
-  "license": "MIT",
+  "author": {
+    "name": "Itee (Tristan Valcke)",
+    "url": "https://github.com/Itee"
+  },
+  "license": "BSD-3-Clause",
   "keywords": [
     "itee",
     "utils",
