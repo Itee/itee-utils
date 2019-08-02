@@ -9,9 +9,9 @@
  * @requires {@link module: [rollup-plugin-node-builtins]{@link https://github.com/calvinmetcalf/rollup-plugin-node-builtins}}
  * @requires {@link module: [rollup-plugin-commonjs]{@link https://github.com/rollup/rollup-plugin-commonjs}}
  * @requires {@link module: [rollup-plugin-json]{@link https://github.com/rollup/rollup-plugin-json}}
- * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
  * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
  * @requires {@link module: [rollup-plugin-re]{@link https://github.com/jetiny/rollup-plugin-re}}
+ * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
  * @requires {@link module: [rollup-plugin-uglify-es]{@link https://github.com/ezekielchentnik/rollup-plugin-uglify-es}}
  */
 
@@ -88,6 +88,7 @@ function CreateRollupConfigs ( options ) {
                     } else {
                         process.stderr.write( `/!\\ ${message}\n` )
                     }
+
                 },
                 treeshake: treeshake,
                 output:    {
