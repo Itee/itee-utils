@@ -42,8 +42,10 @@ function CreateEslintConfiguration () {
             'no-multi-spaces':          [
                 'error', {
                     exceptions: {
-                        'ImportDeclaration':  true,
-                        'VariableDeclarator': true
+                        'Property':             true,
+                        'ImportDeclaration':    true,
+                        'VariableDeclarator':   true,
+                        'AssignmentExpression': true
                     }
                 }
             ],
