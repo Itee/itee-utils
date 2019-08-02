@@ -11003,13 +11003,13 @@ this.Itee.Utils = (function (exports) {
 		fetchSpec: "^5.1.1"
 	};
 	var _requiredBy$1 = [
-		"/",
+		"#DEV:/",
 		"/itee-validators"
 	];
 	var _resolved$1 = "https://registry.npmjs.org/leveldown/-/leveldown-5.1.1.tgz";
 	var _shasum$1 = "5d3a043f0ec76e91e189117ec3627bef0436c0dc";
 	var _spec$1 = "leveldown@^5.1.1";
-	var _where$1 = "C:\\Users\\tvalcke\\Programmation\\IteeUtils";
+	var _where$1 = "C:\\Users\\tvalcke\\Programmation\\IteeUtils\\node_modules\\itee-validators";
 	var bugs$1 = {
 		url: "https://github.com/Level/leveldown/issues"
 	};
@@ -27687,15 +27687,15 @@ this.Itee.Utils = (function (exports) {
 	    if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
 	        // Normal Inheritance
-	        ChildClass.prototype = new ParentClassOrObject();
-	        ChildClass.prototype.parent = ParentClassOrObject.prototype;
+	        ChildClass.prototype             = new ParentClassOrObject();
+	        ChildClass.prototype.parent      = ParentClassOrObject.prototype;
 	        ChildClass.prototype.constructor = ChildClass;
 
 	    } else if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Object ) {
 
 	        // Pure Virtual Inheritance
-	        ChildClass.prototype = ParentClassOrObject;
-	        ChildClass.prototype.parent = ParentClassOrObject;
+	        ChildClass.prototype             = ParentClassOrObject;
+	        ChildClass.prototype.parent      = ParentClassOrObject;
 	        ChildClass.prototype.constructor = ChildClass;
 
 	    } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Object ) {
@@ -27773,7 +27773,7 @@ this.Itee.Utils = (function (exports) {
 
 	        for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
-	            particle = particles.children[ i ];
+	            particle         = particles.children[ i ];
 	            normalizedOffset = localOffset / pathLength;
 
 	            // End of path ( last particle could go to void, but got an error with getPointAt)
@@ -27796,20 +27796,38 @@ this.Itee.Utils = (function (exports) {
 
 	function toEnum ( enumValues ) {
 
-	    return Object.freeze( Object.defineProperty( enumValues, 'toString', {
-	        configurable: false,
-	        enumerable:   false,
-	        writable:     false,
-	        value:        function _toString () {
+	    return Object.freeze( Object.defineProperties( enumValues, {
+	        toString: {
+	            configurable: false,
+	            enumerable:   false,
+	            writable:     false,
+	            value:        function _toString () {
 
-	            const keys = Object.keys( this );
-	            let result = '';
-	            for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-	                result += `${keys[ index ]}, `;
+	                const keys = Object.keys( this );
+	                let result = '';
+	                for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
+	                    result += `${keys[ index ]}, `;
+	                }
+	                result = result.slice( 0, -2 );
+	                return result
+
 	            }
-	            result = result.slice( 0, -2 );
-	            return result
-
+	        },
+	        includes: {
+	            configurable: false,
+	            enumerable:   false,
+	            writable:     false,
+	            value:        function _includes ( key ) {
+	                return Object.values( this ).includes( key )
+	            }
+	        },
+	        types: {
+	            configurable: false,
+	            enumerable:   false,
+	            writable:     false,
+	            value:        function _types () {
+	                return Object.keys( this )
+	            }
 	        }
 	    } ) )
 
