@@ -110,15 +110,15 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
         // Normal Inheritance
-        ChildClass.prototype = new ParentClassOrObject()
-        ChildClass.prototype.parent = ParentClassOrObject.prototype
+        ChildClass.prototype             = new ParentClassOrObject()
+        ChildClass.prototype.parent      = ParentClassOrObject.prototype
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Object ) {
 
         // Pure Virtual Inheritance
-        ChildClass.prototype = ParentClassOrObject
-        ChildClass.prototype.parent = ParentClassOrObject
+        ChildClass.prototype             = ParentClassOrObject
+        ChildClass.prototype.parent      = ParentClassOrObject
         ChildClass.prototype.constructor = ChildClass
 
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Object ) {
@@ -196,7 +196,7 @@ export function createInterval ( particles, path, interval ) {
 
         for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
-            particle = particles.children[ i ]
+            particle         = particles.children[ i ]
             normalizedOffset = localOffset / pathLength
 
             // End of path ( last particle could go to void, but got an error with getPointAt)
