@@ -70,6 +70,7 @@ gulp.task( 'help', ( done ) => {
     log( '' )
     log( 'Available commands are:' )
     log( '\t', blue( 'npm run' ), cyan( 'help' ), ' - Display this help.' )
+    log( '\t', blue( 'npm run' ), cyan( 'patch' ), ' - Will apply some patch/replacements in dependencies.', red( '(Apply only once after run "npm install")' ) )
     log( '\t', blue( 'npm run' ), cyan( 'clean' ), ' - Will delete builds and temporary folders.' )
     log( '\t', blue( 'npm run' ), cyan( 'lint' ), ' - Will run the eslint in pedantic mode with auto fix when possible.' )
     log( '\t', blue( 'npm run' ), cyan( 'doc' ), ' - Will run jsdoc, and create documentation under `documentation` folder, using the docdash theme' )
@@ -90,6 +91,17 @@ gulp.task( 'help', ( done ) => {
     log( 'In case you have', blue( 'gulp' ), 'installed globally, you could use also:' )
     log( '\t', blue( 'gulp' ), cyan( 'command' ), ' - It will perform the command like using "npm run" but with less characters to type... Because you\'re a developer, right ?' )
     log( '' )
+
+    done()
+
+} )
+
+/**
+ * @method npm run patch
+ * @global
+ * @description Will apply some patch/replacements in dependencies
+ */
+gulp.task( 'patch', ( done ) => {
 
     done()
 
