@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Itee/itee-utils.svg?branch=master)](https://travis-ci.com/Itee/itee-utils)
+[![Build Status](https://travis-ci.org/Itee/itee-utils.svg?branch=master)](https://travis-ci.org/Itee/itee-utils)
 ___
 
 # <center>[Itee Utils]</center>

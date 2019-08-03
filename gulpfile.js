@@ -8,6 +8,7 @@
  * The available tasks are:
  * <ul>
  * <li>help</li>
+ * <li>patch</li>
  * <li>clean</li>
  * <li>lint</li>
  * <li>doc</li>
