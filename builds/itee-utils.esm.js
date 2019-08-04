@@ -1,5 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+console.log('Itee.Utils v4.1.1 - EsModule')
+if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.')}
+
+import { isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -79,446 +81,6 @@ function getRandomArbitrary ( min = 0, max = 1 ) {
  */
 function getRandomInt ( min = 0, max = 1 ) {
     return ( Math.floor( Math.random() * ( max - min + 1 ) ) + min )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/arrays/isArray
- * @desc Export function to validate if a value is an array or not
- * @example
- *
- * import { isArray } from 'itee-validators'
- *
- * if( isArray( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */
-
-/**
- * Check if given data is an array
- *
- * @param data {*} The data to check against the array type
- * @returns {boolean} true if data is array, false otherwise
- */
-function isArray ( data ) {
-    return Array.isArray( data )
-}
-
-
-
-////////////////////
-
-/**
- * Check if given data is not an array
- *
- * @param data {*} The data to check against the array type
- * @returns {boolean} true if data is not array, false otherwise
- */
-function isNotArray ( data ) {
-    return !Array.isArray( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/arrays/isEmptyArray
- * @desc Export function to validate if a value is an array of array or not
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty array
- *
- * @param data {*} The data to check against the empty array
- * @returns {boolean} true if data is an empty array, false otherwise
- */
-function isEmptyArray ( data ) {
-
-    if ( isNotArray( data ) ) { return false }
-
-    return ( data.length === 0 )
-
-}
-
-/////
-
-/**
- * Check if given data is null or undefined
- *
- * @param data {*} The data to check against the existence
- * @returns {boolean} true if data is null or undefined, false otherwise.
- */
-function isNotDefined ( data ) {
-    return ( ( data === null ) || ( typeof data === 'undefined' ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/objects/isObject
- * @desc Export function to validate if a value is an object
- * @example todo
- *
- */
-
-/**
- * Check if given data is an object
- *
- * @param data {*} The data to check against the object type
- * @returns {boolean} true if data is object, false otherwise
- */
-function isObject ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-
-    return ( data.constructor === Object )
-}
-
-////
-
-/**
- * Check if given data is not an object
- *
- * @param data {*} The data to check against the object type
- * @returns {boolean} true if data is not an object, false otherwise
- */
-function isNotObject ( data ) {
-    return !isObject( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/strings/isString
- * @desc Export function to validate if a value is a string
- * @example todo
- *
- */
-
-/**
- * Check if given data is a string
- *
- * @param data {*} The data to check against the string type
- * @returns {boolean} true if data is a string, false otherwise.
- */
-function isString ( data ) {
-    return ( typeof data === 'string' || data instanceof String )
-}
-
-
-
-//////
-
-/**
- * Check if given data is not a string
- *
- * @param data {*} The data to check against the string type
- * @returns {boolean} true if data is not a string, false otherwise.
- */
-function isNotString ( data ) {
-    return !isString( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/numbers/isNumber
- * @desc Export function to validate if a value is a finite number
- * @example todo
- *
- */
-
-/**
- * Check if given data is a number
- *
- * @param data {*} The data to check against the maximum safe integer state
- * @returns {boolean} true if data is a number, false otherwise.
- */
-function isNumber ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-
-    return ( data.constructor === Number )
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/objects/isEmptyObject
- * @desc Export function to validate if a value is an object
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty object
- *
- * @param data {*} The data to check against the emptiness of the object
- * @returns {boolean} true if data is an empty object, false otherwise
- */
-function isEmptyObject ( data ) {
-
-    if ( isNotObject( data ) ) { return false }
-
-    if ( data.length === 0 ) {
-        return true
-    }
-
-    // Otherwise, does it have any properties of its own?
-    for ( let key in data ) {
-        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
-            return false
-        }
-    }
-
-    return true
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/strings/isEmptyString
- * @desc Export function to validate if a value is a empty string
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty string
- *
- * @param data {*} The data to check against the emptiness of the string
- * @returns {boolean} true if data is an empty string, false otherwise.
- */
-function isEmptyString ( data ) {
-
-    if ( isNotString( data ) ) {
-        return false
-    }
-
-    return ( data.length === 0 )
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/voids/isEmpty
- * @desc Export function to validate if a value is a void
- * @example todo
- *
- */
-
-/**
- * Check emptiness of given data
- *
- * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
- *
- * @param data {*} The data to check against the emptiness
- * @returns {boolean} true if data is considered as empty, false otherwise.
- */
-function isEmpty ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-    if ( isEmptyString( data ) ) { return true}
-    if ( isEmptyArray( data ) ) { return true }
-    if ( isEmptyObject( data ) ) { return true }
-
-    return false
-
-}
-
-///
-
-/**
- * Check fullness of given data
- *
- * @param data {*} The data to check against the emptiness
- * @returns {boolean} true if data is considered as not empty, false otherwise.
- */
-function isNotEmpty ( data ) {
-    return !isEmpty( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/file-system/paths/isValidPath
- * @description Export function to validate if a value is a valid path
- *
- * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
- *
- * @example todo
- *
- */
-
-/**
- * Check if given data is a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isValidPath ( data ) {
-    return fs.existsSync( data )
-}
-
-/**
- * Check if given data is not a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isInvalidPath ( data ) {
-    return !isValidPath( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/constants
- * @desc Export constants about temperatures
- *
- */
-
-/**
- * @const
- * @type {number}
- * @default 0.00000000045
- * @desc This value corresponding to the absolute zero kelvin value
- */
-const ABSOLUTE_ZERO_KELVIN = 0.00000000045;
-
-/**
- * @const
- * @type {number}
- * @default -273.14999999955
- * @desc This value corresponding to the absolute zero celsius value
- */
-const ABSOLUTE_ZERO_CELSIUS = -273.14999999955;
-
-/**
- * @const
- * @type {number}
- * @default -459.67
- * @desc This value corresponding to the absolute zero fahrenheit value
- */
-const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isCelsius ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotCelsius ( data ) {
-    return !isCelsius( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isFahrenheit ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotFahrenheit ( data ) {
-    return !isFahrenheit( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isKelvin ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotKelvin ( data ) {
-    return !isKelvin( data )
-}
-
-///
-
-/**
- *
- * @param data {*}
- * @return {boolean}
- */
-function isNotTemperature ( data ) {
-    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
 }
 
 /**
@@ -628,15 +190,15 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
         // Normal Inheritance
-        ChildClass.prototype = new ParentClassOrObject();
-        ChildClass.prototype.parent = ParentClassOrObject.prototype;
+        ChildClass.prototype             = new ParentClassOrObject();
+        ChildClass.prototype.parent      = ParentClassOrObject.prototype;
         ChildClass.prototype.constructor = ChildClass;
 
     } else if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Object ) {
 
         // Pure Virtual Inheritance
-        ChildClass.prototype = ParentClassOrObject;
-        ChildClass.prototype.parent = ParentClassOrObject;
+        ChildClass.prototype             = ParentClassOrObject;
+        ChildClass.prototype.parent      = ParentClassOrObject;
         ChildClass.prototype.constructor = ChildClass;
 
     } else if ( ChildClass.constructor === Object && ParentClassOrObject.constructor === Object ) {
@@ -714,7 +276,7 @@ function createInterval ( particles, path, interval ) {
 
         for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
-            particle = particles.children[ i ];
+            particle         = particles.children[ i ];
             normalizedOffset = localOffset / pathLength;
 
             // End of path ( last particle could go to void, but got an error with getPointAt)
@@ -737,20 +299,38 @@ function createInterval ( particles, path, interval ) {
 
 function toEnum ( enumValues ) {
 
-    return Object.freeze( Object.defineProperty( enumValues, 'toString', {
-        configurable: false,
-        enumerable:   false,
-        writable:     false,
-        value:        function _toString () {
+    return Object.freeze( Object.defineProperties( enumValues, {
+        toString: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value:        function _toString () {
 
-            const keys = Object.keys( this );
-            let result = '';
-            for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-                result += `${keys[ index ]}, `;
+                const keys = Object.keys( this );
+                let result = '';
+                for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
+                    result += `${keys[ index ]}, `;
+                }
+                result = result.slice( 0, -2 );
+                return result
+
             }
-            result = result.slice( 0, -2 );
-            return result
-
+        },
+        includes: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value:        function _includes ( key ) {
+                return Object.values( this ).includes( key )
+            }
+        },
+        types: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value:        function _types () {
+                return Object.keys( this )
+            }
         }
     } ) )
 
@@ -1180,60 +760,6 @@ function removeDiacritics ( string ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/file-system/files
- * @description This is the files main export entry point.
- * It expose all exports of the files validators.
- *
- */
-
-function getPathsUnder ( directoryPath ) {
-    return fs.readdirSync( directoryPath )
-}
-
-/**
- * Allow to search all files under filePaths in a recursive way
- *
- * @param {Array.<string>|string} filePaths - The files paths where search files
- * @returns {Array} - The paths of finded files
- * @private
- */
-function getFilesPathsUnder ( paths ) {
-
-    const _paths = ( isArray( paths ) ) ? paths : [ paths ];
-    let files    = [];
-
-    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
-
-        const localPath = _paths[ pathIndex ];
-
-        if ( isInvalidPath( localPath ) ) {
-            console.error( `The path "${localPath}" is not valid !` );
-            continue
-        }
-
-        const stats = fs.statSync( localPath );
-        if ( stats.isFile() ) {
-
-            files.push( localPath );
-
-        } else if ( stats.isDirectory() ) {
-
-            const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.forEach( ( name ) => { getFilesPathsUnder( path.resolve( localPath, name ) ); } );
-            Array.prototype.push.apply( files, subFilesPaths );
-
-        }
-
-    }
-
-    return files
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/geomathics/trigonometries
  */
 
@@ -1611,5 +1137,5 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
 }
 
-export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, diacriticsMap, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, getFilesPathsUnder, getPitch, getRandomArbitrary, getRandomInt, getYaw, kelvinToCelsius, kelvinToFahrenheit, radiansFromDegrees, radiansToDegrees, removeDiacritics, serializeObject, sortBy, toEnum, uniq };
+export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, diacriticsMap, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, getPitch, getRandomArbitrary, getRandomInt, getYaw, kelvinToCelsius, kelvinToFahrenheit, radiansFromDegrees, radiansToDegrees, removeDiacritics, serializeObject, sortBy, toEnum, uniq };
 //# sourceMappingURL=itee-utils.esm.js.map
