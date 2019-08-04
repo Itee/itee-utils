@@ -85,12 +85,9 @@ function CreateRollupConfigs ( options ) {
             const outputPath = ( isProd ) ? path.join( output, `${fileName}.${format}.min.js` ) : path.join( output, `${fileName}.${format}.js` )
 
             configs.push( {
-                input:    input,
-                external: ( format === 'cjs' ) ? [
-                    'fs',
-                    'path'
-                ] : [],
-                plugins: [
+                input:     input,
+                external:  ( format === 'cjs' ) ? [ 'fs', 'path', 'itee-validators' ] : [ 'itee-validators' ],
+                plugins:   [
                     replace( {
                         defines: {
                             IS_REMOVE_ON_BUILD:  false,
