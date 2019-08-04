@@ -7,7 +7,10 @@
  */
 
 export * from './cores/_cores'
-export * from './file-system/_file-system'
 export * from './geomathics/_geomathics'
 export * from './physics/_physics'
 export * from './testings/_testings'
+
+// #if IS_BACKEND_SPECIFIC
+export * from './file-system/_file-system'
+// #endif

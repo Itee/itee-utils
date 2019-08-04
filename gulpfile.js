@@ -297,7 +297,7 @@ gulp.task( 'build', ( done ) => {
             n: 'Itee.Utils',
             i: path.join( __dirname, 'sources', `${packageInfos.name}.js` ),
             o: path.join( __dirname, 'builds' ),
-            f: 'esm,cjs,iife,umd',
+            f: 'esm,cjs,iife',
             e: 'dev,prod',
             s: true,
             t: true
