@@ -127,7 +127,7 @@ function CreateRollupConfigs ( options ) {
                     paths:     {},
                     banner:    ( isProd ) ? '' : _computeBanner( name, format ),
                     footer:    '',
-                    intro:     ( isProd && format === 'iife' ) ? '' : 'if( iteeValidators === undefined ) { console.error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\')}',
+                    intro:     ( format === 'iife' && !isProd ) ? 'if( iteeValidators === undefined ) { console.error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\') }' : '',
                     outro:     '',
                     sourcemap: sourcemap,
                     interop:   true,
