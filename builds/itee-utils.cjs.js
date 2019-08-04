@@ -1,9 +1,13 @@
+console.log('Itee.Utils v4.1.1 - CommonJs')
 'use strict';
+
+if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.')}
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var iteeValidators = require('itee-validators');
 var fs = _interopDefault(require('fs'));
 var path = _interopDefault(require('path'));
 
@@ -91,446 +95,6 @@ function getRandomInt ( min = 0, max = 1 ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/arrays/isArray
- * @desc Export function to validate if a value is an array or not
- * @example
- *
- * import { isArray } from 'itee-validators'
- *
- * if( isArray( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */
-
-/**
- * Check if given data is an array
- *
- * @param data {*} The data to check against the array type
- * @returns {boolean} true if data is array, false otherwise
- */
-function isArray ( data ) {
-    return Array.isArray( data )
-}
-
-
-
-////////////////////
-
-/**
- * Check if given data is not an array
- *
- * @param data {*} The data to check against the array type
- * @returns {boolean} true if data is not array, false otherwise
- */
-function isNotArray ( data ) {
-    return !Array.isArray( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/arrays/isEmptyArray
- * @desc Export function to validate if a value is an array of array or not
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty array
- *
- * @param data {*} The data to check against the empty array
- * @returns {boolean} true if data is an empty array, false otherwise
- */
-function isEmptyArray ( data ) {
-
-    if ( isNotArray( data ) ) { return false }
-
-    return ( data.length === 0 )
-
-}
-
-/////
-
-/**
- * Check if given data is null or undefined
- *
- * @param data {*} The data to check against the existence
- * @returns {boolean} true if data is null or undefined, false otherwise.
- */
-function isNotDefined ( data ) {
-    return ( ( data === null ) || ( typeof data === 'undefined' ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/objects/isObject
- * @desc Export function to validate if a value is an object
- * @example todo
- *
- */
-
-/**
- * Check if given data is an object
- *
- * @param data {*} The data to check against the object type
- * @returns {boolean} true if data is object, false otherwise
- */
-function isObject ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-
-    return ( data.constructor === Object )
-}
-
-////
-
-/**
- * Check if given data is not an object
- *
- * @param data {*} The data to check against the object type
- * @returns {boolean} true if data is not an object, false otherwise
- */
-function isNotObject ( data ) {
-    return !isObject( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/strings/isString
- * @desc Export function to validate if a value is a string
- * @example todo
- *
- */
-
-/**
- * Check if given data is a string
- *
- * @param data {*} The data to check against the string type
- * @returns {boolean} true if data is a string, false otherwise.
- */
-function isString ( data ) {
-    return ( typeof data === 'string' || data instanceof String )
-}
-
-
-
-//////
-
-/**
- * Check if given data is not a string
- *
- * @param data {*} The data to check against the string type
- * @returns {boolean} true if data is not a string, false otherwise.
- */
-function isNotString ( data ) {
-    return !isString( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/numbers/isNumber
- * @desc Export function to validate if a value is a finite number
- * @example todo
- *
- */
-
-/**
- * Check if given data is a number
- *
- * @param data {*} The data to check against the maximum safe integer state
- * @returns {boolean} true if data is a number, false otherwise.
- */
-function isNumber ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-
-    return ( data.constructor === Number )
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/objects/isEmptyObject
- * @desc Export function to validate if a value is an object
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty object
- *
- * @param data {*} The data to check against the emptiness of the object
- * @returns {boolean} true if data is an empty object, false otherwise
- */
-function isEmptyObject ( data ) {
-
-    if ( isNotObject( data ) ) { return false }
-
-    if ( data.length === 0 ) {
-        return true
-    }
-
-    // Otherwise, does it have any properties of its own?
-    for ( let key in data ) {
-        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
-            return false
-        }
-    }
-
-    return true
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/strings/isEmptyString
- * @desc Export function to validate if a value is a empty string
- * @example todo
- *
- */
-
-/**
- * Check if given data is an empty string
- *
- * @param data {*} The data to check against the emptiness of the string
- * @returns {boolean} true if data is an empty string, false otherwise.
- */
-function isEmptyString ( data ) {
-
-    if ( isNotString( data ) ) {
-        return false
-    }
-
-    return ( data.length === 0 )
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/voids/isEmpty
- * @desc Export function to validate if a value is a void
- * @example todo
- *
- */
-
-/**
- * Check emptiness of given data
- *
- * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
- *
- * @param data {*} The data to check against the emptiness
- * @returns {boolean} true if data is considered as empty, false otherwise.
- */
-function isEmpty ( data ) {
-
-    if ( isNotDefined( data ) ) { return false }
-    if ( isEmptyString( data ) ) { return true}
-    if ( isEmptyArray( data ) ) { return true }
-    if ( isEmptyObject( data ) ) { return true }
-
-    return false
-
-}
-
-///
-
-/**
- * Check fullness of given data
- *
- * @param data {*} The data to check against the emptiness
- * @returns {boolean} true if data is considered as not empty, false otherwise.
- */
-function isNotEmpty ( data ) {
-    return !isEmpty( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/file-system/paths/isValidPath
- * @description Export function to validate if a value is a valid path
- *
- * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
- *
- * @example todo
- *
- */
-
-/**
- * Check if given data is a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isValidPath ( data ) {
-    return fs.existsSync( data )
-}
-
-/**
- * Check if given data is not a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isInvalidPath ( data ) {
-    return !isValidPath( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/constants
- * @desc Export constants about temperatures
- *
- */
-
-/**
- * @const
- * @type {number}
- * @default 0.00000000045
- * @desc This value corresponding to the absolute zero kelvin value
- */
-const ABSOLUTE_ZERO_KELVIN = 0.00000000045;
-
-/**
- * @const
- * @type {number}
- * @default -273.14999999955
- * @desc This value corresponding to the absolute zero celsius value
- */
-const ABSOLUTE_ZERO_CELSIUS = -273.14999999955;
-
-/**
- * @const
- * @type {number}
- * @default -459.67
- * @desc This value corresponding to the absolute zero fahrenheit value
- */
-const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isCelsius ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotCelsius ( data ) {
-    return !isCelsius( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isFahrenheit ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotFahrenheit ( data ) {
-    return !isFahrenheit( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/physics/temperatues
- * @desc Export function to validate if a value is a temperature
- * @example todo
- *
- */
-
-/**
- *
- * @param data
- * @return {boolean|*|boolean}
- */
-function isKelvin ( data ) {
-    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN )
-}
-
-///
-
-/**
- *
- * @param data
- * @return {boolean}
- */
-function isNotKelvin ( data ) {
-    return !isKelvin( data )
-}
-
-///
-
-/**
- *
- * @param data {*}
- * @return {boolean}
- */
-function isNotTemperature ( data ) {
-    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/objects
  * @description Export the utilities methods about objects
  */
@@ -552,15 +116,15 @@ function extend ( target, source ) {
 
     let output = undefined;
 
-    if ( isObject( target ) && isNotDefined( source ) ) {
+    if ( iteeValidators.isObject( target ) && iteeValidators.isNotDefined( source ) ) {
 
         output = Object.assign( {}, target );
 
-    } else if ( isNotDefined( target ) && isObject( source ) ) {
+    } else if ( iteeValidators.isNotDefined( target ) && iteeValidators.isObject( source ) ) {
 
         output = Object.assign( {}, source );
 
-    } else if ( isObject( target ) && isObject( source ) ) {
+    } else if ( iteeValidators.isObject( target ) && iteeValidators.isObject( source ) ) {
 
         output = Object.assign( {}, target );
 
@@ -570,7 +134,7 @@ function extend ( target, source ) {
 
             let key = keys[ i ];
 
-            if ( isObject( source[ key ] ) ) {
+            if ( iteeValidators.isObject( source[ key ] ) ) {
 
                 if ( key in target ) {
 
@@ -1204,60 +768,6 @@ function removeDiacritics ( string ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/file-system/files
- * @description This is the files main export entry point.
- * It expose all exports of the files validators.
- *
- */
-
-function getPathsUnder ( directoryPath ) {
-    return fs.readdirSync( directoryPath )
-}
-
-/**
- * Allow to search all files under filePaths in a recursive way
- *
- * @param {Array.<string>|string} filePaths - The files paths where search files
- * @returns {Array} - The paths of finded files
- * @private
- */
-function getFilesPathsUnder ( paths ) {
-
-    const _paths = ( isArray( paths ) ) ? paths : [ paths ];
-    let files    = [];
-
-    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
-
-        const localPath = _paths[ pathIndex ];
-
-        if ( isInvalidPath( localPath ) ) {
-            console.error( `The path "${localPath}" is not valid !` );
-            continue
-        }
-
-        const stats = fs.statSync( localPath );
-        if ( stats.isFile() ) {
-
-            files.push( localPath );
-
-        } else if ( stats.isDirectory() ) {
-
-            const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.forEach( ( name ) => { getFilesPathsUnder( path.resolve( localPath, name ) ); } );
-            Array.prototype.push.apply( files, subFilesPaths );
-
-        }
-
-    }
-
-    return files
-
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/geomathics/trigonometries
  */
 
@@ -1530,10 +1040,10 @@ const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955;
 function celsiusToKelvin ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( celsius + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
@@ -1549,10 +1059,10 @@ function celsiusToKelvin ( celsius, precisionPointAt ) {
 function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
@@ -1568,10 +1078,10 @@ function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ).toFixed( _precisionPointAt )
@@ -1587,10 +1097,10 @@ function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ) + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
@@ -1606,10 +1116,10 @@ function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( kelvin - KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
@@ -1625,13 +1135,67 @@ function kelvinToCelsius ( kelvin, precisionPointAt ) {
 function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
-    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 );
+    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
 
     // Sets the decimal point for the temperature conversion equation
     return ( ( kelvin - KELVIN_CELSIUS_CONSTANTE ) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files
+ * @description This is the files main export entry point.
+ * It expose all exports of the files validators.
+ *
+ */
+
+function getPathsUnder ( directoryPath ) {
+    return fs.readdirSync( directoryPath )
+}
+
+/**
+ * Allow to search all files under filePaths in a recursive way
+ *
+ * @param {Array.<string>|string} filePaths - The files paths where search files
+ * @returns {Array} - The paths of finded files
+ * @private
+ */
+function getFilesPathsUnder ( paths ) {
+
+    const _paths = ( iteeValidators.isArray( paths ) ) ? paths : [ paths ];
+    let files    = [];
+
+    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+
+        const localPath = _paths[ pathIndex ];
+
+        if ( iteeValidators.isInvalidPath( localPath ) ) {
+            console.error( `The path "${localPath}" is not valid !` );
+            continue
+        }
+
+        const stats = fs.statSync( localPath );
+        if ( stats.isFile() ) {
+
+            files.push( localPath );
+
+        } else if ( stats.isDirectory() ) {
+
+            const subPaths      = getPathsUnder( localPath );
+            const subFilesPaths = subPaths.forEach( ( name ) => { getFilesPathsUnder( path.resolve( localPath, name ) ); } );
+            Array.prototype.push.apply( files, subFilesPaths );
+
+        }
+
+    }
+
+    return files
 
 }
 
