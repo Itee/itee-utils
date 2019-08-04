@@ -1,3 +1,20 @@
+# [5.0.0](https://github.com/Itee/itee-utils/compare/v4.1.1...v5.0.0) (2019-08-04)
+
+
+### Bug Fixes
+
+* **rollupconfig:** add itee-validators as dependencies for all bundle ([fc975c8](https://github.com/Itee/itee-utils/commit/fc975c8))
+
+
+### Code Refactoring
+
+* **rollupconfig:** remove umd support, add banner, and remove browserified modules ([ac9818a](https://github.com/Itee/itee-utils/commit/ac9818a))
+
+
+### BREAKING CHANGES
+
+* **rollupconfig:** Remove UMD support
+
 ## [4.1.1](https://github.com/Itee/itee-utils/compare/v4.1.0...v4.1.1) (2019-08-03)
 
 
