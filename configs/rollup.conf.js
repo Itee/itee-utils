@@ -105,7 +105,7 @@ function CreateRollupConfigs ( options ) {
                     } ),
                     isProd && terser()
                 ],
-                onwarn: ( { loc, frame, message } ) => {
+                onwarn:    ( { loc, frame, message } ) => {
 
                     // Ignore some errors
                     if ( message.includes( 'Circular dependency' ) ) { return }
@@ -124,13 +124,15 @@ function CreateRollupConfigs ( options ) {
                     file:    outputPath,
                     format:  format,
                     name:    name,
-                    globals: {},
+                    globals: {
+                        'itee-validators': 'Itee.Validators'
+                    },
 
                     // advanced options
                     paths:     {},
                     banner:    ( isProd ) ? '' : _computeBanner( name, format ),
                     footer:    '',
-                    intro:     '',
+                    intro:     ( isProd && format === 'iife' ) ? '' : 'if( iteeValidators === undefined ) { console.error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\')}',
                     outro:     '',
                     sourcemap: sourcemap,
                     interop:   true,
