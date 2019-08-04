@@ -6,6 +6,7 @@
  * @description The file manage the rollup configuration for build the library using differents arguments. It allow to build with two type of environment (dev and prod), and differents output format.
  * Use npm run help to display all available build options.
  *
+ * @requires {@link module: [rollup-plugin-alias]{@link https://github.com/rollup/rollup-plugin-alias}}
  * @requires {@link module: [rollup-plugin-commonjs]{@link https://github.com/rollup/rollup-plugin-commonjs}}
  * @requires {@link module: [path]{@link https://nodejs.org/api/path.html}}
  * @requires {@link module: [rollup-plugin-re]{@link https://github.com/jetiny/rollup-plugin-re}}
@@ -14,6 +15,7 @@
  */
 
 const packageInfos = require( '../package' )
+const alias        = require( 'rollup-plugin-alias' )
 const commonjs     = require( 'rollup-plugin-commonjs' )
 const path         = require( 'path' )
 const replace      = require( 'rollup-plugin-re' )
@@ -97,6 +99,9 @@ function CreateRollupConfigs ( options ) {
                     } ),
                     commonjs( {
                         include: 'node_modules/**'
+                    } ),
+                    alias( {
+                        'itee-validators': require.resolve( `itee-validators/builds/itee-validators.${format}.${( isProd ) ? 'min.js' : 'js'}` )
                     } ),
                     resolve( {
                         preferBuiltins: true
