@@ -1,3 +1,11 @@
+## [5.0.1](https://github.com/Itee/itee-utils/compare/v5.0.0...v5.0.1) (2019-08-04)
+
+
+### Bug Fixes
+
+* **builds:** add postversion script to build with correct package version ([f1f919b](https://github.com/Itee/itee-utils/commit/f1f919b))
+* **rollupconfig:** fix wrong condition for intro parameter ([cde63a1](https://github.com/Itee/itee-utils/commit/cde63a1))
+
 # [5.0.0](https://github.com/Itee/itee-utils/compare/v4.1.1...v5.0.0) (2019-08-04)
 
 

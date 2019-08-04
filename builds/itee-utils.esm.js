@@ -1,6 +1,4 @@
-console.log('Itee.Utils v4.1.1 - EsModule')
-if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.')}
-
+console.log('Itee.Utils v5.0.1 - EsModule')
 import { isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 
 /**

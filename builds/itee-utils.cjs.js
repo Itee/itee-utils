@@ -1,7 +1,5 @@
-console.log('Itee.Utils v4.1.1 - CommonJs')
+console.log('Itee.Utils v5.0.1 - CommonJs')
 'use strict';
-
-if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.')}
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

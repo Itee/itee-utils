@@ -1,9 +1,9 @@
-console.log('Itee.Utils v4.1.1 - Standalone')
+console.log('Itee.Utils v5.0.1 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
 
-	if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.')}
+	if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.') }
 
 	/**
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
