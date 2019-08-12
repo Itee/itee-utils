@@ -17,6 +17,7 @@
     </a>
 </p>
 
+<br>
 <h2>How to install</h2>
 
 From npm:
@@ -31,6 +32,7 @@ If you want to build the repository from source follow these instructions:
     
 then copy/paste the builded module you need from builds folder.
     
+<br>
 <h2>How to use</h2>
 
 <p align="center">At begin was <a href="https://itee.github.io/itee-utils/">RTFM</a> !</p>
