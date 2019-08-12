@@ -1,13 +1,23 @@
-[![Build Status](https://travis-ci.org/Itee/itee-utils.svg?branch=master)](https://travis-ci.org/Itee/itee-utils)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-___
 
-# <center>[Itee Utils]</center>
+<h1 align="center">[Itee Utils]</h1>
+<br>
 
-The itee utils is a common utility library, it include all utils function for itee packages.
+<p align="center">The itee utils is a common utility library, it include all utils function for itee packages.</p>
+<br>
 
+<p align="center">
+    <a href="https://www.npmjs.com/package/itee-utils">
+        <img src="https://img.shields.io/npm/v/itee-utils" alt="Current package version">
+    </a>
+    <a href="https://travis-ci.org/Itee/itee-utils">
+        <img src="https://travis-ci.org/Itee/itee-utils.svg?branch=master" alt="Build status">
+    </a>
+    <a href="https://github.com/semantic-release/semantic-release">
+        <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Build status">
+    </a>
+</p>
 
-## How to install
+<h2>How to install</h2>
 
 From npm:
 
@@ -21,23 +31,23 @@ If you want to build the repository from source follow these instructions:
     
 then copy/paste the builded module you need from builds folder.
     
-## How to use
+<h2>How to use</h2>
 
-First of all, you should take a look to the documentation ! In case you have clone the repository you could auto-generate the library documentation using: 
+<p align="center">At begin was <a href="https://itee.github.io/itee-utils/">RTFM</a> !</p>
+<br>
+In case you have clone the repository you could also auto-generate the library documentation using: 
 
     npm run doc
 
 then you will be able to use like this:
 
-    import { isString } from 'itee-validators'
+    import { getRandomInt } from 'itee-utils'
         
-    if( isString('hello world') ) {
-        // Do something...
-    } else {
-        // Do something else...
-    }
+    const myRandomNumber = getRandomInt( 0, 100 )
+    console.log( myRandomInt )
 
-## License (BSD-3-Clause)
+<br>
+<h2>License (BSD-3-Clause)</h2>
 
 **Copyright (c) 2015-Present, Itee, Valcke Tristan [https://github.com/Itee](https://github.com/Itee). All rights reserved.**
 
