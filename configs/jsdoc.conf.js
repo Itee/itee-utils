@@ -20,7 +20,7 @@ function CreateJsdocConfiguration () {
             'dictionaries':     [ 'jsdoc', 'closure' ]
         },
         'source': {
-            'include':        [ 'README.md' ],
+            'include':        [],
             'includePattern': '.+\\.js(doc|x)?$',
             'excludePattern': '(node_modules|documentation|builds|tests)'
         },
@@ -29,7 +29,7 @@ function CreateJsdocConfiguration () {
         'recurseDepth': 2,
         'opts':         {
             'encoding':    'utf8',
-            'destination': './documentation/API/',
+            'destination': './docs/',
             'recurse':     true,
             'verbose':     true,
             'private':     true
