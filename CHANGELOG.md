@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/Itee/itee-utils/compare/v5.1.0...v5.1.1) (2019-08-12)
+
+
+### Bug Fixes
+
+* **docs:** remove docs from npm package ([f5aefd6](https://github.com/Itee/itee-utils/commit/f5aefd6))
+
 # [5.1.0](https://github.com/Itee/itee-utils/compare/v5.0.1...v5.1.0) (2019-08-12)
 
 
