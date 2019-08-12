@@ -22,7 +22,7 @@
   "module": "builds/itee-utils.esm.js",
   "browser": "builds/itee-utils.iife.js",
   "homepage": "https://github.com/Itee/itee-validators#readme",
-  "man": "./documentation/API/index.html",
+  "man": "./docs/index.html",
   "bugs": {
     "url": "https://github.com/Itee/itee-validators/issues"
   },
