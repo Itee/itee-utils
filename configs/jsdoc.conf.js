@@ -22,7 +22,7 @@ function CreateJsdocConfiguration () {
         'source': {
             'include':        [],
             'includePattern': '.+\\.js(doc|x)?$',
-            'excludePattern': '(node_modules|documentation|builds|tests)'
+            'excludePattern': '(node_modules|docs|builds|tests)'
         },
         'sourceType':   'module',
         'plugins':      [],
