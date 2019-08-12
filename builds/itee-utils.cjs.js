@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.0.1 - CommonJs')
+console.log('Itee.Utils v5.1.0 - CommonJs')
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -1160,9 +1160,8 @@ function getPathsUnder ( directoryPath ) {
 /**
  * Allow to search all files under filePaths in a recursive way
  *
- * @param {Array.<string>|string} filePaths - The files paths where search files
+ * @param {Array.<string>|string} paths - The files paths where search files
  * @returns {Array} - The paths of finded files
- * @private
  */
 function getFilesPathsUnder ( paths ) {
 
@@ -1174,20 +1173,20 @@ function getFilesPathsUnder ( paths ) {
         const localPath = _paths[ pathIndex ];
 
         if ( iteeValidators.isInvalidPath( localPath ) ) {
-            console.error( `The path "${localPath}" is not valid !` );
-            continue
-        }
 
-        const stats = fs.statSync( localPath );
-        if ( stats.isFile() ) {
+            console.error( `The path "${localPath}" is not valid !` );
+
+        } else if ( iteeValidators.isFilePath( localPath ) ) {
 
             files.push( localPath );
 
-        } else if ( stats.isDirectory() ) {
+        } else if ( iteeValidators.isDirectoryPath( localPath ) ) {
 
             const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.forEach( ( name ) => { getFilesPathsUnder( path.resolve( localPath, name ) ); } );
-            Array.prototype.push.apply( files, subFilesPaths );
+            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path.resolve( localPath, subPath ) ) } );
+            if ( subFilesPaths ) {
+                files = [].concat( ...subFilesPaths );
+            }
 
         }
 

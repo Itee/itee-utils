@@ -1,3 +1,15 @@
+# [5.1.0](https://github.com/Itee/itee-utils/compare/v5.0.1...v5.1.0) (2019-08-12)
+
+
+### Bug Fixes
+
+* **files:** fix getFilesPathsUnder methods that now return correct contents ([7340197](https://github.com/Itee/itee-utils/commit/7340197))
+
+
+### Features
+
+* **documentation:** add docs to github ([b2f7cfc](https://github.com/Itee/itee-utils/commit/b2f7cfc))
+
 ## [5.0.1](https://github.com/Itee/itee-utils/compare/v5.0.0...v5.0.1) (2019-08-04)
 
 
