@@ -4,4 +4,5 @@
  *
  */
 
-import './cores/_cores.benchs'
+export * from './numberToPlainString.benchs'
+

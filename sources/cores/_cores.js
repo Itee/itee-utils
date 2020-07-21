@@ -9,6 +9,7 @@
  */
 
 export * from './arrays'
+export * from './binaries'
 export * from './booleans'
 export * from './functions'
 export * from './numbers'
