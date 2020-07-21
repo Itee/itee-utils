@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.1.1 - Standalone')
+console.log('Itee.Utils v5.2.0 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
@@ -65,25 +65,326 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
 	 *
+	 *
+	 */
+
+	function byteToBits ( byte ) {
+
+	    let bits = '';
+
+	    for ( let i = 128 ; i >= 1 ; i /= 2 ) {
+
+	        if ( byte & i ) {
+	            bits += '1';
+	        } else {
+	            bits += '0';
+	        }
+
+	    }
+
+	    return bits
+
+	}
+
+	function bitsToByte ( bits ) {
+
+	    let byte = 0;
+
+	    for ( let i = 7, e = 0 ; i >= 0 ; i--, e++ ) {
+
+	        if ( bits[ i ] === '1' ) {
+	            byte += 2 ** e;
+	        }
+
+	    }
+
+	    return byte
+
+	}
+
+	function numberToInternalRepresentation ( number ) {
+
+	    //    let buffer  = new Float64Array( [ number ] ).buffer
+	    let bufferA = new ArrayBuffer( 8 );
+	    let view    = new DataView( bufferA );
+	    view.setFloat64( 0, number );
+
+	    let internalRepresentation = '';
+	    for ( let i = 0 ; i < 8 ; i++ ) {
+	        internalRepresentation += byteToBits( view.getUint8( i ) );
+	    }
+	    internalRepresentation = `${ internalRepresentation.substring( 0, 1 ) } ${ internalRepresentation.substring( 1, 12 ) } ${ internalRepresentation.substring( 12 ) }`;
+
+	    return internalRepresentation
+
+	}
+
+	function internalRepresentationToNumber ( string ) {
+
+	    const bytes = string.replace( / /g, '' )
+	                        .match( /.{8}/g )
+	                        .map( subString => bitsToByte( subString ) );
+
+	    let arrayBuffer = new ArrayBuffer( 8 );
+	    let dataView    = new DataView( arrayBuffer );
+	    for ( let i = 0 ; i < 8 ; i++ ) {
+	        dataView.setUint8( i, bytes[ i ] );
+	    }
+
+	    return dataView.getFloat64( 0 )
+
+	}
+
+	/**
+	 * @author [Tristan Valcke]{@link https://github.com/Itee}
+	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+	 *
 	 * @module sources/cores/numbers
 	 * @description Export the utilities methods about numbers
 	 *
 	 */
 
+	function getRandom () {
+	    return Math.random()
+	}
+
 	/**
 	 * Returns a random number between min (inclusive) and max (exclusive)
 	 */
-	function getRandomArbitrary ( min = 0, max = 1 ) {
+	function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
 	    return Math.random() * ( max - min ) + min
+	}
+
+	/**
+	 * Returns a random number between min (inclusive) and max (exclusive)
+	 */
+	function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
+	    return Math.random() * ( max - min + 1.0 ) + min
+	}
+
+	/**
+	 * Returns a random integer between min (inclusive) and max (exclusive)
+	 * Using Math.round() will give you a non-uniform distribution!
+	 */
+	function getRandomIntExclusive ( min = 0, max = 1 ) {
+	    const _min = Math.ceil( min );
+	    const _max = Math.floor( max );
+	    return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
 	}
 
 	/**
 	 * Returns a random integer between min (inclusive) and max (inclusive)
 	 * Using Math.round() will give you a non-uniform distribution!
 	 */
-	function getRandomInt ( min = 0, max = 1 ) {
-	    return ( Math.floor( Math.random() * ( max - min + 1 ) ) + min )
+	function getRandomIntInclusive ( min = 0, max = 1 ) {
+	    const _min = Math.ceil( min );
+	    const _max = Math.floor( max );
+	    return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
 	}
+
+
+	/**
+	 * Convert a number to its literral form
+	 * @param value
+	 * @returns {string}
+	 */
+	function numberToPlainString ( value ) {
+
+	    const stringValue = String( value );
+	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+	    const exponentialSplits   = stringValue.split( 'e' );
+	    const dirtyBase           = exponentialSplits[ 0 ];
+	    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
+	    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
+	    const dotBaseSplits       = unsignedBase.split( '.' );
+	    const numberOfSignificant = dotBaseSplits[ 0 ].length;
+	    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
+	    const base                = dotBaseSplits.join( '' );
+	    const dirtyExponent       = exponentialSplits[ 1 ];
+	    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
+	    const exponent            = parseInt( dirtyExponent.slice( 1 ) );
+
+	    let result = ( negativeBase ) ? '-' : '';
+	    if ( negativeExponant ) {
+
+	        result += '0.';
+	        result += '0'.repeat( exponent - numberOfSignificant );
+	        result += base;
+
+	    } else {
+	        result += base;
+	        result += '0'.repeat( exponent - numberOfDecimals );
+	        result += '.0';
+	    }
+
+	    return result
+
+	}
+
+	// #if IS_KEEP_ON_BUILD
+
+	function numberToPlainString_alt0 ( value ) {
+
+	    const stringValue = String( value );
+	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+	    const exponentialSplits   = stringValue.split( 'e' );
+	    const dirtyBase           = exponentialSplits[ 0 ];
+	    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
+	    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
+	    const dotBaseSplits       = unsignedBase.split( '.' );
+	    const numberOfSignificant = dotBaseSplits[ 0 ].length;
+	    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
+	    const base                = dotBaseSplits.join( '' );
+	    const dirtyExponent       = exponentialSplits[ 1 ];
+	    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
+	    const exponent            = dirtyExponent.slice( 1 );
+
+	    let result = ( negativeBase ) ? '-' : '';
+	    if ( negativeExponant ) {
+
+	        result += '0.';
+	        for ( let i = 0, e = parseInt( exponent ) - numberOfSignificant ; i < e ; i++ ) {
+	            result += '0';
+	        }
+	        result += base;
+
+	    } else {
+	        result += base;
+	        for ( let i = 0, e = parseInt( exponent ) - numberOfDecimals ; i < e ; i++ ) {
+	            result += '0';
+	        }
+	        result += '.0';
+	    }
+
+	    return result
+
+	}
+
+	function numberToPlainString_alt1 ( value ) {
+
+	    const stringValue = String( value );
+	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+	    const exponentialSplits = stringValue.split( 'e' );
+	    const dirtyBase         = exponentialSplits[ 0 ];
+	    const negativeBase      = ( dirtyBase.indexOf( '-' ) === 0 );
+	    const unsignedBase      = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
+	    const base              = unsignedBase.split( '.' ).join( '' );
+	    const dirtyExponent     = exponentialSplits[ 1 ];
+	    const negativeExponant  = ( dirtyExponent.indexOf( '-' ) === 0 );
+	    const exponent          = dirtyExponent.slice( 1 );
+	    const exponentLength    = parseInt( exponent ) + 1;
+
+	    let result = '';
+	    if ( negativeExponant ) {
+	        result += '0.';
+	        result = result.padEnd( exponentLength, '0' );
+	        result += base;
+	    } else {
+	        result += base;
+	        result = result.padEnd( exponentLength, '0' );
+	        result += '.0';
+	    }
+
+	    if ( negativeBase ) {
+	        result = `-${ result }`;
+	    }
+
+	    return result
+
+	}
+
+	function numberToPlainString_alt2 ( value ) {
+
+	    const stringValue = String( value );
+	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+	    const exponentialSplits   = stringValue.split( 'e' );
+	    const dirtyBase           = exponentialSplits[ 0 ];
+	    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
+	    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
+	    const dotBaseSplits       = unsignedBase.split( '.' );
+	    const numberOfSignificant = dotBaseSplits[ 0 ].length;
+	    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
+	    const base                = dotBaseSplits.join( '' );
+	    const dirtyExponent       = exponentialSplits[ 1 ];
+	    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
+	    const exponent            = dirtyExponent.slice( 1 );
+	    const exponentLength      = parseInt( exponent ) + 1;
+	    const sign                = ( negativeBase ) ? '-' : '';
+
+	    let result = '';
+	    if ( negativeExponant ) {
+	        result = `${ sign }0.${ Array( exponentLength - numberOfSignificant ).join( 0 ) }${ base }`;
+	    } else {
+	        result = `${ sign + base + Array( exponentLength - numberOfDecimals ).join( 0 ) }.0`;
+	    }
+
+	    return result
+
+	}
+
+	function numberToPlainString_alt3 ( value ) {
+
+	    return String( value ).replace( /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
+	        ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
+
+	            const exponentLength = parseInt( exponent );
+	            if ( exponentSign === '-' ) {
+	                return `${ sign }0.${ '0'.repeat( exponentLength - significants.length ) }${ significants }${ decimals }`
+	                //                return sign + '0.' + Array( exponentLength - significants.length + 1 ).join( 0 ) + significants + decimals
+	            } else {
+	                return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
+	                //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
+	            }
+	        } )
+
+	}
+
+	function numberToPlainString_alt4 ( num ) {
+	    const nsign = Math.sign( num );
+	    //remove the sign
+	    let _num    = Math.abs( num );
+	    //if the number is in scientific notation remove it
+	    if ( /\d+\.?\d*e[-+]*\d+/i.test( _num ) ) {
+
+	        const zero        = '0';
+	        const parts       = String( _num ).toLowerCase().split( 'e' ); //split into coeff and exponent
+	        const e           = parseInt( parts.pop() ); //store the exponential part
+	        let l             = Math.abs( e ); //get the number of zeros
+	        const sign        = e / l;
+	        const coeff_array = parts[ 0 ].split( '.' );
+
+	        if ( sign === -1 ) {
+	            l -= coeff_array[ 0 ].length;
+	            if ( l < 0 ) {
+	                _num = `${ coeff_array[ 0 ].slice( 0, l ) }.${ coeff_array[ 0 ].slice( l ) }${ coeff_array.length === 2 ? coeff_array[ 1 ] : '' }`;
+	            } else {
+	                _num = `${ zero }.${ new Array( l + 1 ).join( zero ) }${ coeff_array.join( '' ) }`;
+	            }
+	        } else {
+	            const dec = coeff_array[ 1 ];
+	            if ( dec ) {
+	                l -= dec.length;
+	            }
+	            if ( l < 0 ) {
+	                _num = `${ coeff_array[ 0 ] + dec.slice( 0, l ) }.${ dec.slice( l ) }`;
+	            } else {
+	                _num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero );
+	            }
+	        }
+	    }
+
+	    return nsign < 0 ? `-${ _num }` : _num
+	}
+
+	// #endif
 
 	/**
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -301,7 +602,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	function toEnum ( enumValues ) {
 
-	    return Object.freeze( Object.defineProperties( enumValues, {
+	    return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
 	        toString: {
 	            configurable: false,
 	            enumerable:   false,
@@ -361,7 +662,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @public
 	 * @memberOf TApplication
 	 */
-	let diacriticsMap = ( () => {
+	const diacriticsMap = ( () => {
 
 	    /*
 	     Licensed under the Apache License, Version 2.0 (the "License");
@@ -728,11 +1029,12 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	    for ( let i = 0 ; i < defaultDiacriticsRemovalMap.length ; i++ ) {
 
-	        const letters = defaultDiacriticsRemovalMap [ i ].letters;
+	        const letters = defaultDiacriticsRemovalMap[ i ].letters;
+	        const base    = defaultDiacriticsRemovalMap[ i ].base;
 
 	        for ( let j = 0 ; j < letters.length ; j++ ) {
 
-	            map[ letters[ j ] ] = defaultDiacriticsRemovalMap[ i ].base;
+	            map[ letters[ j ] ] = base;
 
 	        }
 
@@ -752,9 +1054,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function removeDiacritics ( string ) {
 
 	    // eslint-disable-next-line
-	    return string.replace( /[^\u0000-\u007E]/g, function ( a ) {
-	        return diacriticsMap[ a ] || a
-	    } )
+	    return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
 
 	}
 
@@ -1016,6 +1316,112 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
 	 *
+	 * @see [IFC Standard]{@link http://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/}
+	 *
+	 */
+
+	/**
+	 *
+	 * @param ring
+	 * @return {boolean}
+	 */
+	function ringClockwise ( ring ) {
+
+	    if ( ( n = ring.length ) < 4 ) {
+	        return false
+	    }
+
+	    var i    = 0,
+	        n,
+	        area = ring[ n - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ n - 1 ][ 0 ] * ring[ 0 ][ 1 ];
+	    while ( ++i < n ) {
+	        area += ring[ i - 1 ][ 1 ] * ring[ i ][ 0 ] - ring[ i - 1 ][ 0 ] * ring[ i ][ 1 ];
+	    }
+	    return area >= 0
+	}
+
+	/**
+	 *
+	 * @param ring
+	 * @param hole
+	 * @return {boolean}
+	 */
+	function ringContainsSome ( ring, hole ) {
+
+	    let i = 0;
+	    let n = hole.length;
+
+	    do {
+
+	        if ( ringContains( ring, hole[ i ] ) > 0 ) {
+	            return true
+	        }
+
+	    } while ( ++i < n )
+
+	    return false
+
+	}
+
+	/**
+	 *
+	 * @param ring
+	 * @param point
+	 * @return {number}
+	 */
+	function ringContains ( ring, point ) {
+
+	    let x        = point[ 0 ];
+	    let y        = point[ 1 ];
+	    let contains = -1;
+
+	    for ( let i = 0, n = ring.length, j = n - 1 ; i < n ; j = i++ ) {
+
+	        const pi = ring[ i ];
+	        const xi = pi[ 0 ];
+	        const yi = pi[ 1 ];
+	        const pj = ring[ j ];
+	        const xj = pj[ 0 ];
+	        const yj = pj[ 1 ];
+
+	        if ( segmentContains( pi, pj, point ) ) {
+	            contains = 0;
+	        } else if ( ( ( yi > y ) !== ( yj > y ) ) && ( ( x < ( xj - xi ) * ( y - yi ) / ( yj - yi ) + xi ) ) ) {
+	            contains = -contains;
+	        }
+
+	    }
+
+	    return contains
+
+	}
+
+	/**
+	 *
+	 * @param p0
+	 * @param p1
+	 * @param p2
+	 * @return {boolean}
+	 */
+	function segmentContains ( p0, p1, p2 ) {
+	    var x20 = p2[ 0 ] - p0[ 0 ],
+	        y20 = p2[ 1 ] - p0[ 1 ];
+	    if ( x20 === 0 && y20 === 0 ) {
+	        return true
+	    }
+	    var x10 = p1[ 0 ] - p0[ 0 ],
+	        y10 = p1[ 1 ] - p0[ 1 ];
+	    if ( x10 === 0 && y10 === 0 ) {
+	        return false
+	    }
+	    var t = ( x20 * x10 + y20 * y10 ) / ( x10 * x10 + y10 * y10 );
+	    return t < 0 || t > 1 ? false : t === 0 || t === 1 ? true : t * x10 === x20 && t * y10 === y20
+	}
+
+	/**
+	 * @author [Tristan Valcke]{@link https://github.com/Itee}
+	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+	 *
 	 * @module sources/physics/temperatures
 	 * @description Export the utilities methods about temperatures
 	 * @requires {@link module:sources/cores/numbers}
@@ -1139,6 +1545,428 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
+	/**
+	 * @author [Tristan Valcke]{@link https://github.com/Itee}
+	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+	 *
+	 * @module sources/testing
+	 *
+	 */
+
+	/* global Itee */
+
+	const voids = {
+	    null:      null,
+	    undefined: undefined,
+	    void:      void ( 0 )
+	};
+
+	const booleans = {
+	    true:  true,
+	    false: false
+	};
+
+	const numbers = {
+	    negativeInfinity:        Number.NEGATIVE_INFINITY,
+	    negativeMaxValue:        -Number.MAX_VALUE,
+	    negativeMinSafeInteger:  Number.MIN_SAFE_INTEGER,
+	    negativeMinValue:        -Number.MIN_VALUE,
+	    negativeHexa:            -0x123456,
+	    negativePow:             -2e+2,
+	    negativePowWithDecimals: -1.2345e+2,
+	    negativeFloat:           -1.01,
+	    negativeInt:             -1,
+	    negativeZero:            -0,
+	    nan:                     Number.NaN,
+	    positiveZero:            0,
+	    positiveInt:             1,
+	    positiveFloat:           1.01,
+	    positivePowWithDecimals: 1.2345e+2,
+	    positivePow:             2e+2,
+	    positiveHexa:            0x123456,
+	    positiveMinValue:        Number.MIN_VALUE,
+	    positiveMaxSafeInteger:  Number.MAX_SAFE_INTEGER,
+	    positiveMaxValue:        Number.MAX_VALUE,
+	    positiveInfinity:        Number.POSITIVE_INFINITY,
+	    // others
+	    e:                       Math.E,
+	    ln10:                    Math.LN10,
+	    ln2:                     Math.LN2,
+	    log10e:                  Math.LOG10E,
+	    log2e:                   Math.LOG2E,
+	    pi:                      Math.PI,
+	    sqrt1_2:                 Math.SQRT1_2,
+	    sqrt2:                   Math.SQRT2
+	};
+
+	const strings = ( () => {
+
+	    const dataMap = {
+	        empty:       '',
+	        blank:       '      ',
+	        stringNull:  String(),
+	        stringEmpty: String( '' ),
+	        stringBlank: String( '    ' ),
+	        foobar:      'foobar'
+	    };
+
+	    // Convert voids to string
+	    const voidDataMap = voids;
+	    for ( let i = 0, m = voidDataMap.length ; i < m ; i++ ) {
+	        dataMap[ voidDataMap[ i ] ] = `${voidDataMap[ i ]}`;
+	    }
+
+	    // Convert booleans to string
+	    const booleanDataMap = booleans;
+	    for ( let j = 0, n = booleanDataMap.length ; j < n ; j++ ) {
+	        dataMap[ booleanDataMap[ j ] ] = `${booleanDataMap[ j ]}`;
+	    }
+
+	    // Convert numbers to string
+	    const numericDataMap = numbers;
+	    for ( let k = 0, o = numericDataMap.length ; k < o ; k++ ) {
+	        dataMap[ numericDataMap[ k ] ] = `${numericDataMap[ k ]}`;
+	    }
+
+	    return dataMap
+
+	} )();
+
+	const functions = {
+	    anonymousFunction: function () {},
+	    namedFunction:     function namedFunction () {},
+	    arrowFunction:     () => {}
+	};
+
+	const arrays = ( () => {
+
+	    const dataMap = {
+	        emptyArray:       [],
+	        emptyArrayObject: new Array(),
+	        singleValued:     [ 0 ],
+	        multiValued:      [ 0, 1, 2 ],
+	        null:             ( () => {
+
+	            const nullArray = [];
+
+	            for ( let index = 0 ; index < 3 ; index++ ) {
+	                nullArray.push( null );
+	            }
+
+	            return nullArray
+
+	        } )(),
+	        undefined: ( () => {
+
+	            const undefinedArray = [];
+
+	            for ( let index = 0 ; index < 3 ; index++ ) {
+	                undefinedArray.push( undefined );
+	            }
+
+	            return undefinedArray
+
+	        } )(),
+	        void: ( () => {
+
+	            const undefinedArray = [];
+
+	            for ( let index = 0 ; index < 3 ; index++ ) {
+	                undefinedArray.push( void ( 0 ) );
+	            }
+
+	            return undefinedArray
+
+	        } )(),
+	        voids: ( () => {
+
+	            const array = [];
+
+	            const voidDataMap = voids;
+	            for ( let key in voidDataMap ) {
+	                array.push( voidDataMap[ key ] );
+	            }
+
+	            return array
+
+	        } )(),
+	        booleans: ( () => {
+
+	            const array = [];
+
+	            const booleanDataMap = booleans;
+	            for ( let key in booleanDataMap ) {
+	                array.push( booleanDataMap[ key ] );
+	            }
+
+	            return array
+
+	        } )(),
+	        numbers: ( () => {
+
+	            const array = [];
+
+	            const numericDataMap = numbers;
+	            for ( let key in numericDataMap ) {
+	                array.push( numericDataMap[ key ] );
+	            }
+
+	            return array
+
+	        } )(),
+	        strings: ( () => {
+
+	            const array = [];
+
+	            const stringDataMap = strings;
+	            for ( let key in stringDataMap ) {
+	                array.push( stringDataMap[ key ] );
+	            }
+
+	            return array
+
+	        } )(),
+	        functions: ( () => {
+
+	            const array = [];
+
+	            const functionDataMap = functions;
+	            for ( let key in functionDataMap ) {
+	                array.push( functionDataMap[ key ] );
+	            }
+
+	            return array
+
+	        } )(),
+	        objects: [
+	            {
+	                foo: 'bar'
+	            },
+	            {
+	                baz: 'qux'
+	            }
+	        ],
+	        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+	    };
+
+	    return dataMap
+
+	} )();
+
+	const typedArrays = {
+	    int8Array:    new Int8Array( [ 1, 2, 3 ] ),
+	    uInt8Array:   new Uint8Array( [ 1, 2, 3 ] ),
+	    int16Array:   new Int16Array( [ 1, 2, 3 ] ),
+	    uInt16Array:  new Uint16Array( [ 1, 2, 3 ] ),
+	    int32Array:   new Int32Array( [ 1, 2, 3 ] ),
+	    uInt32Array:  new Uint32Array( [ 1, 2, 3 ] ),
+	    float32Array: new Float32Array( [ 1.0, 2.0, 3.0 ] ),
+	    float64Array: new Float64Array( [ 1.0, 2.0, 3.0 ] )
+	};
+
+	const objects = {
+	    empty:     {},
+	    instance:  new Object(),
+	    null:      { null: null },
+	    undefined: { undefined: undefined },
+	    foo:       { foo: 'bar' }
+	};
+
+	const globalDataMap = {
+	    voids,
+	    booleans,
+	    numbers,
+	    strings,
+	    functions,
+	    arrays,
+	    typedArrays,
+	    objects
+	};
+
+	const Testing = {
+
+	    DataMap: undefined,
+
+	    createDataMap: function ( dataMapOptions ) {
+
+	        if ( dataMapOptions === undefined ) {
+
+	            dataMapOptions = {
+	                voids:       [],
+	                booleans:    [],
+	                numbers:     [],
+	                strings:     [],
+	                functions:   [],
+	                arrays:      [],
+	                typedArrays: [],
+	                objects:     []
+	            };
+
+	        }
+
+	        let dataMap = {};
+
+	        for ( let optionKey in dataMapOptions ) {
+
+	            const map = globalDataMap[ optionKey ];
+	            if ( map === undefined ) {
+	                throw ReferenceError( `The global data map does not contain element for key: ${optionKey}` )
+	            }
+
+	            const option = dataMapOptions[ optionKey ];
+
+	            dataMap[ optionKey ] = {};
+
+	            if ( option.length === 0 ) {
+
+	                for ( let valueKey in map ) {
+	                    dataMap[ optionKey ][ valueKey ] = map[ valueKey ];
+	                }
+
+	            } else {
+
+	                for ( let i = 0, nbOptions = option.length ; i < nbOptions ; i++ ) {
+	                    dataMap[ optionKey ][ option[ i ] ] = map[ option[ i ] ];
+	                }
+
+	            }
+
+	        }
+
+	        return dataMap
+
+	    },
+
+	    createDataMapBenchmarkOptions: function ( dataMapOptions ) {
+
+	        Itee.Testing.DataMap = Itee.Testing.createDataMap( dataMapOptions );
+
+	        return {
+
+	            setup: function onSetup () {
+	                this.datamap = Itee.Testing.DataMap;
+	            },
+
+	            teardown: function onTeardown () {
+	                delete this.datamap;
+	            }
+
+	        }
+
+	    },
+
+	    iterateOverDataMap: function ( func ) {
+
+	        return function _iterateOverDataMap () {
+
+	            const datamap = this.datamap;
+	            for ( let datasetKey in datamap ) {
+
+	                const dataset = datamap[ datasetKey ];
+
+	                if ( Array.isArray( dataset ) ) {
+
+	                    for ( let i = 0, n = dataset.length ; i < n ; i++ ) {
+
+	                        const data = dataset[ i ];
+	                        func( data );
+
+	                    }
+
+	                } else {
+
+	                    for ( let dataKey in dataset ) {
+
+	                        const data = dataset[ dataKey ];
+	                        func( data );
+
+	                    }
+
+	                }
+
+	            }
+
+	        }
+
+	    },
+
+	    createDataSet: function ( dataSetOptions ) {
+
+	        if ( dataSetOptions === undefined ) {
+
+	            dataSetOptions = {
+	                voids:       [],
+	                booleans:    [],
+	                numbers:     [],
+	                strings:     [],
+	                functions:   [],
+	                arrays:      [],
+	                typedArrays: [],
+	                objects:     []
+	            };
+
+	        }
+
+	        let dataSet = [];
+
+	        for ( let optionKey in dataSetOptions ) {
+
+	            const map    = globalDataMap[ optionKey ];
+	            const option = dataSetOptions[ optionKey ];
+
+	            if ( option.length === 0 ) {
+
+	                for ( let valueKey in map ) {
+	                    dataSet.push( map[ valueKey ] );
+	                }
+
+	            } else {
+
+	                for ( let i = 0, nbOptions = option.length ; i < nbOptions ; i++ ) {
+	                    dataSet.push( map[ option[ i ] ] );
+	                }
+
+	            }
+
+	        }
+
+	        return dataSet
+
+	    },
+
+	    createDataSetBenchmarkOptions: function ( datasetName ) {
+
+	        return {
+
+	            setup: function onSetup () {
+	                this.dataset = Itee.Testing.createDataSet()[ datasetName ];
+	            },
+
+	            teardown: function onTeardown () {
+	                delete this.dataset;
+	            }
+
+	        }
+
+	    },
+
+	    iterateOverDataSet: function ( func ) {
+
+	        return function () {
+
+	            const dataset = this.dataset;
+	            for ( let i = 0, n = dataset.length ; i < n ; i++ ) {
+
+	                func( dataset[ i ] );
+
+	            }
+
+	        }
+
+	    }
+
+	};
+
 	exports.DEG_TO_RAD = DEG_TO_RAD;
 	exports.FAHRENHEIT_CELSIUS_COEFFICIENT = FAHRENHEIT_CELSIUS_COEFFICIENT;
 	exports.FAHRENHEIT_CELSIUS_CONSTANTE = FAHRENHEIT_CELSIUS_CONSTANTE;
@@ -1147,6 +1975,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.PI_2 = PI_2;
 	exports.PI_4 = PI_4;
 	exports.RAD_TO_DEG = RAD_TO_DEG;
+	exports.Testing = Testing;
+	exports.bitsToByte = bitsToByte;
+	exports.byteToBits = byteToBits;
 	exports.celsiusToFahrenheit = celsiusToFahrenheit;
 	exports.celsiusToKelvin = celsiusToKelvin;
 	exports.classNameify = classNameify;
@@ -1154,20 +1985,34 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.createInterval = createInterval;
 	exports.degreesFromRadians = degreesFromRadians;
 	exports.degreesToRadians = degreesToRadians;
-	exports.diacriticsMap = diacriticsMap;
 	exports.extend = extend;
 	exports.extendObject = extendObject;
 	exports.fahrenheitToCelsius = fahrenheitToCelsius;
 	exports.fahrenheitToKelvin = fahrenheitToKelvin;
 	exports.getPitch = getPitch;
-	exports.getRandomArbitrary = getRandomArbitrary;
-	exports.getRandomInt = getRandomInt;
+	exports.getRandom = getRandom;
+	exports.getRandomFloatExclusive = getRandomFloatExclusive;
+	exports.getRandomFloatInclusive = getRandomFloatInclusive;
+	exports.getRandomIntExclusive = getRandomIntExclusive;
+	exports.getRandomIntInclusive = getRandomIntInclusive;
 	exports.getYaw = getYaw;
+	exports.internalRepresentationToNumber = internalRepresentationToNumber;
 	exports.kelvinToCelsius = kelvinToCelsius;
 	exports.kelvinToFahrenheit = kelvinToFahrenheit;
+	exports.numberToInternalRepresentation = numberToInternalRepresentation;
+	exports.numberToPlainString = numberToPlainString;
+	exports.numberToPlainString_alt0 = numberToPlainString_alt0;
+	exports.numberToPlainString_alt1 = numberToPlainString_alt1;
+	exports.numberToPlainString_alt2 = numberToPlainString_alt2;
+	exports.numberToPlainString_alt3 = numberToPlainString_alt3;
+	exports.numberToPlainString_alt4 = numberToPlainString_alt4;
 	exports.radiansFromDegrees = radiansFromDegrees;
 	exports.radiansToDegrees = radiansToDegrees;
 	exports.removeDiacritics = removeDiacritics;
+	exports.ringClockwise = ringClockwise;
+	exports.ringContains = ringContains;
+	exports.ringContainsSome = ringContainsSome;
+	exports.segmentContains = segmentContains;
 	exports.serializeObject = serializeObject;
 	exports.sortBy = sortBy;
 	exports.toEnum = toEnum;
