@@ -26,7 +26,7 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         frameworks: [ 'benchmark' ],
 
         // list of files / patterns to load in the browser
-        files: [ `builds/${packageInfos.name}.benchs.js` ],
+        files: [ `builds/${ packageInfos.name }.benchs.iife.js` ],
 
         // list of files to exclude
         exclude: [],
@@ -34,6 +34,10 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {},
+
+        client: {
+            captureConsole: false
+        },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
