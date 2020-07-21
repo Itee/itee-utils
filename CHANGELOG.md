@@ -1,3 +1,23 @@
+# [5.2.0](https://github.com/Itee/itee-utils/compare/v5.1.1...v5.2.0) (2020-07-21)
+
+
+### Bug Fixes
+
+* **global:** lint source and fix related error ([c0ec19f](https://github.com/Itee/itee-utils/commit/c0ec19fd9388301656e4353d6d9a5c0a23b0b9eb))
+* **objects:** fix bad treeshaking against toEnum method, mark it as pure ([f6b744e](https://github.com/Itee/itee-utils/commit/f6b744e83f98e2c8532d019abee18098151de408))
+* **package:** fix package lock merging due to depandabot ([3a46963](https://github.com/Itee/itee-utils/commit/3a46963ca1b2b5f8f5b4568640f5e0f0354d3ccf))
+* **strings:** fix bad tree shaking against diacriticsMap iife ([fdb924e](https://github.com/Itee/itee-utils/commit/fdb924e08e7ab558fd87c304bfb9755fccad0608))
+
+
+### Features
+
+* **binaries:** add method to convert uint8 and float64 to/from binary string representation ([0b056fc](https://github.com/Itee/itee-utils/commit/0b056fc1a7de25e8c97c0e3093d9971de4c99ca9))
+* **chrono:** add chrono class to time measure ([80d4fa9](https://github.com/Itee/itee-utils/commit/80d4fa9cceb91ea6fbc7678717db725f166ae68e))
+* **geometries:** add new geometries function about ring and segments intersections ([5198dbd](https://github.com/Itee/itee-utils/commit/5198dbd16e55eb1f770449aa7fc834dd4a7c5b93))
+* **number:** add getRandom function to have normalized way to get Math.random number ([58f3a98](https://github.com/Itee/itee-utils/commit/58f3a98e06b4c45e5e80c6505cfb9916ac14eb5f))
+* **number:** add new methods to display plain string representation of number ([297e492](https://github.com/Itee/itee-utils/commit/297e4922fadde28ba7155fb26d5d64ad09aa8883))
+* **number:** normalize random function and add inclusive version for float and integer ([7e3ecce](https://github.com/Itee/itee-utils/commit/7e3ecceef824232892a4a0a3f1604ea33222dac6))
+
 ## [5.1.1](https://github.com/Itee/itee-utils/compare/v5.1.0...v5.1.1) (2019-08-12)
 
 
