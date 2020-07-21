@@ -219,7 +219,7 @@ export function createInterval ( particles, path, interval ) {
 
 export function toEnum ( enumValues ) {
 
-    return Object.freeze( Object.defineProperties( enumValues, {
+    return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
         toString: {
             configurable: false,
             enumerable:   false,
