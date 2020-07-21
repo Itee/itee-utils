@@ -26,7 +26,7 @@ export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
 }
 
 /**
- * Returns a random integer between min (inclusive) and max (inclusive)
+ * Returns a random integer between min (inclusive) and max (exclusive)
  * Using Math.round() will give you a non-uniform distribution!
  */
 export function getRandomIntExclusive ( min = 0, max = 1 ) {
@@ -35,10 +35,10 @@ export function getRandomIntExclusive ( min = 0, max = 1 ) {
     return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
 }
 
-// On renvoie un entier aléatoire entre une valeur min (incluse)
-// et une valeur max (incluse).
-// Attention : si on utilisait Math.round(), on aurait une distribution
-// non uniforme !
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ */
 export function getRandomIntInclusive ( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
     const _max = Math.floor( max )
