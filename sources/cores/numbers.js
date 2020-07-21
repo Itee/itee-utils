@@ -7,6 +7,10 @@
  *
  */
 
+export function getRandom () {
+    return Math.random()
+}
+
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
  */
