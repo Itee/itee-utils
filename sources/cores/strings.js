@@ -21,7 +21,7 @@ export function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-export let diacriticsMap = ( () => {
+const diacriticsMap = ( () => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -388,11 +388,12 @@ export let diacriticsMap = ( () => {
 
     for ( let i = 0 ; i < defaultDiacriticsRemovalMap.length ; i++ ) {
 
-        const letters = defaultDiacriticsRemovalMap [ i ].letters
+        const letters = defaultDiacriticsRemovalMap[ i ].letters
+        const base    = defaultDiacriticsRemovalMap[ i ].base
 
         for ( let j = 0 ; j < letters.length ; j++ ) {
 
-            map[ letters[ j ] ] = defaultDiacriticsRemovalMap[ i ].base
+            map[ letters[ j ] ] = base
 
         }
 
@@ -412,8 +413,6 @@ export let diacriticsMap = ( () => {
 export function removeDiacritics ( string ) {
 
     // eslint-disable-next-line
-    return string.replace( /[^\u0000-\u007E]/g, function ( a ) {
-        return diacriticsMap[ a ] || a
-    } )
+    return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
 
 }
