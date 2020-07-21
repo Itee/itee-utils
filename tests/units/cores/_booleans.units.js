@@ -4,9 +4,8 @@
  *
  */
 
-/* global describe, beforeEach, afterEach */
+/* global describe */
 
-import { TestsUtils }     from '../../../utils/itee-validators.tests-utils.js'
 import { isBooleanUnits } from './isBoolean.units'
 
 function _booleansUnits () {

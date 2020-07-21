@@ -6,8 +6,6 @@
  *
  */
 
-/* global Itee, suite, benchmark */
-
 import Benchmark from 'benchmark'
 import {
     numberToPlainString,

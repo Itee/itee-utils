@@ -54,7 +54,7 @@ export function getRandomIntInclusive ( min = 0, max = 1 ) {
 export function numberToPlainString ( value ) {
 
     const stringValue = String( value )
-    if ( !( /\d+\.?\d*e[\+\-]*\d+/i.test( stringValue ) ) ) { return stringValue }
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
 
 
     const exponentialSplits   = stringValue.split( 'e' )
@@ -67,7 +67,7 @@ export function numberToPlainString ( value ) {
     const base                = dotBaseSplits.join( '' )
     const dirtyExponent       = exponentialSplits[ 1 ]
     const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 )
-    const exponent            = parseInt(dirtyExponent.slice( 1 ))
+    const exponent            = parseInt( dirtyExponent.slice( 1 ) )
 
     let result = ( negativeBase ) ? '-' : ''
     if ( negativeExponant ) {
@@ -91,7 +91,7 @@ export function numberToPlainString ( value ) {
 export function numberToPlainString_alt0 ( value ) {
 
     const stringValue = String( value )
-    if ( !( /\d+\.?\d*e[\+\-]*\d+/i.test( stringValue ) ) ) { return stringValue }
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
 
 
     const exponentialSplits   = stringValue.split( 'e' )
@@ -130,7 +130,7 @@ export function numberToPlainString_alt0 ( value ) {
 export function numberToPlainString_alt1 ( value ) {
 
     const stringValue = String( value )
-    if ( !( /\d+\.?\d*e[\+\-]*\d+/i.test( stringValue ) ) ) { return stringValue }
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
 
 
     const exponentialSplits = stringValue.split( 'e' )
@@ -165,7 +165,7 @@ export function numberToPlainString_alt1 ( value ) {
 export function numberToPlainString_alt2 ( value ) {
 
     const stringValue = String( value )
-    if ( !( /\d+\.?\d*e[\+\-]*\d+/i.test( stringValue ) ) ) { return stringValue }
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
 
 
     const exponentialSplits   = stringValue.split( 'e' )
@@ -211,38 +211,40 @@ export function numberToPlainString_alt3 ( value ) {
 }
 
 export function numberToPlainString_alt4 ( num ) {
-    var nsign = Math.sign( num )
+    const nsign = Math.sign( num )
     //remove the sign
-    num       = Math.abs( num )
+    let _num    = Math.abs( num )
     //if the number is in scientific notation remove it
-    if ( /\d+\.?\d*e[\+\-]*\d+/i.test( num ) ) {
-        var zero        = '0',
-            parts       = String( num ).toLowerCase().split( 'e' ), //split into coeff and exponent
-            e           = parts.pop(), //store the exponential part
-            l           = Math.abs( e ), //get the number of zeros
-            sign        = e / l,
-            coeff_array = parts[ 0 ].split( '.' )
+    if ( /\d+\.?\d*e[-+]*\d+/i.test( _num ) ) {
+
+        const zero        = '0'
+        const parts       = String( _num ).toLowerCase().split( 'e' ) //split into coeff and exponent
+        const e           = parseInt( parts.pop() ) //store the exponential part
+        let l             = Math.abs( e ) //get the number of zeros
+        const sign        = e / l
+        const coeff_array = parts[ 0 ].split( '.' )
+
         if ( sign === -1 ) {
-            l = l - coeff_array[ 0 ].length
+            l -= coeff_array[ 0 ].length
             if ( l < 0 ) {
-                num = coeff_array[ 0 ].slice( 0, l ) + '.' + coeff_array[ 0 ].slice( l ) + ( coeff_array.length === 2 ? coeff_array[ 1 ] : '' )
+                _num = `${ coeff_array[ 0 ].slice( 0, l ) }.${ coeff_array[ 0 ].slice( l ) }${ coeff_array.length === 2 ? coeff_array[ 1 ] : '' }`
             } else {
-                num = zero + '.' + new Array( l + 1 ).join( zero ) + coeff_array.join( '' )
+                _num = `${ zero }.${ new Array( l + 1 ).join( zero ) }${ coeff_array.join( '' ) }`
             }
         } else {
-            var dec = coeff_array[ 1 ]
+            const dec = coeff_array[ 1 ]
             if ( dec ) {
-                l = l - dec.length
+                l -= dec.length
             }
             if ( l < 0 ) {
-                num = coeff_array[ 0 ] + dec.slice( 0, l ) + '.' + dec.slice( l )
+                _num = `${ coeff_array[ 0 ] + dec.slice( 0, l ) }.${ dec.slice( l ) }`
             } else {
-                num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero )
+                _num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero )
             }
         }
     }
 
-    return nsign < 0 ? '-' + num : num
+    return nsign < 0 ? `-${ _num }` : _num
 }
 
 // #endif
