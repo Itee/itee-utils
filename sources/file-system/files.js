@@ -38,7 +38,7 @@ function getFilesPathsUnder ( paths ) {
 
         if ( isInvalidPath( localPath ) ) {
 
-            console.error( `The path "${localPath}" is not valid !` )
+            throw new Error( `The path "${localPath}" is not valid !` )
 
         } else if ( isFilePath( localPath ) ) {
 
