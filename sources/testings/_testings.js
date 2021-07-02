@@ -109,7 +109,7 @@ const arrays = ( () => {
             return nullArray
 
         } )(),
-        undefined:        ( () => {
+        undefined: ( () => {
 
             const undefinedArray = []
 
@@ -120,7 +120,7 @@ const arrays = ( () => {
             return undefinedArray
 
         } )(),
-        void:             ( () => {
+        void: ( () => {
 
             const undefinedArray = []
 
@@ -131,7 +131,7 @@ const arrays = ( () => {
             return undefinedArray
 
         } )(),
-        voids:            ( () => {
+        voids: ( () => {
 
             const array = []
 
@@ -143,7 +143,7 @@ const arrays = ( () => {
             return array
 
         } )(),
-        booleans:         ( () => {
+        booleans: ( () => {
 
             const array = []
 
@@ -155,7 +155,7 @@ const arrays = ( () => {
             return array
 
         } )(),
-        numbers:          ( () => {
+        numbers: ( () => {
 
             const array = []
 
@@ -167,7 +167,7 @@ const arrays = ( () => {
             return array
 
         } )(),
-        strings:          ( () => {
+        strings: ( () => {
 
             const array = []
 
@@ -179,7 +179,7 @@ const arrays = ( () => {
             return array
 
         } )(),
-        functions:        ( () => {
+        functions: ( () => {
 
             const array = []
 
@@ -191,7 +191,7 @@ const arrays = ( () => {
             return array
 
         } )(),
-        objects:          [
+        objects: [
             {
                 foo: 'bar'
             },
@@ -199,7 +199,7 @@ const arrays = ( () => {
                 baz: 'qux'
             }
         ],
-        arrays:           [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
     }
 
     return dataMap

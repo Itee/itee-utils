@@ -88,7 +88,7 @@ function CreateRollupConfigs ( options ) {
                 plugins:  [
                     replace( {
                         defines: {
-                            IS_KEEP_ON_BUILD:  true,
+                            IS_KEEP_ON_BUILD:    true,
                             IS_BACKEND_SPECIFIC: ( format === 'cjs' )
                         }
                     } ),

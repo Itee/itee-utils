@@ -136,11 +136,11 @@ function setupBench () {
                 -Infinity,
                 NaN,
                 -NaN,
-                ( 1 + 2 ** -52 ),                           // Smallest number > 1
-                ( 2 ** -1074 ),                             // Min. subnormal positive double
-                ( 2 ** -1022 * 1 ),                         // Min. normal positive double
-                ( 2 ** -1022 * ( 1 - 2 ** -52 ) ),          // Max. subnormal double
-                ( 2 ** 1023 * ( 1 + ( 1 - 2 ** -52 ) ) )    // Max. Double
+                ( 1 + 2 ** -52 ), // Smallest number > 1
+                ( 2 ** -1074 ), // Min. subnormal positive double
+                ( 2 ** -1022 * 1 ), // Min. normal positive double
+                ( 2 ** -1022 * ( 1 - 2 ** -52 ) ), // Max. subnormal double
+                ( 2 ** 1023 * ( 1 + ( 1 - 2 ** -52 ) ) ) // Max. Double
                 //                586084736227728377283728272309128120398n
             ]
         },
