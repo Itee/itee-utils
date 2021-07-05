@@ -23,6 +23,7 @@ function setupSuite () {
         // called when the suite starts running
         'onStart': function onStartSuite () {
 
+            //eslint-disable-next-line
             console.log( `Running Suite: ${ this.name }` )
             this.results = []
 
@@ -31,6 +32,7 @@ function setupSuite () {
         // called between running benchmarks
         'onCycle': function onCycleSuite ( event ) {
 
+            //eslint-disable-next-line
             console.log( `Running Bench: ${ event.target.name }` )
             this.results.push( event.target )
 
@@ -54,12 +56,15 @@ function setupSuite () {
             } )
 
             for ( let i = 0, num = this.results.length ; i < num ; i++ ) {
+                //eslint-disable-next-line
                 console.log( `${ i }: ${ String( this.results[ i ] ) }` )
             }
 
             const fastest       = this.results[ 0 ]
             const slowest       = this.results[ this.results.length - 1 ]
             const speedIncrease = ( ( fastest.hz - slowest.hz ) / slowest.hz ) * 100
+
+            //eslint-disable-next-line
             console.log( `\n${ fastest.name } is ${ Math.round( speedIncrease ) }% fastest than ${ slowest.name }` )
 
         }
