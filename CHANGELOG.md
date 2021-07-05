@@ -1,3 +1,13 @@
+## [5.2.1](https://github.com/Itee/itee-utils/compare/v5.2.0...v5.2.1) (2021-07-05)
+
+
+### Bug Fixes
+
+* **eslint:** allow console statement in benchmarks ([6d1bdec](https://github.com/Itee/itee-utils/commit/6d1bdec219142a5b03224ab6754b2d6baf793508))
+* **eslint:** remove unused variable sourcemap ([dcaa9e0](https://github.com/Itee/itee-utils/commit/dcaa9e077fb4cb647e63459ffd81d4006cb02a8e))
+* **package:** apply npm audit fix ([c8bb0c2](https://github.com/Itee/itee-utils/commit/c8bb0c292f5c33812186e3911e7508dc0d10f347))
+* 🐛 allow sourcemapping geneartion only for dev env ([f061aef](https://github.com/Itee/itee-utils/commit/f061aef3d3bb6c544e81346c882b0f88f5222e3a))
+
 # [5.2.0](https://github.com/Itee/itee-utils/compare/v5.1.1...v5.2.0) (2020-07-21)
 
 

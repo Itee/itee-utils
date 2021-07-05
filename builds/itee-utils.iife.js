@@ -1,9 +1,9 @@
-console.log('Itee.Utils v5.2.0 - Standalone')
+console.log('Itee.Utils v5.2.1 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
 
-	if( iteeValidators === undefined ) { console.error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.') }
+	if( iteeValidators === undefined ) { throw new Error('Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.') }
 
 	/**
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -600,6 +600,34 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
+	/**
+	 *
+	 * @param enumValues
+	 * @method toString - return a string representation of the enum
+	 * @method includes - check if given value is one of the enum
+	 * @method types - return an array containing all enum types
+	 *
+	 * @example {@lang javascript}
+	 * const Meal = toEnum( {
+	 *     Food: 'Tartiflette',
+	 *     Drink: 'Saint-Emilion',
+	 *     Dessert: 'Mousse au chocolat'
+	 * } )
+	 *
+	 * if( Foo.includes('Tartiflette') {
+	 *     // Happy
+	 * }
+	 *
+	 * const myDrink = 'coke'
+	 * if( myDrink === Meal.Drink ) {
+	 *
+	 * } else {
+	 *     // Your life is a pain
+	 * }
+	 *
+	 * const MealTypes = Meal.types
+	 * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
+	 */
 	function toEnum ( enumValues ) {
 
 	    return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
@@ -2017,6 +2045,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.sortBy = sortBy;
 	exports.toEnum = toEnum;
 	exports.uniq = uniq;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
 
 	return exports;
 

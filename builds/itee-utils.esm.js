@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.2.0 - EsModule')
+console.log('Itee.Utils v5.2.1 - EsModule')
 import { isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 
 /**
@@ -596,6 +596,34 @@ function createInterval ( particles, path, interval ) {
 
 }
 
+/**
+ *
+ * @param enumValues
+ * @method toString - return a string representation of the enum
+ * @method includes - check if given value is one of the enum
+ * @method types - return an array containing all enum types
+ *
+ * @example {@lang javascript}
+ * const Meal = toEnum( {
+ *     Food: 'Tartiflette',
+ *     Drink: 'Saint-Emilion',
+ *     Dessert: 'Mousse au chocolat'
+ * } )
+ *
+ * if( Foo.includes('Tartiflette') {
+ *     // Happy
+ * }
+ *
+ * const myDrink = 'coke'
+ * if( myDrink === Meal.Drink ) {
+ *
+ * } else {
+ *     // Your life is a pain
+ * }
+ *
+ * const MealTypes = Meal.types
+ * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
+ */
 function toEnum ( enumValues ) {
 
     return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {

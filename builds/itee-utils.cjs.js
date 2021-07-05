@@ -1,13 +1,16 @@
-console.log('Itee.Utils v5.2.0 - CommonJs')
+console.log('Itee.Utils v5.2.1 - CommonJs')
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
 var iteeValidators = require('itee-validators');
-var fs = _interopDefault(require('fs'));
-var path = _interopDefault(require('path'));
+var fs = require('fs');
+var path = require('path');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
+var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -604,6 +607,34 @@ function createInterval ( particles, path, interval ) {
 
 }
 
+/**
+ *
+ * @param enumValues
+ * @method toString - return a string representation of the enum
+ * @method includes - check if given value is one of the enum
+ * @method types - return an array containing all enum types
+ *
+ * @example {@lang javascript}
+ * const Meal = toEnum( {
+ *     Food: 'Tartiflette',
+ *     Drink: 'Saint-Emilion',
+ *     Dessert: 'Mousse au chocolat'
+ * } )
+ *
+ * if( Foo.includes('Tartiflette') {
+ *     // Happy
+ * }
+ *
+ * const myDrink = 'coke'
+ * if( myDrink === Meal.Drink ) {
+ *
+ * } else {
+ *     // Your life is a pain
+ * }
+ *
+ * const MealTypes = Meal.types
+ * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
+ */
 function toEnum ( enumValues ) {
 
     return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
@@ -1982,7 +2013,7 @@ const Testing = {
  */
 
 function getPathsUnder ( directoryPath ) {
-    return fs.readdirSync( directoryPath )
+    return fs__default['default'].readdirSync( directoryPath )
 }
 
 /**
@@ -2011,12 +2042,12 @@ function getFilesPathsUnder ( paths ) {
         } else if ( iteeValidators.isDirectoryPath( localPath ) ) {
 
             const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path.resolve( localPath, subPath ) ) } );
+            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default['default'].resolve( localPath, subPath ) ) } );
             if ( subFilesPaths ) {
                 files = [].concat( ...subFilesPaths );
             }
 
-        }
+        } else ;
 
     }
 
