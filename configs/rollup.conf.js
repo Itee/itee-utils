@@ -67,7 +67,6 @@ function CreateRollupConfigs ( options ) {
     const output    = options.output
     const formats   = options.format.split( ',' )
     const envs      = options.env.split( ',' )
-    const sourcemap = options.sourcemap
     const treeshake = options.treeshake
     const fileName  = path.basename( input, '.js' )
 
@@ -88,7 +87,7 @@ function CreateRollupConfigs ( options ) {
                 plugins:  [
                     replace( {
                         defines: {
-                            IS_KEEP_ON_BUILD:  true,
+                            IS_KEEP_ON_BUILD:    true,
                             IS_BACKEND_SPECIFIC: ( format === 'cjs' )
                         }
                     } ),
@@ -127,9 +126,9 @@ function CreateRollupConfigs ( options ) {
                     paths:     {},
                     banner:    ( isProd ) ? '' : _computeBanner( name, format ),
                     footer:    '',
-                    intro:     ( format === 'iife' && !isProd ) ? 'if( iteeValidators === undefined ) { console.error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\') }' : '',
+                    intro:     ( format === 'iife' && !isProd ) ? 'if( iteeValidators === undefined ) { throw new Error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\') }' : '',
                     outro:     '',
-                    sourcemap: sourcemap,
+                    sourcemap: !isProd,
                     interop:   true,
 
                     // danger zone
