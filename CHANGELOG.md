@@ -1,3 +1,10 @@
+## [5.2.3](https://github.com/Itee/itee-utils/compare/v5.2.2...v5.2.3) (2021-07-07)
+
+
+### Bug Fixes
+
+* **package:** apply dependencies fix ([24d1f0d](https://github.com/Itee/itee-utils/commit/24d1f0decbad336eadad650a3f1a24f3886f9a2d))
+
 ## [5.2.2](https://github.com/Itee/itee-utils/compare/v5.2.1...v5.2.2) (2021-07-07)
 
 

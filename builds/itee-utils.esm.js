@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.2.2 - EsModule')
+console.log('Itee.Utils v5.2.3 - EsModule')
 import { isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 
 /**
