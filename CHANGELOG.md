@@ -1,3 +1,11 @@
+## [5.2.2](https://github.com/Itee/itee-utils/compare/v5.2.1...v5.2.2) (2021-07-07)
+
+
+### Bug Fixes
+
+* **releaserc:** fix missing dev maps ([142c659](https://github.com/Itee/itee-utils/commit/142c659c5d618d565ab734f051c1e8966383a9f8))
+* **version:** apply fix from dependencies ([c8b7e68](https://github.com/Itee/itee-utils/commit/c8b7e68562b5203dbbd1a2b57bf2118f092a1c9c))
+
 ## [5.2.1](https://github.com/Itee/itee-utils/compare/v5.2.0...v5.2.1) (2021-07-05)
 
 
