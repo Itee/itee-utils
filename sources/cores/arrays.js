@@ -6,6 +6,10 @@
  * @description Export the utilities methods about Arrays
  *
  */
+import {
+    isArray,
+    isObject
+} from 'itee-validators'
 
 export function sortBy ( propertyName, ascending = 'asc' ) {
 
@@ -51,5 +55,35 @@ export function sortBy ( propertyName, ascending = 'asc' ) {
     }
 
     return resultSorter
+
+}
+
+/**
+ * Will wrap the object value in a array, if is not already one, and return empty array in case
+ * where input object is null or undefined.
+ * This function is build to ensure the return value will be always an array
+ *
+ * @param {*} object - The target to return as array
+ * @param {object} [options]
+ * @param {boolean} [options.keepArray=false] - If true, will wrap array too instead of returning it
+ * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
+ * @returns {Array.<*>}
+ */
+export function toArray ( object, options = {
+    keepArray: false,
+    keepNull:  false
+} ) {
+
+    let array
+
+    if ( isArray( object ) ) {
+        array = ( options.keepArray ) ? [ object ] : object
+    } else if ( options.keepNull || typeof object === 'object' || isObject( object ) ) {
+        array = [ object ]
+    } else {
+        array = []
+    }
+
+    return array
 
 }
