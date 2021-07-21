@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.2.3 - Standalone')
+console.log('Itee.Utils v5.3.0 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
@@ -58,6 +58,36 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    }
 
 	    return resultSorter
+
+	}
+
+	/**
+	 * Will wrap the object value in a array, if is not already one, and return empty array in case
+	 * where input object is null or undefined.
+	 * This function is build to ensure the return value will be always an array
+	 *
+	 * @param {*} object - The target to return as array
+	 * @param {object} [options]
+	 * @param {boolean} [options.keepArray=false] - If true, will wrap array too instead of returning it
+	 * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
+	 * @returns {Array.<*>}
+	 */
+	function toArray ( object, options = {
+	    keepArray: false,
+	    keepNull:  false
+	} ) {
+
+	    let array;
+
+	    if ( iteeValidators.isArray( object ) ) {
+	        array = ( options.keepArray ) ? [ object ] : object;
+	    } else if ( options.keepNull || typeof object === 'object' || iteeValidators.isObject( object ) ) {
+	        array = [ object ];
+	    } else {
+	        array = [];
+	    }
+
+	    return array
 
 	}
 
@@ -2043,6 +2073,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.segmentContains = segmentContains;
 	exports.serializeObject = serializeObject;
 	exports.sortBy = sortBy;
+	exports.toArray = toArray;
 	exports.toEnum = toEnum;
 	exports.uniq = uniq;
 
