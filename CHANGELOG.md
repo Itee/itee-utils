@@ -1,3 +1,15 @@
+# [5.3.0](https://github.com/Itee/itee-utils/compare/v5.2.3...v5.3.0) (2021-07-21)
+
+
+### Bug Fixes
+
+* **readme:** fix readme tags ([36d7bb9](https://github.com/Itee/itee-utils/commit/36d7bb98fc427355fb4096e6f6bff894ee8c128d))
+
+
+### Features
+
+* **toarray:** add toArray function that will always return his input as array ([e3db5ec](https://github.com/Itee/itee-utils/commit/e3db5ec7244115c2c8a40877729e60328b4c16bd))
+
 ## [5.2.3](https://github.com/Itee/itee-utils/compare/v5.2.2...v5.2.3) (2021-07-07)
 
 

@@ -1,5 +1,5 @@
-console.log('Itee.Utils v5.2.3 - EsModule')
-import { isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
+console.log('Itee.Utils v5.3.0 - EsModule')
+import { isArray, isObject, isNotDefined, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -54,6 +54,36 @@ function sortBy ( propertyName, ascending = 'asc' ) {
     }
 
     return resultSorter
+
+}
+
+/**
+ * Will wrap the object value in a array, if is not already one, and return empty array in case
+ * where input object is null or undefined.
+ * This function is build to ensure the return value will be always an array
+ *
+ * @param {*} object - The target to return as array
+ * @param {object} [options]
+ * @param {boolean} [options.keepArray=false] - If true, will wrap array too instead of returning it
+ * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
+ * @returns {Array.<*>}
+ */
+function toArray ( object, options = {
+    keepArray: false,
+    keepNull:  false
+} ) {
+
+    let array;
+
+    if ( isArray( object ) ) {
+        array = ( options.keepArray ) ? [ object ] : object;
+    } else if ( options.keepNull || typeof object === 'object' || isObject( object ) ) {
+        array = [ object ];
+    } else {
+        array = [];
+    }
+
+    return array
 
 }
 
@@ -1991,5 +2021,5 @@ const Testing = {
 
 };
 
-export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, Testing, bitsToByte, byteToBits, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, getPitch, getRandom, getRandomFloatExclusive, getRandomFloatInclusive, getRandomIntExclusive, getRandomIntInclusive, getYaw, internalRepresentationToNumber, kelvinToCelsius, kelvinToFahrenheit, numberToInternalRepresentation, numberToPlainString, numberToPlainString_alt0, numberToPlainString_alt1, numberToPlainString_alt2, numberToPlainString_alt3, numberToPlainString_alt4, radiansFromDegrees, radiansToDegrees, removeDiacritics, ringClockwise, ringContains, ringContainsSome, segmentContains, serializeObject, sortBy, toEnum, uniq };
+export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, Testing, bitsToByte, byteToBits, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, getPitch, getRandom, getRandomFloatExclusive, getRandomFloatInclusive, getRandomIntExclusive, getRandomIntInclusive, getYaw, internalRepresentationToNumber, kelvinToCelsius, kelvinToFahrenheit, numberToInternalRepresentation, numberToPlainString, numberToPlainString_alt0, numberToPlainString_alt1, numberToPlainString_alt2, numberToPlainString_alt3, numberToPlainString_alt4, radiansFromDegrees, radiansToDegrees, removeDiacritics, ringClockwise, ringContains, ringContainsSome, segmentContains, serializeObject, sortBy, toArray, toEnum, uniq };
 //# sourceMappingURL=itee-utils.esm.js.map
