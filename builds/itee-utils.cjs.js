@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.3.0 - CommonJs')
+console.log('Itee.Utils v5.3.1 - CommonJs')
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -2043,7 +2043,7 @@ const Testing = {
  */
 
 function getPathsUnder ( directoryPath ) {
-    return fs__default['default'].readdirSync( directoryPath )
+    return fs__default["default"].readdirSync( directoryPath )
 }
 
 /**
@@ -2072,7 +2072,7 @@ function getFilesPathsUnder ( paths ) {
         } else if ( iteeValidators.isDirectoryPath( localPath ) ) {
 
             const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default['default'].resolve( localPath, subPath ) ) } );
+            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default["default"].resolve( localPath, subPath ) ) } );
             if ( subFilesPaths ) {
                 files = [].concat( ...subFilesPaths );
             }
