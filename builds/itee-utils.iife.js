@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.3.0 - Standalone')
+console.log('Itee.Utils v5.3.1 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
@@ -2081,5 +2081,5 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	return exports;
 
-}({}, Itee.Validators));
+})({}, Itee.Validators);
 //# sourceMappingURL=itee-utils.iife.js.map
