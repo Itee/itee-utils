@@ -1,3 +1,10 @@
+## [5.3.2](https://github.com/Itee/itee-utils/compare/v5.3.1...v5.3.2) (2022-02-14)
+
+
+### Bug Fixes
+
+* **package:** update deps to latest version ([e647732](https://github.com/Itee/itee-utils/commit/e64773251dad0d9687ddad7d5de71da121de9387))
+
 ## [5.3.1](https://github.com/Itee/itee-utils/compare/v5.3.0...v5.3.1) (2022-02-08)
 
 
