@@ -38,6 +38,7 @@
 /* eslint-env node */
 
 const packageInfos = require( './package.json' )
+const childProcess = require( 'child_process' )
 const gulp         = require( 'gulp' )
 const jsdoc        = require( 'gulp-jsdoc3' )
 const eslint       = require( 'gulp-eslint' )
@@ -180,22 +181,38 @@ gulp.task( 'doc', ( done ) => {
 
 } )
 
+
+/**
+ *
+ */
+gulp.task( 'unit-node', ( done ) => {
+
+    const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
+    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
+    const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
+    mocha.on( 'close', ( code ) => {
+
+        ( code === 0 )
+            ? done()
+            : done( `mocha exited with code ${ code }` )
+
+    } )
+
+} )
 /**
  * @method npm run unit
  * @global
  * @description Will run unit tests using karma
  */
-gulp.task( 'unit', ( done ) => {
+gulp.task( 'unit-browser', async ( done ) => {
 
-    const karmaServer = new karma.Server( {
-        configFile: `${__dirname}/configs/karma.units.conf.js`,
-        singleRun:  true
-    }, ( exitCode ) => {
+    const karmaConfig = karma.config.parseConfig( `${ __dirname }/configs/karma.units.conf.js` )
+    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
 
         if ( exitCode !== 0 ) {
-            done( `Karma server exit with code ${exitCode}` )
+            done( `Karma server exit with code ${ exitCode }` )
         } else {
-            log( `Karma server exit with code ${exitCode}` )
+            log( `Karma server exit with code ${ exitCode }` )
             done()
         }
 
@@ -205,9 +222,13 @@ gulp.task( 'unit', ( done ) => {
         log( red( error.message ) )
     } )
 
-    karmaServer.start()
+    await karmaServer.start()
 
 } )
+/**
+ *
+ */
+gulp.task( 'unit', gulp.series( 'unit-node', 'unit-browser' ) )
 
 /**
  * @method npm run bench
