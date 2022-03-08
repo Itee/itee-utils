@@ -230,34 +230,51 @@ gulp.task( 'unit-browser', async ( done ) => {
  */
 gulp.task( 'unit', gulp.series( 'unit-node', 'unit-browser' ) )
 
+gulp.task( 'bench-node', ( done ) => {
+
+    const benchsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.benchs.cjs.js` )
+    const benchmark  = childProcess.spawn( 'node', [ benchsPath ], { stdio: 'inherit' } )
+    benchmark.on( 'close', ( code ) => {
+
+        ( code === 0 )
+            ? done()
+            : done( `benchmark exited with code ${ code }` )
+
+    } )
+
+} )
 /**
  * @method npm run bench
  * @global
  * @description Will run benchmarks using karma
  */
-gulp.task( 'bench', ( done ) => {
+gulp.task( 'bench-browser', async ( done ) => {
 
-    const karmaServer = new karma.Server( {
-        configFile: `${__dirname}/configs/karma.benchs.conf.js`,
-        singleRun:  true
-    }, ( exitCode ) => {
+    const karmaConfig = karma.config.parseConfig( `${ __dirname }/configs/karma.benchs.conf.js` )
+    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
 
         if ( exitCode !== 0 ) {
-            done( `Karma server exit with code ${exitCode}` )
+            done( `Karma server exit with code ${ exitCode }` )
         } else {
-            log( `Karma server exit with code ${exitCode}` )
+            log( `Karma server exit with code ${ exitCode }` )
             done()
         }
 
     } )
 
     karmaServer.on( 'browser_error', ( browser, error ) => {
-        log( red( error.message ) )
+        log( red( error ) )
     } )
 
-    karmaServer.start()
+    await karmaServer.start()
 
 } )
+/**
+ * @method npm run bench
+ * @global
+ * @description Will run benchmarks using karma
+ */
+gulp.task( 'bench', gulp.series( 'bench-node', 'bench-browser' ) )
 
 /**
  * @method npm run test
