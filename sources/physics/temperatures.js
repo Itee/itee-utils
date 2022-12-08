@@ -26,7 +26,8 @@ export const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955
 export function celsiusToKelvin ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -45,7 +46,8 @@ export function celsiusToKelvin ( celsius, precisionPointAt ) {
 export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -64,7 +66,8 @@ export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -83,7 +86,8 @@ export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -102,7 +106,8 @@ export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 export function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -121,7 +126,8 @@ export function kelvinToCelsius ( kelvin, precisionPointAt ) {
 export function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) && isNumber( precisionPointAt ) ? precisionPointAt : 2 )
