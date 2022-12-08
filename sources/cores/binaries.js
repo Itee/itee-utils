@@ -5,6 +5,13 @@
  *
  */
 
+import {
+    isArrayOfUndefined,
+    isNotDefined,
+    isNotString,
+    isNull
+} from 'itee-validators'
+
 export function byteToBits ( byte ) {
 
     let bits = ''
@@ -24,6 +31,7 @@ export function byteToBits ( byte ) {
 }
 
 export function bitsToByte ( bits ) {
+    if ( isNotString( bits ) ) { return }
 
     let byte = 0
 
@@ -65,9 +73,16 @@ export function numberToInternalRepresentation ( number ) {
 
 export function internalRepresentationToNumber ( string ) {
 
-    const bytes = string.replace( / /g, '' )
-                        .match( /.{8}/g )
-                        .map( subString => bitsToByte( subString ) )
+    if ( isNotDefined( string ) ) { return }
+    if ( isNotString( string ) ) { return }
+    //    if ( isNotDefined( string ) ) { throw ReferenceError( 'string cannot be null or empty !' )}
+
+    const cleanString = string.replace( / /g, '' )
+    const matchs      = cleanString.match( /.{8}/g ) // multiple of eight
+    if ( isNull( matchs ) ) { return }
+
+    const bytes = matchs.map( subString => bitsToByte( subString ) )
+    if ( isArrayOfUndefined( bytes ) ) { return }
 
     let arrayBuffer = new ArrayBuffer( 8 )
     let dataView    = new DataView( arrayBuffer )

@@ -7,6 +7,8 @@
  *
  */
 
+import { isNotString, isEmptyString } from 'itee-validators'
+
 /**
  * Set the first char to upper case like a classname
  * @param {String} word
@@ -15,6 +17,9 @@
  * @throws {TypeError} - If 'word' is an empty string
  */
 export function classNameify ( word ) {
+    if(isNotString(word)) { return }
+    if(isEmptyString(word)) { return }
+
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 }
 
@@ -414,6 +419,7 @@ const diacriticsMap = ( () => {
  * @returns {null|string}
  */
 export function removeDiacritics ( string ) {
+    if(isNotString(string)) { return null }
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )

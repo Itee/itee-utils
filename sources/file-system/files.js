@@ -38,7 +38,7 @@ function getFilesPathsUnder ( paths ) {
 
         if ( isInvalidPath( localPath ) ) {
 
-            throw new Error( `The path "${localPath}" is not valid !` )
+            throw new Error( `The path "${ localPath }" is not valid !` )
 
         } else if ( isFilePath( localPath ) ) {
 
@@ -64,7 +64,6 @@ function getFilesPathsUnder ( paths ) {
 
 }
 
-export { getFilesPathsUnder }
 /**
  * Return all the files paths under filePaths in a recursive way.
  *
