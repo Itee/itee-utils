@@ -28,7 +28,7 @@ export function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-const diacriticsMap = ( () => {
+const diacriticsMap = /*#__PURE__*/( /*#__PURE__*/() => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
