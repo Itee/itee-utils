@@ -9,8 +9,10 @@
 
 /**
  * Set the first char to upper case like a classname
- * @param word
- * @returns {string}
+ * @param {String} word
+ * @returns {String}
+ * @throws {TypeError} - If 'word' is not a string
+ * @throws {TypeError} - If 'word' is an empty string
  */
 export function classNameify ( word ) {
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
@@ -404,11 +406,12 @@ const diacriticsMap = ( () => {
 } )()
 
 /**
+ *
  * @static
  * @public
  * @memberOf TApplication
- *
- * @param string
+ * @param {string} string
+ * @returns {null|string}
  */
 export function removeDiacritics ( string ) {
 

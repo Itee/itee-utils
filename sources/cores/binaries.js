@@ -41,6 +41,11 @@ export function bitsToByte ( bits ) {
 
 }
 
+/**
+ *
+ * @param {number} number - The number to convert in this internal representation
+ * @returns {string}
+ */
 export function numberToInternalRepresentation ( number ) {
 
     //    let buffer  = new Float64Array( [ number ] ).buffer

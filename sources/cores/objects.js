@@ -20,9 +20,9 @@ export function uniq ( a ) {
 
 /**
  *
- * @param target
- * @param source
- * @return {*}
+ * @param {object} target
+ * @param {object} source
+ * @return {object}
  */
 export function extend ( target, source ) {
 
@@ -101,8 +101,8 @@ export function serializeObject () {
 
 /**
  *
- * @param ChildClass
- * @param ParentClassOrObject
+ * @param {class} ChildClass
+ * @param {class} ParentClassOrObject
  * @return {*}
  */
 export function extendObject ( ChildClass, ParentClassOrObject ) {
@@ -167,9 +167,9 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
 
 /**
  *
- * @param particles
- * @param path
- * @param interval
+ * @param {cloudpoint} particles
+ * @param {3dpath} path
+ * @param {number} interval
  */
 export function createInterval ( particles, path, interval ) {
 

@@ -13,6 +13,10 @@ export function getRandom () {
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min ) + min
@@ -20,6 +24,10 @@ export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min + 1.0 ) + min
@@ -28,6 +36,10 @@ export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
 /**
  * Returns a random integer between min (inclusive) and max (exclusive)
  * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 export function getRandomIntExclusive ( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
@@ -38,6 +50,10 @@ export function getRandomIntExclusive ( min = 0, max = 1 ) {
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 export function getRandomIntInclusive ( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
@@ -48,7 +64,8 @@ export function getRandomIntInclusive ( min = 0, max = 1 ) {
 
 /**
  * Convert a number to its literral form
- * @param value
+ *
+ * @param {number} value
  * @returns {string}
  */
 export function numberToPlainString ( value ) {

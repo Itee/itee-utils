@@ -65,3 +65,10 @@ function getFilesPathsUnder ( paths ) {
 }
 
 export { getFilesPathsUnder }
+/**
+ * Return all the files paths under filePaths in a recursive way.
+ *
+ * @param {string} filePaths - An array of string, representing the base path where looking for get all files paths
+ * @return {Array.<string>} - An array of files paths
+ * @private
+ */
