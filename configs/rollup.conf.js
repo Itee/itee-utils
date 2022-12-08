@@ -48,7 +48,7 @@ function _computeBanner ( name, format ) {
 
     }
 
-    return `console.log('${ packageName } v${ packageInfos.version } - ${ prettyFormat }')`
+    return `/*#__PURE__*/ console.log('${ packageName } v${ packageInfos.version } - ${ prettyFormat }')`
 
 }
 

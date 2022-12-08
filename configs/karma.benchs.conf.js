@@ -26,7 +26,11 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         frameworks: [ 'benchmark' ],
 
         // list of files / patterns to load in the browser
-        files: [ `builds/${ packageInfos.name }.benchs.iife.js` ],
+        files: [
+//            'builds/itee-validators.iife.js',
+            '../node_modules/itee-validators/builds/itee-validators.iife.js',
+            `builds/${ packageInfos.name }.benchs.iife.js`
+        ],
 
         // list of files to exclude
         exclude: [],
