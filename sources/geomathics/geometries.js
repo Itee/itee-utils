@@ -6,12 +6,15 @@
  *
  */
 
+import { isNotArray } from 'itee-validators'
+
 /**
  *
  * @param ring
  * @return {boolean}
  */
 export function ringClockwise ( ring ) {
+    if ( isNotArray( ring ) ) { return }
 
     if ( ( n = ring.length ) < 4 ) {
         return false
@@ -33,6 +36,8 @@ export function ringClockwise ( ring ) {
  * @return {boolean}
  */
 export function ringContainsSome ( ring, hole ) {
+    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( hole ) ) { return }
 
     let i = 0
     let n = hole.length
@@ -56,6 +61,8 @@ export function ringContainsSome ( ring, hole ) {
  * @return {number}
  */
 export function ringContains ( ring, point ) {
+    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( point ) ) { return }
 
     let x        = point[ 0 ]
     let y        = point[ 1 ]
@@ -90,6 +97,10 @@ export function ringContains ( ring, point ) {
  * @return {boolean}
  */
 export function segmentContains ( p0, p1, p2 ) {
+    if ( isNotArray( p0 ) ) { return }
+    if ( isNotArray( p1 ) ) { return }
+    if ( isNotArray( p2 ) ) { return }
+
     var x20 = p2[ 0 ] - p0[ 0 ],
         y20 = p2[ 1 ] - p0[ 1 ]
     if ( x20 === 0 && y20 === 0 ) {

@@ -26,7 +26,9 @@ function CreateKarmaUnitsConfiguration ( config ) {
         frameworks: [ 'mocha', 'chai' ],
 
         // list of files / patterns to load in the browser
-        files: [ `builds/${packageInfos.name}.units.iife.js` ],
+        files: [
+            `builds/${packageInfos.name}.units.iife.js`
+        ],
 
         // list of files to exclude
         exclude: [],

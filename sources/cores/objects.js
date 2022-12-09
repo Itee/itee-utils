@@ -7,11 +7,16 @@
  */
 
 import {
+    isDefined,
+    isNotArray,
     isNotDefined,
-    isObject
+    isNotObject,
+    isObject,
+    isUndefined
 } from 'itee-validators'
 
 export function uniq ( a ) {
+    if ( isNotArray( a ) ) { return }
 
     const seen = {}
     return a.filter( item => Object.prototype.hasOwnProperty.call( seen, item ) ? false : ( seen[ item ] = true ) )
@@ -20,13 +25,13 @@ export function uniq ( a ) {
 
 /**
  *
- * @param target
- * @param source
- * @return {*}
+ * @param {object} target
+ * @param {object} source
+ * @return {object}
  */
 export function extend ( target, source ) {
 
-    let output = undefined
+    let output
 
     if ( isObject( target ) && isNotDefined( source ) ) {
 
@@ -101,11 +106,13 @@ export function serializeObject () {
 
 /**
  *
- * @param ChildClass
- * @param ParentClassOrObject
+ * @param {class} ChildClass
+ * @param {class} ParentClassOrObject
  * @return {*}
  */
 export function extendObject ( ChildClass, ParentClassOrObject ) {
+    if ( isUndefined( ChildClass ) ) { return }
+    if ( isUndefined( ParentClassOrObject ) ) { return }
 
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
@@ -167,11 +174,14 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
 
 /**
  *
- * @param particles
- * @param path
- * @param interval
+ * @param {cloudpoint} particles
+ * @param {3dpath} path
+ * @param {number} interval
  */
 export function createInterval ( particles, path, interval ) {
+    if ( !particles ) {return}
+    if ( !path ) {return}
+    if ( !interval ) {return}
 
     var globalOffset = 0
 
@@ -245,19 +255,26 @@ export function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-export function toEnum ( enumValues ) {
+export function toEnum ( enumValues, ...otherValues ) {
+    if ( isNotObject( enumValues ) ) { return }
+    if ( isDefined( enumValues.toString ) ) {
+        const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' )
+        if ( isDefined( descriptor ) && descriptor.configurable === false ) {
+            return
+        }
+    }
 
     return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
         toString: {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _toString () {
+            value () {
 
                 const keys = Object.keys( this )
                 let result = ''
                 for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-                    result += `${keys[ index ]}, `
+                    result += `${ keys[ index ] }, `
                 }
                 result = result.slice( 0, -2 )
                 return result
@@ -268,16 +285,32 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _includes ( key ) {
+            value ( key ) {
                 return Object.values( this ).includes( key )
             }
         },
-        types: {
+        keys:     {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _types () {
+            value () {
                 return Object.keys( this )
+            }
+        },
+        values:   {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value () {
+                return Object.values( this )
+            }
+        },
+        entries:  {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value () {
+                return Object.entries( this )
             }
         }
     } ) )

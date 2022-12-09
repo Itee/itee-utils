@@ -11,6 +11,12 @@ import {
     isObject
 } from 'itee-validators'
 
+/**
+ *
+ * @param {string} propertyName
+ * @param {string} ascending
+ * @returns {Function}
+ */
 export function sortBy ( propertyName, ascending = 'asc' ) {
 
     const _propertyName = propertyName

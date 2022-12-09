@@ -4,6 +4,10 @@
  *
  * @module sources/geomathics/trigonometries
  */
+import {
+    isNotDefined,
+    isNotObject
+} from 'itee-validators'
 
 export const PI   = Math.PI
 export const PI_2 = Math.PI / 2
@@ -55,6 +59,9 @@ export function radiansFromDegrees ( degrees ) {
  * @return {number}
  */
 export function getYaw ( vector ) {
+    if(isNotDefined(vector)) { return }
+    if(isNotObject(vector)) { return }
+
     return -Math.atan2( vector.x, vector.z )
 }
 
@@ -64,6 +71,9 @@ export function getYaw ( vector ) {
  * @return {number}
  */
 export function getPitch ( vector ) {
+    if(isNotDefined(vector)) { return }
+    if(isNotObject(vector)) { return }
+
     return Math.asin( vector.y )
 }
 
@@ -73,6 +83,8 @@ export function getPitch ( vector ) {
  * @return {{yaw: number, pitch: number}}
  */
 export function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
+    if(isNotDefined(vectorDir)) { return }
+    if(isNotObject(vectorDir)) { return }
 
     function getYaw ( vector ) {
         return Math.atan2( vector.y, vector.x )

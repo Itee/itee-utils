@@ -7,12 +7,19 @@
  *
  */
 
+import { isNotString, isEmptyString } from 'itee-validators'
+
 /**
  * Set the first char to upper case like a classname
- * @param word
- * @returns {string}
+ * @param {String} word
+ * @returns {String}
+ * @throws {TypeError} - If 'word' is not a string
+ * @throws {TypeError} - If 'word' is an empty string
  */
 export function classNameify ( word ) {
+    if(isNotString(word)) { return }
+    if(isEmptyString(word)) { return }
+
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 }
 
@@ -21,7 +28,7 @@ export function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-const diacriticsMap = ( () => {
+const diacriticsMap = /*#__PURE__*/( /*#__PURE__*/() => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -404,13 +411,15 @@ const diacriticsMap = ( () => {
 } )()
 
 /**
+ *
  * @static
  * @public
  * @memberOf TApplication
- *
- * @param string
+ * @param {string} string
+ * @returns {null|string}
  */
 export function removeDiacritics ( string ) {
+    if(isNotString(string)) { return null }
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
