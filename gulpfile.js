@@ -188,6 +188,230 @@ gulp.task( 'doc', ( done ) => {
 } )
 
 
+// TESTING
+
+/**
+ * @description In view to detect bundling side effects this task will
+ * create intermediary file for each individual export from this package
+ * and then create rollup config for each of them and bundle
+ * Todo: Check for differents target env like next task below this one
+ */
+gulp.task( 'check-bundling-side-effect', async ( done ) => {
+
+    const baseDir        = __dirname
+    const sourcesDir     = path.join( baseDir, 'sources' )
+    const testsDir       = path.join( baseDir, 'tests' )
+    const bundleDir      = path.join( testsDir, 'bundles' )
+    const sideEffectsDir = path.join( bundleDir, 'side-effects' )
+    const temporariesDir = path.join( sideEffectsDir, '_tmp' )
+
+    const filePathsToIgnore = [
+        `${ packageInfos.name }.js`,
+        'LineFileSplitter.js'
+    ]
+
+    let sourcesGlob    = path.join( sourcesDir, '/**' )
+    // sourcesGlob        = sourcesGlob.replaceAll( '\\', '/' )
+    const sourcesFiles = glob.sync( sourcesGlob )
+                             .map( filePath => {
+                                 return path.normalize( filePath )
+                             } )
+                             .filter( filePath => {
+                                 const fileName         = path.basename( filePath )
+                                 const isJsFile         = fileName.endsWith( '.js' )
+                                 const isNotPrivateFile = !fileName.startsWith( '_' )
+                                 const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
+                                 return isJsFile && isNotPrivateFile && isNotIgnoredFile
+                             } )
+
+    for ( let sourceFile of sourcesFiles ) {
+
+        const {
+                  dir:  sourceDir,
+                  base: sourceBase,
+                  name: sourceName
+              }                = path.parse( sourceFile )
+        const specificFilePath = sourceFile.replace( sourcesDir, '' )
+        const specificDir      = path.dirname( specificFilePath )
+
+        // Create temp import file per file in package
+        const temporaryFileName = `${ sourceName }.tmp.js`
+        const temporaryDir      = path.join( temporariesDir, specificDir )
+        const temporaryFile     = path.join( temporaryDir, temporaryFileName )
+        const importDir         = path.relative( temporaryDir, sourceDir )
+        const importFile        = path.join( importDir, sourceBase )
+        const temporaryFileData = `import '${ importFile.replace( /\\/g, '/' ) }'`
+
+        // Bundle tmp file and check content for side effects
+        const bundleFileName = `${ sourceName }.bundle.js`
+        const bundleFilePath = path.join( sideEffectsDir, specificDir, bundleFileName )
+
+        const config = {
+            input: temporaryFile,
+            //                                external:  [ 'itee-validators' ],
+            plugins:   [
+                nodeResolve()
+                //                commonJs()
+            ],
+            onwarn:    ( {
+                loc,
+                frame,
+                message
+            } ) => {
+
+                // Ignore some errors
+                if ( message.includes( 'Circular dependency' ) ) { return }
+                if ( message.includes( 'Generated an empty chunk' ) ) { return }
+
+                if ( loc ) {
+                    process.stderr.write( `/!\\ ${ loc.file } (${ loc.line }:${ loc.column }) ${ frame } ${ message }\n` )
+                } else {
+                    process.stderr.write( `/!\\ ${ message }\n` )
+                }
+
+            },
+            treeshake: {
+                moduleSideEffects:                true,
+                annotations:                      true,
+                correctVarValueBeforeDeclaration: true,
+                propertyReadSideEffects:          true,
+                tryCatchDeoptimization:           true,
+                unknownGlobalSideEffects:         true
+            },
+            output:    {
+                indent: '\t',
+                format: 'esm',
+                file:   bundleFilePath
+            }
+        }
+
+        // create tmp file
+        try {
+
+            fs.mkdirSync( temporaryDir, { recursive: true } )
+            fs.writeFileSync( temporaryFile, temporaryFileData )
+
+            const bundle     = await rollup.rollup( config )
+            const { output } = await bundle.generate( config.output )
+
+            if ( output[ 0 ].code.length > 1 ) {
+                log( red( `[${ specificFilePath }] contain side-effects !` ) )
+                // Todo: make option to log, to write or nothing
+                // log( output[ 0 ].code )
+                // await bundle.write( config.output )
+            } else {
+                log( green( `[${ specificFilePath }] is side-effect free.` ) )
+            }
+
+        } catch ( error ) {
+            log( red( error.message ) )
+        }
+
+    }
+
+    // Todo: depends on option to log or to write
+    fs.rmSync( bundleDir, { recursive: true } )
+    // fs.rmSync( temporariesDir, { recursive: true } )
+
+    done()
+
+} )
+gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
+
+    const baseDir    = __dirname
+    const sourcesDir = path.join( baseDir, 'sources' )
+    const testsDir   = path.join( baseDir, 'tests' )
+    const bundlesDir = path.join( testsDir, 'bundles' )
+    const outputDir  = path.join( bundlesDir, 'files' )
+
+    const filePathsToIgnore = [
+        `${ packageInfos.name }.js`,
+        'LineFileSplitter.js'
+    ]
+
+    const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
+                             .map( filePath => path.normalize( filePath ) )
+                             .filter( filePath => {
+                                 const fileName         = path.basename( filePath )
+                                 const isJsFile         = fileName.endsWith( '.js' )
+                                 const isNotPrivateFile = !fileName.startsWith( '_' )
+                                 const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
+                                 return isJsFile && isNotPrivateFile && isNotIgnoredFile
+                             } )
+
+    for ( let sourceFile of sourcesFiles ) {
+
+        const specificFilePath = sourceFile.replace( sourcesDir, '' )
+        const specificDir      = path.dirname( specificFilePath )
+        const fileName         = path.basename( sourceFile, path.extname( sourceFile ) )
+
+        const bundleFileName = `${ fileName }.bundle.js`
+        const bundleFilePath = path.join( outputDir, specificDir, bundleFileName )
+
+        const config = {
+            input:     sourceFile,
+            external:  [ '' ],
+            plugins:   [
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                cleanup( {
+                    comments: 'none'
+                } )
+            ],
+            onwarn:    ( {
+                loc,
+                frame,
+                message
+            } ) => {
+
+                // Ignore some errors
+                if ( message.includes( 'Circular dependency' ) ) { return }
+                if ( message.includes( 'Generated an empty chunk' ) ) { return }
+
+                if ( loc ) {
+                    process.stderr.write( `/!\\ ${ loc.file } (${ loc.line }:${ loc.column }) ${ frame } ${ message }\n` )
+                } else {
+                    process.stderr.write( `/!\\ ${ message }\n` )
+                }
+
+            },
+            treeshake: {
+                moduleSideEffects:                true,
+                annotations:                      true,
+                correctVarValueBeforeDeclaration: true,
+                propertyReadSideEffects:          true,
+                tryCatchDeoptimization:           true,
+                unknownGlobalSideEffects:         true
+            },
+            output:    {
+                indent: '\t',
+                format: 'cjs',
+                file:   bundleFilePath
+            }
+        }
+
+        try {
+
+            log( `Building bundle ${ config.output.file }` )
+
+            const bundle = await rollup.rollup( config )
+            const { output } = await bundle.generate( config.output )
+            await bundle.write( config.output )
+
+        } catch ( error ) {
+
+            log( red( error.message ) )
+
+        }
+
+    }
+
+    done()
+
+} )
+gulp.task( 'check-bundling', gulp.series( 'check-bundling-side-effect', 'check-bundling-by-source-file-export' ) )
+
 /**
  *
  */
@@ -289,191 +513,6 @@ gulp.task( 'bench', gulp.series( 'bench-node', 'bench-browser' ) )
  */
 gulp.task( 'test', gulp.series( 'unit', 'bench' ) )
 
-/**
- * In view to detect bundling side effects this task will
- * create intermediary file for each individual export from this package
- * and then create rollup config for each of them and bundle
- */
-gulp.task( 'compute-test-bundle-side-effect', async ( done ) => {
-
-    const baseDir        = __dirname
-    const sourcesDir     = path.join( baseDir, 'sources' )
-    const testsDir       = path.join( baseDir, 'tests' )
-    const bundlesDir     = path.join( testsDir, 'bundles' )
-    const sideEffectsDir = path.join( bundlesDir, 'side-effects' )
-    const temporariesDir = path.join( sideEffectsDir, '_tmp' )
-
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js'
-    ]
-
-    const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
-                             .map( filePath => path.normalize( filePath ) )
-                             .filter( filePath => {
-                                 const fileName         = path.basename( filePath )
-                                 const isJsFile         = fileName.endsWith( '.js' )
-                                 const isNotPrivateFile = !fileName.startsWith( '_' )
-                                 const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
-                                 return isJsFile && isNotPrivateFile && isNotIgnoredFile
-                             } )
-
-    for ( let sourceFile of sourcesFiles ) {
-
-        const {
-                  dir:  sourceDir,
-                  base: sourceBase,
-                  name: sourceName
-              }                = path.parse( sourceFile )
-        const specificFilePath = sourceFile.replace( sourcesDir, '' )
-        const specificDir      = path.dirname( specificFilePath )
-
-        // Create temp import file per file in package
-        const temporaryFileName = `${ sourceName }.tmp.js`
-        const temporaryDir      = path.join( temporariesDir, specificDir )
-        const temporaryFile     = path.join( temporaryDir, temporaryFileName )
-        const importDir         = path.relative( temporaryDir, sourceDir )
-        const importFile        = path.join( importDir, sourceBase )
-        const temporaryFileData = `import '${ importFile.replace( /\\/g, '/' ) }'`
-
-        // Bundle tmp file and check content for side effects
-        const bundleFileName = `${ sourceName }.bundle.js`
-        const bundleFilePath = path.join( bundlesDir, specificDir, bundleFileName )
-
-        const config = {
-            input:   temporaryFile,
-            //                                external:  [ 'itee-validators' ],
-            plugins: [
-                nodeResolve()
-                //                commonJs()
-            ],
-            onwarn: ( {
-                loc,
-                frame,
-                message
-            } ) => {
-
-                // Ignore some errors
-                if ( message.includes( 'Circular dependency' ) ) { return }
-                if ( message.includes( 'Generated an empty chunk' ) ) { return }
-
-                if ( loc ) {
-                    process.stderr.write( `/!\\ ${ loc.file } (${ loc.line }:${ loc.column }) ${ frame } ${ message }\n` )
-                } else {
-                    process.stderr.write( `/!\\ ${ message }\n` )
-                }
-
-            },
-            treeshake: {
-                moduleSideEffects:                true,
-                annotations:                      true,
-                correctVarValueBeforeDeclaration: true,
-                propertyReadSideEffects:          true,
-                tryCatchDeoptimization:           true,
-                unknownGlobalSideEffects:         true
-            },
-            output: {
-                indent: '\t',
-                format: 'esm',
-                file:   bundleFilePath
-            }
-        }
-
-        // create tmp file
-        try {
-
-            fs.mkdirSync( temporaryDir, { recursive: true } )
-            fs.writeFileSync( temporaryFile, temporaryFileData )
-
-            const bundle     = await rollup.rollup( config )
-            const { output } = await bundle.generate( config.output )
-
-            if ( output[ 0 ].code.length > 1 ) {
-                log( red( `[${ specificFilePath }] contain side-effects !` ) )
-                await bundle.write( config.output )
-            } else {
-                log( green( `[${ specificFilePath }] is side-effect free.` ) )
-            }
-
-        } catch ( error ) {
-            log( red( error.message ) )
-        }
-
-    }
-
-    fs.rmSync( temporariesDir, { recursive: true } )
-
-    done()
-
-} )
-gulp.task( 'compute-test-bundle-by-source-file-export', async ( done ) => {
-
-    const basePath       = __dirname
-    const sourcesPath    = path.join( basePath, 'sources' )
-    const testsPath      = path.join( basePath, 'tests' )
-    const bundleBasePath = path.join( testsPath, 'bundles', 'files' )
-
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js'
-    ]
-
-    const sourcesFilesPaths = glob.sync( path.join( sourcesPath, '**' ) )
-                                  .map( filePath => path.normalize( filePath ) )
-                                  .filter( filePath => {
-                                      const fileName         = path.basename( filePath )
-                                      const isJsFile         = fileName.endsWith( '.js' )
-                                      const isNotPrivateFile = !fileName.startsWith( '_' )
-                                      const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
-                                      return isJsFile && isNotPrivateFile && isNotIgnoredFile
-                                  } )
-
-    for ( let sourcesFilesPath of sourcesFilesPaths ) {
-
-        try {
-
-            const specificFilePath = sourcesFilesPath.replace( sourcesPath, '' )
-            const specificDirPath  = path.dirname( specificFilePath )
-            const fileName         = path.basename( sourcesFilesPath, path.extname( sourcesFilesPath ) )
-
-            const bundleFileName = `${ fileName }.bundle.js`
-            const bundleFilePath = path.join( bundleBasePath, specificDirPath, bundleFileName )
-            const config         = {
-                input:    sourcesFilesPath,
-                external: [ 'itee-validators' ],
-                plugins:  [
-                    nodeResolve( {
-                        preferBuiltins: true
-                    } ),
-                    cleanup( {
-                        comments: 'none'
-                    } )
-                ],
-                treeshake: true,
-                output:    {
-                    indent: '\t',
-                    format: 'cjs',
-                    file:   bundleFilePath
-                }
-            }
-
-            log( `Building bundle ${ config.output.file }` )
-
-            const bundle = await rollup.rollup( config )
-            await bundle.write( config.output )
-
-        } catch ( error ) {
-
-            log( red( error ) )
-
-        }
-
-    }
-
-    done()
-
-} )
-gulp.task( 'compute-test-bundles', gulp.parallel( 'compute-test-bundle-side-effect', 'compute-test-bundle-by-source-file-export' ) )
 gulp.task( 'compute-test-unit', async ( done ) => {
 
     const fsUtils        = require( './builds/itee-utils.cjs' )
@@ -1202,7 +1241,7 @@ gulp.task( 'bundle-tests', async ( done ) => {
  * @global
  * @description Will build itee client tests.
  */
-gulp.task( 'build-tests', gulp.series( 'compute-test-bundles', 'compute-test-unit', 'compute-test-bench', 'bundle-tests' ) )
+gulp.task( 'build-tests', gulp.series( 'compute-test-unit', 'compute-test-bench', 'bundle-tests' ) )
 
 /**
  * @method npm run build
