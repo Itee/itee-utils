@@ -37,22 +37,23 @@
 
 /* eslint-env node */
 
-const packageInfos    = require( './package.json' )
-const childProcess    = require( 'child_process' )
-const fs              = require( 'fs' )
-const glob            = require( 'glob' )
-const gulp            = require( 'gulp' )
-const jsdoc           = require( 'gulp-jsdoc3' )
-const eslint          = require( 'gulp-eslint' )
-const del             = require( 'del' )
-const parseArgs       = require( 'minimist' )
-const rollup          = require( 'rollup' )
-const path            = require( 'path' )
-const karma           = require( 'karma' )
-const log             = require( 'fancy-log' )
-const colors          = require( 'ansi-colors' )
-const { nodeResolve } = require( '@rollup/plugin-node-resolve' )
-const cleanup         = require( 'rollup-plugin-cleanup' )
+import childProcess       from 'child_process'
+import {nodeResolve}      from '@rollup/plugin-node-resolve'
+import cleanup            from 'rollup-plugin-cleanup'
+import fs                 from 'fs'
+import glob               from 'glob'
+import gulp               from 'gulp'
+import jsdoc              from 'gulp-jsdoc3'
+import eslint             from 'gulp-eslint'
+import {deleteAsync}      from 'del'
+import parseArgs          from 'minimist'
+import {rollup}           from 'rollup'
+import path               from 'path'
+import karma              from 'karma'
+import log                from 'fancy-log'
+import colors             from 'ansi-colors'
+import {fileURLToPath}    from "url"
+import jsdocConfiguration from './configs/jsdoc.conf.js'
 
 const red     = colors.red
 const green   = colors.green
@@ -60,6 +61,13 @@ const blue    = colors.blue
 const cyan    = colors.cyan
 const yellow  = colors.yellow
 const magenta = colors.magenta
+
+// eslint-disable-next-line
+const __dirname = path.dirname( fileURLToPath( import.meta.url ) )
+
+const packageInfos = JSON.parse( fs.readFileSync(
+    new URL( './package.json', import.meta.url )
+) )
 
 /**
  * @method npm run help ( default )
@@ -127,7 +135,7 @@ gulp.task( 'clean', () => {
         './docs'
     ]
 
-    return del.deleteAsync( filesToClean )
+    return deleteAsync( filesToClean )
 
 } )
 
@@ -139,7 +147,6 @@ gulp.task( 'clean', () => {
 gulp.task( 'lint', () => {
 
     const filesToLint = [
-        'gulpfile.js',
         'configs/**/*.js',
         'sources/**/*.js',
         '!sources/scripts/*.js',
@@ -173,10 +180,10 @@ gulp.task( 'lint', () => {
  */
 gulp.task( 'doc', ( done ) => {
 
-    const config     = require( './configs/jsdoc.conf' )
+    const config     = jsdocConfiguration
     const filesToDoc = [
         'README.md',
-        'gulpfile.js',
+        'gulpfile.mjs',
         './configs/*.js',
         './sources/**/*.js',
         './tests/**/*.js'
@@ -291,7 +298,7 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
             fs.mkdirSync( temporaryDir, { recursive: true } )
             fs.writeFileSync( temporaryFile, temporaryFileData )
 
-            const bundle     = await rollup.rollup( config )
+            const bundle     = await rollup( config )
             const { output } = await bundle.generate( config.output )
 
             if ( output[ 0 ].code.length > 1 ) {
@@ -395,9 +402,9 @@ gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
 
             log( `Building bundle ${ config.output.file }` )
 
-            const bundle = await rollup.rollup( config )
+            const bundle = await rollup( config )
             const { output } = await bundle.generate( config.output )
-            await bundle.write( config.output )
+            // await bundle.write( config.output )
 
         } catch ( error ) {
 
@@ -1222,7 +1229,7 @@ gulp.task( 'bundle-tests', async ( done ) => {
 
         try {
 
-            const bundle = await rollup.rollup( config )
+            const bundle = await rollup( config )
             await bundle.write( config.output )
 
         } catch ( error ) {
@@ -1313,4 +1320,5 @@ gulp.task( 'release', gulp.series( 'clean', 'lint', 'doc', 'build-tests', 'test'
 
 //---------
 
-gulp.task( 'default', gulp.series( 'help' ) )
+gulp.task( 'default', gulp.series( 'check-bundling' ) )
+// gulp.task( 'default', gulp.series( 'help' ) )

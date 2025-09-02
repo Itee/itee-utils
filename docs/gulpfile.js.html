@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: gulpfile.js</title>
+	<title>Itee-Utils Source: gulpfile.mjs</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: gulpfile.js</h1>
+		<h1 class="page-title">Source: gulpfile.mjs</h1>
     
 <section>
     <article>
@@ -218,7 +218,7 @@ gulp.task( 'clean', () => {
 gulp.task( 'lint', () => {
 
     const filesToLint = [
-        'gulpfile.js',
+        'gulpfile.mjs',
         'configs/**/*.js',
         'sources/**/*.js',
         '!sources/scripts/*.js',
@@ -255,7 +255,7 @@ gulp.task( 'doc', ( done ) => {
     const config     = require( './configs/jsdoc.conf' )
     const filesToDoc = [
         'README.md',
-        'gulpfile.js',
+        'gulpfile.mjs',
         './configs/*.js',
         './sources/**/*.js',
         './tests/**/*.js'
