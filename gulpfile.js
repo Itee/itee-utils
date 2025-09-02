@@ -126,7 +126,7 @@ gulp.task( 'clean', () => {
         './docs'
     ]
 
-    return del( filesToClean )
+    return del.deleteAsync( filesToClean )
 
 } )
 

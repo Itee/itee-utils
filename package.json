@@ -70,7 +70,7 @@
     "benchmark": "^2.1.4",
     "chai": "^4.3.6",
     "cz-conventional-changelog": "^3.3.0",
-    "del": "^6.0.0",
+    "del": "^7.1.0",
     "eslint-plugin-mocha": "^10.0.3",
     "fancy-log": "^2.0.0",
     "glob": "^7.2.0",
