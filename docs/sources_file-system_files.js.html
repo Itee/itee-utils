@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -83,7 +83,7 @@
  *
  * @module sources/file-system/files
  * @description This is the files main export entry point.
- * It expose all exports of the files validators.
+ * It exposes all exports of the files validators.
  *
  */
 
@@ -117,7 +117,7 @@ function getFilesPathsUnder ( paths ) {
 
         if ( isInvalidPath( localPath ) ) {
 
-            throw new Error( `The path "${localPath}" is not valid !` )
+            throw new Error( `The path "${ localPath }" is not valid !` )
 
         } else if ( isFilePath( localPath ) ) {
 
@@ -143,7 +143,195 @@ function getFilesPathsUnder ( paths ) {
 
 }
 
-export { getFilesPathsUnder }
+/**
+ * Return all the files paths under filePaths in a recursive way.
+ *
+ * @param {string} filePaths - An array of string, representing the base path where looking for get all files paths
+ * @return {Array.&lt;string>} - An array of files paths
+ * @private
+ */
+function getFilesPathsUnder_1 ( filePaths ) {
+
+    let files = []
+
+    if ( Array.isArray( filePaths ) ) {
+
+        let filePath = undefined
+        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex &lt; numberOfPaths ; pathIndex++ ) {
+
+            filePath = filePaths[ pathIndex ]
+            checkStateOf( filePath )
+
+        }
+
+    } else {
+
+        checkStateOf( filePaths )
+
+    }
+
+    return files
+
+    function getFilesPathsUnderFolder ( folder ) {
+
+        fs.readdirSync( folder ).forEach( ( name ) => {
+
+            const filePath = path.resolve( folder, name )
+            checkStateOf( filePath )
+
+        } )
+
+    }
+
+    function checkStateOf ( filePath ) {
+
+        if ( !fileExistForPath( filePath ) ) {
+            // eslint-disable-next-line no-console
+            console.error( 'ES6Converter: Invalid file path "' + filePath + '"' )
+            return
+        }
+
+        const stats = fs.statSync( filePath )
+        if ( stats.isFile() ) {
+
+            files.push( filePath )
+
+        } else if ( stats.isDirectory() ) {
+
+            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) )
+
+        } else {
+
+            // eslint-disable-next-line no-console
+            console.error( 'Invalid stat object !' )
+
+        }
+
+    }
+
+}
+
+function fileExistForPath ( filePath ) {
+
+    return fs.existsSync( filePath )
+
+}
+
+function getFileForPath ( filePath ) {
+
+    // In case files doesn't exist
+    if ( !fileExistForPath( filePath ) ) {
+        throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
+    }
+
+    return fs.readFileSync( filePath, 'utf8' )
+
+}
+
+function getUncommentedFileForPath ( filePath ) {
+
+    return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
+
+}
+
+/**
+ * Will create an array without the strings in filePaths that are matched in excludes paths
+ *
+ * @param {Array.&lt;string>} filePaths - An array of string to clean
+ * @param {Array.&lt;string>} excludes - The paths to remove
+ * @return {Array.&lt;string>} The cleaned filePaths of excludes paths
+ * @private
+ */
+function excludesFilesPaths ( filePaths, excludes ) {
+
+    let filteredFilesPath = []
+
+    let filePath = undefined
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex &lt; numberOfFilePaths ; filePathIndex++ ) {
+        filePath = filePaths[ filePathIndex ]
+
+        if ( isExclude( filePath ) ) {
+            continue
+        }
+
+        filteredFilesPath.push( filePath )
+
+    }
+
+    return filteredFilesPath
+
+    function isExclude ( path ) {
+
+        let isExclude      = false
+        let excludePattern = undefined
+        for ( let i = 0, pathLength = excludes.length ; i &lt; pathLength ; i++ ) {
+
+            excludePattern = excludes[ i ]
+
+            // In case this is a file name it must fully match
+            if ( excludePattern.indexOf( '.' ) > -1 ) {
+
+                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' )
+                if ( fileName === excludePattern ) {
+                    isExclude = true
+                }
+
+            } else if ( path.contains( excludePattern ) ) {
+                isExclude = true
+            }
+
+        }
+
+        return isExclude
+
+    }
+
+}
+
+/**
+ * Will filter file paths an keep only js files
+ *
+ * @param {Array.&lt;string>} filePaths - An array of path to filter
+ * @return {Array.&lt;string>} The filtered path with only javascript files
+ * @private
+ */
+function filterJavascriptFiles ( filePaths, filter ) {
+
+    let filteredFilesPath = []
+
+    let filePath = undefined
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex &lt; numberOfFilePaths ; filePathIndex++ ) {
+
+        filePath = filePaths[ filePathIndex ]
+
+        // Not a js file like fonts or shaders
+        if ( filter &amp;&amp; !filter( filePath ) ) {
+            continue
+        } else {
+            const fileExtension = path.extname( filePath )
+            if ( filePath.indexOf( 'glsl' ) > -1 || fileExtension !== '.js' ) {
+                continue
+            }
+        }
+
+        filteredFilesPath.push( filePath )
+
+    }
+
+    return filteredFilesPath
+
+}
+
+export {
+    getPathsUnder,
+    getFilesPathsUnder,
+    getFilesPathsUnder_1,
+    fileExistForPath,
+    getFileForPath,
+    getUncommentedFileForPath,
+    excludesFilesPaths,
+    filterJavascriptFiles
+}
 </pre>
     </article>
 </section>

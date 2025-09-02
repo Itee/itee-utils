@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -86,12 +86,19 @@
  *
  */
 
+import { isNotString, isEmptyString } from 'itee-validators'
+
 /**
  * Set the first char to upper case like a classname
- * @param word
- * @returns {string}
+ * @param {String} word
+ * @returns {String}
+ * @throws {TypeError} - If 'word' is not a string
+ * @throws {TypeError} - If 'word' is an empty string
  */
 export function classNameify ( word ) {
+    if(isNotString(word)) { return }
+    if(isEmptyString(word)) { return }
+
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 }
 
@@ -100,7 +107,7 @@ export function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-const diacriticsMap = ( () => {
+const diacriticsMap = /*#__PURE__*/( /*#__PURE__*/() => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -483,13 +490,15 @@ const diacriticsMap = ( () => {
 } )()
 
 /**
+ *
  * @static
  * @public
  * @memberOf TApplication
- *
- * @param string
+ * @param {string} string
+ * @returns {null|string}
  */
 export function removeDiacritics ( string ) {
+    if(isNotString(string)) { return null }
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )

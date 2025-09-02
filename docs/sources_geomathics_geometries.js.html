@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -85,12 +85,15 @@
  *
  */
 
+import { isNotArray } from 'itee-validators'
+
 /**
  *
  * @param ring
  * @return {boolean}
  */
 export function ringClockwise ( ring ) {
+    if ( isNotArray( ring ) ) { return }
 
     if ( ( n = ring.length ) &lt; 4 ) {
         return false
@@ -112,6 +115,8 @@ export function ringClockwise ( ring ) {
  * @return {boolean}
  */
 export function ringContainsSome ( ring, hole ) {
+    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( hole ) ) { return }
 
     let i = 0
     let n = hole.length
@@ -135,6 +140,8 @@ export function ringContainsSome ( ring, hole ) {
  * @return {number}
  */
 export function ringContains ( ring, point ) {
+    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( point ) ) { return }
 
     let x        = point[ 0 ]
     let y        = point[ 1 ]
@@ -169,6 +176,10 @@ export function ringContains ( ring, point ) {
  * @return {boolean}
  */
 export function segmentContains ( p0, p1, p2 ) {
+    if ( isNotArray( p0 ) ) { return }
+    if ( isNotArray( p1 ) ) { return }
+    if ( isNotArray( p2 ) ) { return }
+
     var x20 = p2[ 0 ] - p0[ 0 ],
         y20 = p2[ 1 ] - p0[ 1 ]
     if ( x20 === 0 &amp;&amp; y20 === 0 ) {

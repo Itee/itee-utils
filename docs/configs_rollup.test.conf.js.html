@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -86,6 +86,10 @@
  */
 
 const packageInfos = require( '../package' )
+//const fs               = require( 'fs' )
+//const path             = require( 'path' )
+const { nodeResolve } = require( '@rollup/plugin-node-resolve' )
+const alias           = require( '@rollup/plugin-alias' )
 
 /**
  * Will create an appropriate configuration object for rollup, related to the given arguments.
@@ -96,68 +100,127 @@ const packageInfos = require( '../package' )
 function CreateTestsRollupConfigs ( /*options*/ ) {
     'use strict'
 
-    return [
-        // Benchs
-        // For karma
-        {
-            input:     `tests/benchmarks/${packageInfos.name}.benchs.js`,
-            external:  [ 'benchmark' ],
-            plugins:   [],
-            treeshake: false,
-            output:    {
-                globals: {
-                    'benchmark': 'Benchmark'
-                },
-                indent: '\t',
-                format: 'iife',
-                name:   'Itee.Benchs',
-                file:   `tests/builds/${packageInfos.name}.benchs.iife.js`
-            }
-        },
-        // For Node
-        {
-            input:     `tests/benchmarks/${packageInfos.name}.benchs.js`,
-            external:  [ 'benchmark' ],
-            plugins:   [],
-            treeshake: false,
-            output:    {
-                globals: {
-                    'benchmark': 'Benchmark'
-                },
-                indent: '\t',
-                format: 'cjs',
-                name:   'Itee.Benchs',
-                file:   `tests/builds/${packageInfos.name}.benchs.cjs.js`
-            }
-        },
-
+    /**
+     * Globals configs for run all benchs and units test inside karma or nodejs
+     */
+    const configs = [
         // Units
         // For karma
         {
-            input:     `tests/units/${packageInfos.name}.units.js`,
-            plugins:   [],
-            treeshake: false,
+            input:    `tests/units/${ packageInfos.name }.units.js`,
+            external: [
+                //                        'itee-validators',
+                //                        'itee-utils',
+                'mocha',
+                'chai'
+            ],
+            plugins: [
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                        //                                        {
+                        //                                            find:        'itee-validators',
+                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+                        //                                        }
+                    ]
+                } )
+            ],
+            treeshake: true,
             output:    {
-                indent: '\t',
-                format: 'iife',
-                name:   'Itee.Units',
-                file:   `tests/builds/${packageInfos.name}.units.iife.js`
+                indent:  '\t',
+                format:  'iife',
+                //                name:   'Itee.Units',
+                globals: {
+                    //                            'itee-validators': 'Itee.Validators',
+                    //                            'itee-utils': 'Itee.Utils',
+                    'mocha': 'Mocha',
+                    'chai':  'chai'
+                },
+                file: `tests/builds/${ packageInfos.name }.units.iife.js`
             }
         },
         // For Node
         {
-            input:     `tests/units/${packageInfos.name}.units.js`,
-            plugins:   [],
-            treeshake: false,
+            input:    `tests/units/${ packageInfos.name }.units.js`,
+            external: [
+                //                'itee-validators',
+                //                'itee-utils',
+                'mocha',
+                'chai',
+                'fs',
+                'path'
+            ],
+            plugins: [
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                        //                                        {
+                        //                                            find:        'itee-validators',
+                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+                        //                                        }
+                    ]
+                } )
+            ],
+            treeshake: true,
             output:    {
                 indent: '\t',
                 format: 'cjs',
-                name:   'Itee.Units',
-                file:   `tests/builds/${packageInfos.name}.units.cjs.js`
+                file:   `tests/builds/${ packageInfos.name }.units.cjs.js`
             }
-        },
-
+        }
+        //
+        //        // Benchs
+        //        // For karma
+        //        {
+        //            input:     `tests/benchmarks/${ packageInfos.name }.benchs.js`,
+        //            external:  [
+        //                'itee-validators',
+        //                'benchmark'
+        //            ],
+        //            plugins:   [],
+        //            treeshake: false,
+        //            output:    {
+        //                indent:  '\t',
+        //                format:  'iife',
+        //                name:    'Itee.Benchmarks',
+        //                globals: {
+        //                    'itee-validators': 'Itee.Validators',
+        //                    'benchmark':       'Benchmark'
+        //                },
+        //                file:    `tests/builds/${ packageInfos.name }.benchs.iife.js`
+        //            }
+        //        },
+        //        // For Node
+        //        {
+        //            input:     `tests/benchmarks/${ packageInfos.name }.benchs.js`,
+        //            external:  [
+        //                'itee-validators',
+        //                'benchmark'
+        //            ],
+        //            plugins:   [],
+        //            treeshake: false,
+        //            output:    {
+        //                indent:  '\t',
+        //                format:  'cjs',
+        ////                name:    'Itee.Benchmarks',
+        //                file:    `tests/builds/${ packageInfos.name }.benchs.cjs.js`
+        //            }
+        //        }
     ]
+
+    return configs
 
 }
 

@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -174,7 +174,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".getRandomFloatExclusive"><span class="type-signature">&lt;static> </span>getRandomFloatExclusive()</h4>
+    <h4 class="name" id=".getRandomFloatExclusive"><span class="type-signature">&lt;static> </span>getRandomFloatExclusive(min, max)</h4>
     
     
 </dt>
@@ -191,6 +191,80 @@
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -229,7 +303,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="sources_cores_numbers.js.html">sources/cores/numbers.js</a>,
-				 <a href="sources_cores_numbers.js.html#sunlight-1-line-17">line 17</a>
+				 <a href="sources_cores_numbers.js.html#sunlight-1-line-21">line 21</a>
 			</li>
 		</ul>
 	</dd>
@@ -254,6 +328,26 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -262,7 +356,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".getRandomFloatInclusive"><span class="type-signature">&lt;static> </span>getRandomFloatInclusive()</h4>
+    <h4 class="name" id=".getRandomFloatInclusive"><span class="type-signature">&lt;static> </span>getRandomFloatInclusive(min, max)</h4>
     
     
 </dt>
@@ -280,94 +374,79 @@
 
     
     
+        <h5>Parameters:</h5>
+        
 
-    
-<dl class="details">
-    
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="sources_cores_numbers.js.html">sources/cores/numbers.js</a>,
-				 <a href="sources_cores_numbers.js.html#sunlight-1-line-24">line 24</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dd>
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<hr>
-<dt>
-    <h4 class="name" id=".getRandomIntExclusive"><span class="type-signature">&lt;static> </span>getRandomIntExclusive()</h4>
-    
-    
-</dt>
-<dd>
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
-    <div class="description">
-        Returns a random integer between min (inclusive) and max (exclusive)
-Using Math.round() will give you a non-uniform distribution!
-    </div>
-    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
+    </tbody>
+</table>
 
-    
-
-    
     
 
     
@@ -431,6 +510,26 @@ Using Math.round() will give you a non-uniform distribution!
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -439,7 +538,7 @@ Using Math.round() will give you a non-uniform distribution!
             
 <hr>
 <dt>
-    <h4 class="name" id=".getRandomIntInclusive"><span class="type-signature">&lt;static> </span>getRandomIntInclusive()</h4>
+    <h4 class="name" id=".getRandomIntExclusive"><span class="type-signature">&lt;static> </span>getRandomIntExclusive(min, max)</h4>
     
     
 </dt>
@@ -447,7 +546,7 @@ Using Math.round() will give you a non-uniform distribution!
 
     
     <div class="description">
-        Returns a random integer between min (inclusive) and max (inclusive)
+        Returns a random integer between min (inclusive) and max (exclusive)
 Using Math.round() will give you a non-uniform distribution!
     </div>
     
@@ -457,6 +556,80 @@ Using Math.round() will give you a non-uniform distribution!
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -495,7 +668,7 @@ Using Math.round() will give you a non-uniform distribution!
 		<ul class="dummy">
 			<li>
 				<a href="sources_cores_numbers.js.html">sources/cores/numbers.js</a>,
-				 <a href="sources_cores_numbers.js.html#sunlight-1-line-42">line 42</a>
+				 <a href="sources_cores_numbers.js.html#sunlight-1-line-44">line 44</a>
 			</li>
 		</ul>
 	</dd>
@@ -520,6 +693,209 @@ Using Math.round() will give you a non-uniform distribution!
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".getRandomIntInclusive"><span class="type-signature">&lt;static> </span>getRandomIntInclusive(min, max)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Returns a random integer between min (inclusive) and max (inclusive)
+Using Math.round() will give you a non-uniform distribution!
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>min</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="sources_cores_numbers.js.html">sources/cores/numbers.js</a>,
+				 <a href="sources_cores_numbers.js.html#sunlight-1-line-58">line 58</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -576,6 +952,12 @@ Using Math.round() will give you a non-uniform distribution!
 
             <td class="type">
             
+                
+<span class="param-type">number</span>
+
+
+
+            
             </td>
 
             
@@ -627,7 +1009,7 @@ Using Math.round() will give you a non-uniform distribution!
 		<ul class="dummy">
 			<li>
 				<a href="sources_cores_numbers.js.html">sources/cores/numbers.js</a>,
-				 <a href="sources_cores_numbers.js.html#sunlight-1-line-54">line 54</a>
+				 <a href="sources_cores_numbers.js.html#sunlight-1-line-71">line 71</a>
 			</li>
 		</ul>
 	</dd>

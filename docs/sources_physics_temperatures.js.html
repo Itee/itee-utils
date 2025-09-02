@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="global.html#byteToBits">byteToBits</a></li><li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li>
+					<li><a href="global.html#npmrunbench">npm run bench</a></li><li><a href="global.html#npmrunbuild">npm run build</a></li><li><a href="global.html#npmrunbuild-test">npm run build-test</a></li><li><a href="global.html#npmrunclean">npm run clean</a></li><li><a href="global.html#npmrundoc">npm run doc</a></li><li><a href="global.html#npmrunhelpdefault">npm run help ( default )</a></li><li><a href="global.html#npmrunlint">npm run lint</a></li><li><a href="global.html#npmrunpatch">npm run patch</a></li><li><a href="global.html#npmrunrelease">npm run release</a></li><li><a href="global.html#npmruntest">npm run test</a></li><li><a href="global.html#npmrununit">npm run unit</a></li><li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
 				</ul>
 			</li>
 			
@@ -105,7 +105,8 @@ export const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955
 export function celsiusToKelvin ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -124,7 +125,8 @@ export function celsiusToKelvin ( celsius, precisionPointAt ) {
 export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -143,7 +145,8 @@ export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -162,7 +165,8 @@ export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -181,7 +185,8 @@ export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 export function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
@@ -200,7 +205,8 @@ export function kelvinToCelsius ( kelvin, precisionPointAt ) {
 export function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
