@@ -4,7 +4,7 @@
  *
  * @module sources/file-system/files
  * @description This is the files main export entry point.
- * It expose all exports of the files validators.
+ * It exposes all exports of the files validators.
  *
  */
 
@@ -107,6 +107,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
     function checkStateOf ( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
+            // eslint-disable-next-line no-console
             console.error( 'ES6Converter: Invalid file path "' + filePath + '"' )
             return
         }
@@ -122,6 +123,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
         } else {
 
+            // eslint-disable-next-line no-console
             console.error( 'Invalid stat object !' )
 
         }
@@ -190,7 +192,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
             // In case this is a file name it must fully match
             if ( excludePattern.indexOf( '.' ) > -1 ) {
 
-                const fileName = path.replace( /^.*(\\|\/|\:)/, '' )
+                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' )
                 if ( fileName === excludePattern ) {
                     isExclude = true
                 }

@@ -28,14 +28,14 @@ function CreateTestsRollupConfigs ( /*options*/ ) {
         // Units
         // For karma
         {
-            input:     `tests/units/${ packageInfos.name }.units.js`,
-            external:  [
+            input:    `tests/units/${ packageInfos.name }.units.js`,
+            external: [
                 //                        'itee-validators',
                 //                        'itee-utils',
                 'mocha',
                 'chai'
             ],
-            plugins:   [
+            plugins: [
                 nodeResolve( {
                     preferBuiltins: true
                 } ),
@@ -54,8 +54,8 @@ function CreateTestsRollupConfigs ( /*options*/ ) {
             ],
             treeshake: true,
             output:    {
-                indent: '\t',
-                format: 'iife',
+                indent:  '\t',
+                format:  'iife',
                 //                name:   'Itee.Units',
                 globals: {
                     //                            'itee-validators': 'Itee.Validators',
@@ -63,13 +63,13 @@ function CreateTestsRollupConfigs ( /*options*/ ) {
                     'mocha': 'Mocha',
                     'chai':  'chai'
                 },
-                file:    `tests/builds/${ packageInfos.name }.units.iife.js`
+                file: `tests/builds/${ packageInfos.name }.units.iife.js`
             }
         },
         // For Node
         {
-            input:     `tests/units/${ packageInfos.name }.units.js`,
-            external:  [
+            input:    `tests/units/${ packageInfos.name }.units.js`,
+            external: [
                 //                'itee-validators',
                 //                'itee-utils',
                 'mocha',
@@ -77,7 +77,7 @@ function CreateTestsRollupConfigs ( /*options*/ ) {
                 'fs',
                 'path'
             ],
-            plugins:   [
+            plugins: [
                 nodeResolve( {
                     preferBuiltins: true
                 } ),

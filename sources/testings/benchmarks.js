@@ -4,6 +4,7 @@
  */
 import * as globalDataMap from './primitives'
 
+/* eslint-disable no-console */
 const Testing = {
 
     DataMap: undefined,
@@ -65,7 +66,7 @@ const Testing = {
         return {
 
             // called when the benchmark starts running
-            'onStart': function onStartBench ( event ) {
+            'onStart': function onStartBench ( /*event*/ ) {
                 this.benchDataMap = Testing.DataMap
 
                 //                console.log( `${ this.constructor.name } [${ this.name }]` )
@@ -76,12 +77,12 @@ const Testing = {
             },
 
             // called after each run cycle
-            'onCycle': function onCycleBench ( event ) {
+            'onCycle': function onCycleBench ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onCycle` )
             },
 
             // called when aborted
-            'onAbort': function onAbortBench ( event ) {
+            'onAbort': function onAbortBench ( /*event*/ ) {
                 console.log( `${ this.constructor.name } [${ this.name }] onAbort` )
             },
 
@@ -92,36 +93,38 @@ const Testing = {
             },
 
             // called when reset
-            'onReset': function onResetBench ( event ) {
+            'onReset': function onResetBench ( /*event*/ ) {
                 console.log( `${ this.constructor.name } [${ this.name }] onReset` )
             },
 
             // called when the benchmark completes running
-            'onComplete': function onCompleteBench ( event ) {
+            'onComplete': function onCompleteBench ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onComplete` )
                 delete this.benchDataMap
             },
 
             // compiled/called before the test loop
-            'setup': function setupBench ( event ) {
+            'setup': function setupBench ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] setup` )
             },
 
             // compiled/called after the test loop
-            'teardown': function teardownBench ( event ) {
+            'teardown': function teardownBench ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] teardown` )
             }
         }
 
     },
 
-    createSuiteOptions: function ( dataMapOptions ) {
+    createSuiteOptions: function ( /*dataMapOptions*/ ) {
+
+        let options
 
         // #if IS_BACKEND_SPECIFIC
-        return {
+        options = {
 
             // called when the suite starts running
-            'onStart': function onStartSuite ( event ) {
+            'onStart': function onStartSuite ( /*event*/ ) {
                 //eslint-disable-next-line
                 console.log( `Running ${ this.constructor.name }: ${ this.name }` )
                 this.results = []
@@ -135,22 +138,22 @@ const Testing = {
             },
 
             // called when aborted
-            'onAbort': function onAbortSuite ( event ) {
+            'onAbort': function onAbortSuite ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onAbort` )
             },
 
             // called when a test errors
-            'onError': function onErrorSuite ( event ) {
+            'onError': function onErrorSuite ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onError` )
             },
 
             // called when reset
-            'onReset': function onResetSuite ( event ) {
+            'onReset': function onResetSuite ( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onReset` )
             },
 
             // called when the suite completes running
-            'onComplete': function onCompleteSuite ( event ) {
+            'onComplete': function onCompleteSuite ( /*event*/ ) {
 
                 this.results.sort( ( a, b ) => {
 
@@ -185,9 +188,10 @@ const Testing = {
         // #endif
 
         // #if IS_FRONTEND_SPECIFIC
-        return {}
+        options = {}
         // #endif
 
+        return options
     },
 
     iterateOverDataMap: function ( method ) {
@@ -316,5 +320,6 @@ const Testing = {
     }
 
 }
+/* eslint-enable no-console */
 
 export { Testing }

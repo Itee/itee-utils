@@ -142,7 +142,8 @@ gulp.task( 'lint', () => {
         'gulpfile.js',
         'configs/**/*.js',
         'sources/**/*.js',
-        'tests/**/*.js',
+        '!sources/scripts/*.js',
+        '!tests/**/*.js',
         '!tests/builds/*.js'
     ]
 
@@ -340,13 +341,13 @@ gulp.task( 'compute-test-bundle-side-effect', async ( done ) => {
         const bundleFilePath = path.join( bundlesDir, specificDir, bundleFileName )
 
         const config = {
-            input: temporaryFile,
+            input:   temporaryFile,
             //                                external:  [ 'itee-validators' ],
-            plugins:   [
+            plugins: [
                 nodeResolve()
                 //                commonJs()
             ],
-            onwarn:    ( {
+            onwarn: ( {
                 loc,
                 frame,
                 message
@@ -371,7 +372,7 @@ gulp.task( 'compute-test-bundle-side-effect', async ( done ) => {
                 tryCatchDeoptimization:           true,
                 unknownGlobalSideEffects:         true
             },
-            output:    {
+            output: {
                 indent: '\t',
                 format: 'esm',
                 file:   bundleFilePath
@@ -438,9 +439,9 @@ gulp.task( 'compute-test-bundle-by-source-file-export', async ( done ) => {
             const bundleFileName = `${ fileName }.bundle.js`
             const bundleFilePath = path.join( bundleBasePath, specificDirPath, bundleFileName )
             const config         = {
-                input:     sourcesFilesPath,
-                external:  [ 'itee-validators' ],
-                plugins:   [
+                input:    sourcesFilesPath,
+                external: [ 'itee-validators' ],
+                plugins:  [
                     nodeResolve( {
                         preferBuiltins: true
                     } ),
@@ -511,7 +512,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
 
         try {
 
-            console.log( `Create [${ unitFilePath }] from [${ bundleFilePath }]` )
+            log( `Create [${ unitFilePath }] from [${ bundleFilePath }]` )
 
             const jsdocOutput = childProcess.execFileSync( 'node', [ './node_modules/jsdoc/jsdoc.js', '-X', sourcesFilesPath ] ).toString()
             const jsonData    = JSON.parse( jsdocOutput ).filter( data => {
@@ -544,7 +545,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                         let paramName = param.name
                         if ( !paramName ) {
                             paramName = `param${ pIndex }`
-                            console.warn( `Missing parameter name for [${ docData.longname }]. Defaulting to [${ paramName }]` )
+                            log(yellow(`Missing parameter name for [${ docData.longname }]. Defaulting to [${ paramName }]` ))
                         }
 
                         const paramType = param.type
@@ -579,7 +580,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                     // Todo check throws
 
                     // Get user define rules
-                    const rules = []
+                    // const rules = []
 
 
                     // Infer basic rules
@@ -646,7 +647,6 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             let indent   = 1 + 1 + 1 + 1
                             let openTry  = ''
                             let closeTry = ''
-                            let counter  = expects.length
                             for ( let expect of expects ) {
                                 openTry += '' +
                                     `${ I( indent ) }try {` + '\n' +
@@ -656,7 +656,6 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 closeTry = `${ I( indent ) }}` + '\n' + `${ closeTry }`
 
                                 indent++
-                                counter--
                             }
                             const _expect = '' +
                                 `${ openTry }` +
@@ -684,7 +683,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             let dataSets      = ''
                             let forLoopOpens  = ''
                             let forLoopCloses = ''
-                            let arguments     = []
+                            let args          = []
                             for ( let parameter of parameters ) {
 
                                 const parameterType = parameter.types[ 0 ]
@@ -695,7 +694,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                     `${ I( localIndent ) }for ( let key${ index } in dataSet${ index } ) {` + '\n' +
                                     `${ I( localIndent + 1 ) }const dataSetValue${ index } = dataSet${ index }[ key${ index } ]` + '\n'
 
-                                arguments.push( `dataSetValue${ index }` )
+                                args.push( `dataSetValue${ index }` )
 
                                 forLoopCloses = `${ I( localIndent ) }}` + '\n' + `${ forLoopCloses }`
 
@@ -703,7 +702,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ arguments.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
                             const expect = `${ I( localIndent ) }expect(result).to.be.a('undefined')` + '\n'
 
                             const param = '' +
@@ -732,7 +731,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             let dataSets      = ''
                             let forLoopOpens  = ''
                             let forLoopCloses = ''
-                            let arguments     = []
+                            let args          = []
                             for ( let parameter of parameters ) {
 
                                 const parameterType = parameter.types[ 0 ]
@@ -753,7 +752,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                         `${ I( localIndent ) }for ( let key${ index } in dataSet${ index } ) {` + '\n' +
                                         `${ I( localIndent + 1 ) }const dataSetValue${ index } = dataSet${ index }[ key${ index } ]` + '\n'
 
-                                    arguments.push( `dataSetValue${ index }` )
+                                    args.push( `dataSetValue${ index }` )
 
                                     forLoopCloses = `${ I( localIndent ) }}` + '\n' +
                                         `${ I( localIndent - 1 ) }}` + '\n' +
@@ -766,7 +765,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                         `${ I( localIndent ) }for ( let key${ index } in dataSet${ index } ) {` + '\n' +
                                         `${ I( localIndent + 1 ) }const dataSetValue${ index } = dataSet${ index }[ key${ index } ]` + '\n'
 
-                                    arguments.push( `dataSetValue${ index }` )
+                                    args.push( `dataSetValue${ index }` )
 
                                     forLoopCloses = `${ I( localIndent ) }}` + '\n' + `${ forLoopCloses }`
 
@@ -777,7 +776,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ arguments.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
 
                             let expect = ''
                             if ( lowerName.startsWith( 'array' ) ) {
@@ -810,7 +809,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             let dataSets      = ''
                             let forLoopOpens  = ''
                             let forLoopCloses = ''
-                            let arguments     = []
+                            let args          = []
                             for ( let parameter of parameters ) {
 
                                 const parameterType = parameter.types[ 0 ]
@@ -821,7 +820,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                     `${ I( localIndent ) }for ( let key${ index } in dataSet${ index } ) {` + '\n' +
                                     `${ I( localIndent + 1 ) }const dataSetValue${ index } = dataSet${ index }[ key${ index } ]` + '\n'
 
-                                arguments.push( `dataSetValue${ index }` )
+                                args.push( `dataSetValue${ index }` )
 
                                 forLoopCloses = `${ I( localIndent ) }}` + '\n' + `${ forLoopCloses }`
 
@@ -829,7 +828,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ arguments.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
 
                             let returnTypesLabel = []
                             let expects          = []
@@ -848,7 +847,6 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             }
                             let openTry  = ''
                             let closeTry = ''
-                            let counter  = expects.length
                             for ( let expect of expects ) {
                                 openTry += '' +
                                     `${ I( localIndent ) }try {` + '\n' +
@@ -858,7 +856,6 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 closeTry = `${ I( localIndent ) }}` + '\n' + `${ closeTry }`
 
                                 localIndent++
-                                counter--
                             }
                             const _expect = '' +
                                 `${ openTry }` +
@@ -1023,7 +1020,7 @@ gulp.task( 'compute-test-bench', async ( done ) => {
 
         try {
 
-            console.log( `Create [${ benchFilePath }] from [${ bundleFilePath }]` )
+            log( `Create [${ benchFilePath }] from [${ bundleFilePath }]` )
             const Target = require( bundleFilePath )
 
             const targetEntries = Object.entries( Target ).map( entry => {
@@ -1226,7 +1223,7 @@ gulp.task( 'build', ( done ) => {
             s: true,
             t: true
         },
-        alias:   {
+        alias: {
             n: 'name',
             i: 'input',
             o: 'output',

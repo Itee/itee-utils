@@ -241,13 +241,13 @@ export function createInterval ( particles, path, interval ) {
  *     Dessert: 'Mousse au chocolat'
  * } )
  *
- * if( Foo.includes('Tartiflette') {
+ * if( Foo.includes('Tartiflette') ) {
  *     // Happy
  * }
  *
  * const myDrink = 'coke'
  * if( myDrink === Meal.Drink ) {
- *
+ *     // Cheers
  * } else {
  *     // Your life is a pain
  * }
@@ -255,7 +255,7 @@ export function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-export function toEnum ( enumValues, ...otherValues ) {
+export function toEnum ( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
     if ( isDefined( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' )
@@ -289,7 +289,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.values( this ).includes( key )
             }
         },
-        keys:     {
+        keys: {
             configurable: false,
             enumerable:   false,
             writable:     false,
@@ -297,7 +297,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.keys( this )
             }
         },
-        values:   {
+        values: {
             configurable: false,
             enumerable:   false,
             writable:     false,
@@ -305,7 +305,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.values( this )
             }
         },
-        entries:  {
+        entries: {
             configurable: false,
             enumerable:   false,
             writable:     false,

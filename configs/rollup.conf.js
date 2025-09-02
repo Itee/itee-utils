@@ -82,9 +82,9 @@ function CreateRollupConfigs ( options ) {
             const outputPath = ( isProd ) ? path.join( output, `${ fileName }.${ format }.min.js` ) : path.join( output, `${ fileName }.${ format }.js` )
 
             configs.push( {
-                input:     input,
-                external:  ( format === 'cjs' ) ? [ 'fs', 'path', 'itee-validators' ] : [ 'itee-validators' ],
-                plugins:   [
+                input:    input,
+                external: ( format === 'cjs' ) ? [ 'fs', 'path', 'itee-validators' ] : [ 'itee-validators' ],
+                plugins:  [
                     replace( {
                         defines: {
                             IS_KEEP_ON_BUILD:    true,
@@ -99,7 +99,7 @@ function CreateRollupConfigs ( options ) {
                     } ),
                     isProd && terser()
                 ],
-                onwarn:    ( {
+                onwarn: ( {
                     loc,
                     frame,
                     message
