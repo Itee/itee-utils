@@ -53,12 +53,13 @@ const log             = require( 'fancy-log' )
 const colors          = require( 'ansi-colors' )
 const { nodeResolve } = require( '@rollup/plugin-node-resolve' )
 const cleanup         = require( 'rollup-plugin-cleanup' )
-const red             = colors.red
-const green           = colors.green
-const blue            = colors.blue
-const cyan            = colors.cyan
-const yellow          = colors.yellow
-const magenta         = colors.magenta
+
+const red     = colors.red
+const green   = colors.green
+const blue    = colors.blue
+const cyan    = colors.cyan
+const yellow  = colors.yellow
+const magenta = colors.magenta
 
 /**
  * @method npm run help ( default )
