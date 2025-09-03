@@ -1,13 +1,14 @@
 import { expect }       from 'chai'
 import { describe, it } from 'mocha'
-import { TestsUtils }      from 'itee-utils'
-import * as Numbers from '../../../sources/cores/numbers.js'
+import { Testing }      from '../../../sources/testings/benchmarks'
+//import { Testing }      from 'itee-utils'
+import * as numbersNamespace from '../../../sources/cores/numbers.js'
 
 function numbersUnits () {
 
 	beforeEach( () => {
 
-		this._dataMap = TestsUtils.createDataMap()
+		this._dataMap = Testing.createDataMap()
 
 	} )
 
@@ -17,17 +18,17 @@ function numbersUnits () {
 
 	} )
 
-	describe( 'Numbers', () => {
+	describe( 'numbersUnits', () => {
 
-		describe( 'getRandomFloatExclusive', () => {
+		describe( 'getRandomFloatExclusive()', () => {
 
-			it( 'getRandomFloatExclusive is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Numbers.getRandomFloatExclusive).to.exist
+				expect(numbersNamespace.getRandomFloatExclusive).to.exist
 
 			} )
 
-			it( 'getRandomFloatExclusive return type is number when min is of type number and max is of type number', () => {
+			it( 'return type is number when min is of type number and max is of type number', () => {
 
 				const dataSet0 = this._dataMap[ 'numbers' ]
 				const dataSet1 = this._dataMap[ 'numbers' ]
@@ -37,7 +38,7 @@ function numbersUnits () {
 
 					for ( let key1 in dataSet1 ) {
 						const dataSetValue1 = dataSet1[ key1 ]
-						const result = Numbers.getRandomFloatExclusive( dataSetValue0, dataSetValue1 )
+						const result = numbersNamespace.getRandomFloatExclusive( dataSetValue0, dataSetValue1 )
 						expect(result).to.be.a('number')
 					}
 				}
@@ -46,15 +47,15 @@ function numbersUnits () {
 
 		} )
 
-		describe( 'getRandomFloatInclusive', () => {
+		describe( 'getRandomFloatInclusive()', () => {
 
-			it( 'getRandomFloatInclusive is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Numbers.getRandomFloatInclusive).to.exist
+				expect(numbersNamespace.getRandomFloatInclusive).to.exist
 
 			} )
 
-			it( 'getRandomFloatInclusive return type is number when min is of type number and max is of type number', () => {
+			it( 'return type is number when min is of type number and max is of type number', () => {
 
 				const dataSet0 = this._dataMap[ 'numbers' ]
 				const dataSet1 = this._dataMap[ 'numbers' ]
@@ -64,7 +65,7 @@ function numbersUnits () {
 
 					for ( let key1 in dataSet1 ) {
 						const dataSetValue1 = dataSet1[ key1 ]
-						const result = Numbers.getRandomFloatInclusive( dataSetValue0, dataSetValue1 )
+						const result = numbersNamespace.getRandomFloatInclusive( dataSetValue0, dataSetValue1 )
 						expect(result).to.be.a('number')
 					}
 				}
@@ -73,15 +74,15 @@ function numbersUnits () {
 
 		} )
 
-		describe( 'getRandomIntExclusive', () => {
+		describe( 'getRandomIntExclusive()', () => {
 
-			it( 'getRandomIntExclusive is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Numbers.getRandomIntExclusive).to.exist
+				expect(numbersNamespace.getRandomIntExclusive).to.exist
 
 			} )
 
-			it( 'getRandomIntExclusive return type is number when min is of type number and max is of type number', () => {
+			it( 'return type is number when min is of type number and max is of type number', () => {
 
 				const dataSet0 = this._dataMap[ 'numbers' ]
 				const dataSet1 = this._dataMap[ 'numbers' ]
@@ -91,7 +92,7 @@ function numbersUnits () {
 
 					for ( let key1 in dataSet1 ) {
 						const dataSetValue1 = dataSet1[ key1 ]
-						const result = Numbers.getRandomIntExclusive( dataSetValue0, dataSetValue1 )
+						const result = numbersNamespace.getRandomIntExclusive( dataSetValue0, dataSetValue1 )
 						expect(result).to.be.a('number')
 					}
 				}
@@ -100,15 +101,15 @@ function numbersUnits () {
 
 		} )
 
-		describe( 'getRandomIntInclusive', () => {
+		describe( 'getRandomIntInclusive()', () => {
 
-			it( 'getRandomIntInclusive is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Numbers.getRandomIntInclusive).to.exist
+				expect(numbersNamespace.getRandomIntInclusive).to.exist
 
 			} )
 
-			it( 'getRandomIntInclusive return type is number when min is of type number and max is of type number', () => {
+			it( 'return type is number when min is of type number and max is of type number', () => {
 
 				const dataSet0 = this._dataMap[ 'numbers' ]
 				const dataSet1 = this._dataMap[ 'numbers' ]
@@ -118,7 +119,7 @@ function numbersUnits () {
 
 					for ( let key1 in dataSet1 ) {
 						const dataSetValue1 = dataSet1[ key1 ]
-						const result = Numbers.getRandomIntInclusive( dataSetValue0, dataSetValue1 )
+						const result = numbersNamespace.getRandomIntInclusive( dataSetValue0, dataSetValue1 )
 						expect(result).to.be.a('number')
 					}
 				}
@@ -127,21 +128,21 @@ function numbersUnits () {
 
 		} )
 
-		describe( 'numberToPlainString', () => {
+		describe( 'numberToPlainString()', () => {
 
-			it( 'numberToPlainString is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Numbers.numberToPlainString).to.exist
+				expect(numbersNamespace.numberToPlainString).to.exist
 
 			} )
 
-			it( 'numberToPlainString return type is string when value is of type number', () => {
+			it( 'return type is string when value is of type number', () => {
 
 				const dataSet0 = this._dataMap[ 'numbers' ]
 
 				for ( let key0 in dataSet0 ) {
 					const dataSetValue0 = dataSet0[ key0 ]
-					const result = Numbers.numberToPlainString( dataSetValue0 )
+					const result = numbersNamespace.numberToPlainString( dataSetValue0 )
 					expect(result).to.be.a('string')
 				}
 

@@ -1,13 +1,14 @@
 import { expect }       from 'chai'
 import { describe, it } from 'mocha'
-import { TestsUtils }      from 'itee-utils'
-import * as Trigonometries from '../../../sources/geomathics/trigonometries.js'
+import { Testing }      from '../../../sources/testings/benchmarks'
+//import { Testing }      from 'itee-utils'
+import * as trigonometriesNamespace from '../../../sources/geomathics/trigonometries.js'
 
 function trigonometriesUnits () {
 
 	beforeEach( () => {
 
-		this._dataMap = TestsUtils.createDataMap()
+		this._dataMap = Testing.createDataMap()
 
 	} )
 
@@ -17,7 +18,7 @@ function trigonometriesUnits () {
 
 	} )
 
-	describe( 'Trigonometries', () => {
+	describe( 'trigonometriesUnits', () => {
 
 	} )
 

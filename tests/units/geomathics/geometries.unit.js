@@ -1,13 +1,14 @@
 import { expect }       from 'chai'
 import { describe, it } from 'mocha'
-import { TestsUtils }      from 'itee-utils'
-import * as Geometries from '../../../sources/geomathics/geometries.js'
+import { Testing }      from '../../../sources/testings/benchmarks'
+//import { Testing }      from 'itee-utils'
+import * as geometriesNamespace from '../../../sources/geomathics/geometries.js'
 
 function geometriesUnits () {
 
 	beforeEach( () => {
 
-		this._dataMap = TestsUtils.createDataMap()
+		this._dataMap = Testing.createDataMap()
 
 	} )
 
@@ -17,7 +18,7 @@ function geometriesUnits () {
 
 	} )
 
-	describe( 'Geometries', () => {
+	describe( 'geometriesUnits', () => {
 
 	} )
 

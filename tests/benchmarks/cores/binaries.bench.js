@@ -1,16 +1,20 @@
 
-import Benchmark      from 'benchmark'
-import { TestsUtils } from '../../../sources/testings/benchmarks'
-import * as Binaries from '../../../sources/cores/binaries.js'
+import Benchmark   from 'benchmark'
+//import { Testing } from 'itee-utils'
+import { Testing }      from '../../../sources/testings/benchmarks'
+import * as binariesNamespace from '../../../sources/cores/binaries.js'
 
-const bitsToByteSuite = Benchmark.Suite( 'Binaries.bitsToByte', TestsUtils.createSuiteOptions() )
-                                     .add( 'bitsToByte()', TestsUtils.iterateOverDataMap( Binaries.bitsToByte ), TestsUtils.createBenchmarkOptions() )
-const byteToBitsSuite = Benchmark.Suite( 'Binaries.byteToBits', TestsUtils.createSuiteOptions() )
-                                     .add( 'byteToBits()', TestsUtils.iterateOverDataMap( Binaries.byteToBits ), TestsUtils.createBenchmarkOptions() )
-const internalRepresentationToNumberSuite = Benchmark.Suite( 'Binaries.internalRepresentationToNumber', TestsUtils.createSuiteOptions() )
-                                     .add( 'internalRepresentationToNumber()', TestsUtils.iterateOverDataMap( Binaries.internalRepresentationToNumber ), TestsUtils.createBenchmarkOptions() )
-const numberToInternalRepresentationSuite = Benchmark.Suite( 'Binaries.numberToInternalRepresentation', TestsUtils.createSuiteOptions() )
-                                     .add( 'numberToInternalRepresentation()', TestsUtils.iterateOverDataMap( Binaries.numberToInternalRepresentation ), TestsUtils.createBenchmarkOptions() )
+const byteToBitsSuite = Benchmark.Suite( 'binariesNamespace.byteToBits', Testing.createSuiteOptions() )
+                                     .add( 'byteToBits()', Testing.iterateOverDataMap( binariesNamespace.byteToBits ), Testing.createBenchmarkOptions() )
 
-export { bitsToByteSuite,byteToBitsSuite,internalRepresentationToNumberSuite,numberToInternalRepresentationSuite }
+const bitsToByteSuite = Benchmark.Suite( 'binariesNamespace.bitsToByte', Testing.createSuiteOptions() )
+                                     .add( 'bitsToByte()', Testing.iterateOverDataMap( binariesNamespace.bitsToByte ), Testing.createBenchmarkOptions() )
+
+const numberToInternalRepresentationSuite = Benchmark.Suite( 'binariesNamespace.numberToInternalRepresentation', Testing.createSuiteOptions() )
+                                     .add( 'numberToInternalRepresentation()', Testing.iterateOverDataMap( binariesNamespace.numberToInternalRepresentation ), Testing.createBenchmarkOptions() )
+
+const internalRepresentationToNumberSuite = Benchmark.Suite( 'binariesNamespace.internalRepresentationToNumber', Testing.createSuiteOptions() )
+                                     .add( 'internalRepresentationToNumber()', Testing.iterateOverDataMap( binariesNamespace.internalRepresentationToNumber ), Testing.createBenchmarkOptions() )
+
+export { byteToBitsSuite,bitsToByteSuite,numberToInternalRepresentationSuite,internalRepresentationToNumberSuite }
 
