@@ -344,7 +344,8 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
     }
 
     // Todo: depends on option to log or to write
-    fs.rmSync( bundleDir, { recursive: true } )
+    // Care rmSync not exist under node v12
+    // fs.rmSync( bundleDir, { recursive: true } )
     // fs.rmSync( temporariesDir, { recursive: true } )
 
     done()
