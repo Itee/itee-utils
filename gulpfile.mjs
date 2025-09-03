@@ -81,11 +81,26 @@ const packageInfos = JSON.parse( fs.readFileSync(
  */
 gulp.task( 'help', ( done ) => {
 
+    const iteeVersion = packageInfos.version
+    const iteeVersionLength = iteeVersion.length
+    const iteeSpaceFilling = ' '.repeat( 28 - iteeVersionLength )
+
+    const nodeVersion = childProcess.execFileSync( 'node', [ '--version' ] ).toString().replace(/(\r\n|\n|\r)/gm, '')
+    const nodeVersionLength = nodeVersion.length
+    const nodeSpaceFilling = ' '.repeat( 43 - nodeVersionLength )
+
+    const npmVersion = childProcess.execFileSync( 'npm', [ '--version' ] ).toString().replace(/(\r\n|\n|\r)/gm, '')
+    const npmVersionLength = npmVersion.length
+    const npmSpaceFilling = ' '.repeat( 42 - npmVersionLength )
+
     log( '' )
     log( '====================================================' )
     log( '|                      HELP                        |' )
     log( '|                   Itee Utils                     |' )
-    log( `|                     v${ packageInfos.version }                       |` )
+    log( `|                     v${ iteeVersion }${iteeSpaceFilling}|` )
+    log( '|--------------------------------------------------|' )
+    log( `| node: ${nodeVersion}${nodeSpaceFilling}|` )
+    log( `| npm:  v${npmVersion}${npmSpaceFilling}|` )
     log( '====================================================' )
     log( '' )
     log( 'Available commands are:' )
