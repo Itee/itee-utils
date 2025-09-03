@@ -21,6 +21,12 @@ var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
  *
  */
 
+/**
+ *
+ * @param {string} propertyName
+ * @param {ordering} ascending
+ * @returns {Function}
+ */
 function sortBy ( propertyName, ascending = 'asc' ) {
 
     const _propertyName = propertyName;
@@ -60,7 +66,7 @@ function sortBy ( propertyName, ascending = 'asc' ) {
 
     } else {
 
-        throw 'Invalid ascending !'
+        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
 
     }
 
@@ -69,7 +75,7 @@ function sortBy ( propertyName, ascending = 'asc' ) {
 }
 
 /**
- * Will wrap the object value in a array, if is not already one, and return empty array in case
+ * Will wrap the object value in an array, if is not already one, and return empty array in case
  * where input object is null or undefined.
  * This function is build to ensure the return value will be always an array
  *
@@ -124,6 +130,7 @@ function byteToBits ( byte ) {
 }
 
 function bitsToByte ( bits ) {
+    if ( iteeValidators.isNotString( bits ) ) { return }
 
     let byte = 0;
 
@@ -139,6 +146,11 @@ function bitsToByte ( bits ) {
 
 }
 
+/**
+ *
+ * @param {number} number - The number to convert in this internal representation
+ * @returns {string}
+ */
 function numberToInternalRepresentation ( number ) {
 
     //    let buffer  = new Float64Array( [ number ] ).buffer
@@ -158,9 +170,16 @@ function numberToInternalRepresentation ( number ) {
 
 function internalRepresentationToNumber ( string ) {
 
-    const bytes = string.replace( / /g, '' )
-                        .match( /.{8}/g )
-                        .map( subString => bitsToByte( subString ) );
+    if ( iteeValidators.isNotDefined( string ) ) { return }
+    if ( iteeValidators.isNotString( string ) ) { return }
+    //    if ( isNotDefined( string ) ) { throw ReferenceError( 'string cannot be null or empty !' )}
+
+    const cleanString = string.replace( / /g, '' );
+    const matchs      = cleanString.match( /.{8}/g ); // multiple of eight
+    if ( iteeValidators.isNull( matchs ) ) { return }
+
+    const bytes = matchs.map( subString => bitsToByte( subString ) );
+    if ( iteeValidators.isArrayOfUndefined( bytes ) ) { return }
 
     let arrayBuffer = new ArrayBuffer( 8 );
     let dataView    = new DataView( arrayBuffer );
@@ -187,6 +206,10 @@ function getRandom () {
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min ) + min
@@ -194,6 +217,10 @@ function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min + 1.0 ) + min
@@ -202,6 +229,10 @@ function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
 /**
  * Returns a random integer between min (inclusive) and max (exclusive)
  * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 function getRandomIntExclusive ( min = 0, max = 1 ) {
     const _min = Math.ceil( min );
@@ -212,6 +243,10 @@ function getRandomIntExclusive ( min = 0, max = 1 ) {
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
  */
 function getRandomIntInclusive ( min = 0, max = 1 ) {
     const _min = Math.ceil( min );
@@ -222,7 +257,8 @@ function getRandomIntInclusive ( min = 0, max = 1 ) {
 
 /**
  * Convert a number to its literral form
- * @param value
+ *
+ * @param {number} value
  * @returns {string}
  */
 function numberToPlainString ( value ) {
@@ -260,169 +296,6 @@ function numberToPlainString ( value ) {
 
 }
 
-// #if IS_KEEP_ON_BUILD
-
-function numberToPlainString_alt0 ( value ) {
-
-    const stringValue = String( value );
-    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-    const exponentialSplits   = stringValue.split( 'e' );
-    const dirtyBase           = exponentialSplits[ 0 ];
-    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
-    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-    const dotBaseSplits       = unsignedBase.split( '.' );
-    const numberOfSignificant = dotBaseSplits[ 0 ].length;
-    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
-    const base                = dotBaseSplits.join( '' );
-    const dirtyExponent       = exponentialSplits[ 1 ];
-    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
-    const exponent            = dirtyExponent.slice( 1 );
-
-    let result = ( negativeBase ) ? '-' : '';
-    if ( negativeExponant ) {
-
-        result += '0.';
-        for ( let i = 0, e = parseInt( exponent ) - numberOfSignificant ; i < e ; i++ ) {
-            result += '0';
-        }
-        result += base;
-
-    } else {
-        result += base;
-        for ( let i = 0, e = parseInt( exponent ) - numberOfDecimals ; i < e ; i++ ) {
-            result += '0';
-        }
-        result += '.0';
-    }
-
-    return result
-
-}
-
-function numberToPlainString_alt1 ( value ) {
-
-    const stringValue = String( value );
-    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-    const exponentialSplits = stringValue.split( 'e' );
-    const dirtyBase         = exponentialSplits[ 0 ];
-    const negativeBase      = ( dirtyBase.indexOf( '-' ) === 0 );
-    const unsignedBase      = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-    const base              = unsignedBase.split( '.' ).join( '' );
-    const dirtyExponent     = exponentialSplits[ 1 ];
-    const negativeExponant  = ( dirtyExponent.indexOf( '-' ) === 0 );
-    const exponent          = dirtyExponent.slice( 1 );
-    const exponentLength    = parseInt( exponent ) + 1;
-
-    let result = '';
-    if ( negativeExponant ) {
-        result += '0.';
-        result = result.padEnd( exponentLength, '0' );
-        result += base;
-    } else {
-        result += base;
-        result = result.padEnd( exponentLength, '0' );
-        result += '.0';
-    }
-
-    if ( negativeBase ) {
-        result = `-${ result }`;
-    }
-
-    return result
-
-}
-
-function numberToPlainString_alt2 ( value ) {
-
-    const stringValue = String( value );
-    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-    const exponentialSplits   = stringValue.split( 'e' );
-    const dirtyBase           = exponentialSplits[ 0 ];
-    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
-    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-    const dotBaseSplits       = unsignedBase.split( '.' );
-    const numberOfSignificant = dotBaseSplits[ 0 ].length;
-    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
-    const base                = dotBaseSplits.join( '' );
-    const dirtyExponent       = exponentialSplits[ 1 ];
-    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
-    const exponent            = dirtyExponent.slice( 1 );
-    const exponentLength      = parseInt( exponent ) + 1;
-    const sign                = ( negativeBase ) ? '-' : '';
-
-    let result = '';
-    if ( negativeExponant ) {
-        result = `${ sign }0.${ Array( exponentLength - numberOfSignificant ).join( 0 ) }${ base }`;
-    } else {
-        result = `${ sign + base + Array( exponentLength - numberOfDecimals ).join( 0 ) }.0`;
-    }
-
-    return result
-
-}
-
-function numberToPlainString_alt3 ( value ) {
-
-    return String( value ).replace( /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
-        ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
-
-            const exponentLength = parseInt( exponent );
-            if ( exponentSign === '-' ) {
-                return `${ sign }0.${ '0'.repeat( exponentLength - significants.length ) }${ significants }${ decimals }`
-                //                return sign + '0.' + Array( exponentLength - significants.length + 1 ).join( 0 ) + significants + decimals
-            } else {
-                return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
-                //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
-            }
-        } )
-
-}
-
-function numberToPlainString_alt4 ( num ) {
-    const nsign = Math.sign( num );
-    //remove the sign
-    let _num    = Math.abs( num );
-    //if the number is in scientific notation remove it
-    if ( /\d+\.?\d*e[-+]*\d+/i.test( _num ) ) {
-
-        const zero        = '0';
-        const parts       = String( _num ).toLowerCase().split( 'e' ); //split into coeff and exponent
-        const e           = parseInt( parts.pop() ); //store the exponential part
-        let l             = Math.abs( e ); //get the number of zeros
-        const sign        = e / l;
-        const coeff_array = parts[ 0 ].split( '.' );
-
-        if ( sign === -1 ) {
-            l -= coeff_array[ 0 ].length;
-            if ( l < 0 ) {
-                _num = `${ coeff_array[ 0 ].slice( 0, l ) }.${ coeff_array[ 0 ].slice( l ) }${ coeff_array.length === 2 ? coeff_array[ 1 ] : '' }`;
-            } else {
-                _num = `${ zero }.${ new Array( l + 1 ).join( zero ) }${ coeff_array.join( '' ) }`;
-            }
-        } else {
-            const dec = coeff_array[ 1 ];
-            if ( dec ) {
-                l -= dec.length;
-            }
-            if ( l < 0 ) {
-                _num = `${ coeff_array[ 0 ] + dec.slice( 0, l ) }.${ dec.slice( l ) }`;
-            } else {
-                _num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero );
-            }
-        }
-    }
-
-    return nsign < 0 ? `-${ _num }` : _num
-}
-
-// #endif
-
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -431,7 +304,13 @@ function numberToPlainString_alt4 ( num ) {
  * @description Export the utilities methods about objects
  */
 
+/**
+ *
+ * @param {array.<*>} a
+ * @returns {array.<*>}
+ */
 function uniq ( a ) {
+    if ( iteeValidators.isNotArray( a ) ) { return }
 
     const seen = {};
     return a.filter( item => Object.prototype.hasOwnProperty.call( seen, item ) ? false : ( seen[ item ] = true ) )
@@ -440,13 +319,13 @@ function uniq ( a ) {
 
 /**
  *
- * @param target
- * @param source
- * @return {*}
+ * @param {object} target
+ * @param {object} source
+ * @return {object}
  */
 function extend ( target, source ) {
 
-    let output = undefined;
+    let output;
 
     if ( iteeValidators.isObject( target ) && iteeValidators.isNotDefined( source ) ) {
 
@@ -521,11 +400,13 @@ function serializeObject () {
 
 /**
  *
- * @param ChildClass
- * @param ParentClassOrObject
+ * @param {class} ChildClass
+ * @param {class} ParentClassOrObject
  * @return {*}
  */
 function extendObject ( ChildClass, ParentClassOrObject ) {
+    if ( iteeValidators.isUndefined( ChildClass ) ) { return }
+    if ( iteeValidators.isUndefined( ParentClassOrObject ) ) { return }
 
     if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
@@ -587,18 +468,21 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
 
 /**
  *
- * @param particles
- * @param path
- * @param interval
+ * @param {cloudpoint} particles
+ * @param {3dpath} path
+ * @param {number} interval
  */
 function createInterval ( particles, path, interval ) {
+    if ( !particles ) {return}
+    if ( !path ) {return}
+    if ( !interval ) {return}
 
-    var globalOffset = 0;
+    let globalOffset = 0;
 
-    setInterval( function () {
+    function moveParticlesOnPath() {
 
-        var moveOffset             = 0.1;
-        var DELTA_BETWEEN_PARTICLE = 1; // meter
+        const moveOffset             = 0.1;
+        const DELTA_BETWEEN_PARTICLE = 1; // meter
 
         if ( globalOffset >= DELTA_BETWEEN_PARTICLE ) {
             globalOffset = 0;
@@ -608,13 +492,13 @@ function createInterval ( particles, path, interval ) {
             globalOffset += moveOffset;
         }
 
-        var pathLength       = path.getLength();
-        var localOffset      = globalOffset;
-        var normalizedOffset = undefined;
-        var particle         = undefined;
-        var newPosition      = undefined;
+        const pathLength     = path.getLength();
+        let localOffset      = globalOffset;
+        let normalizedOffset = undefined;
+        let particle         = undefined;
+        let newPosition      = undefined;
 
-        for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
+        for ( let i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
             particle         = particles.children[ i ];
             normalizedOffset = localOffset / pathLength;
@@ -633,16 +517,20 @@ function createInterval ( particles, path, interval ) {
 
         }
 
-    }, interval );
+    }
+
+    setInterval( moveParticlesOnPath, interval );
 
 }
 
 /**
  *
- * @param enumValues
+ * @param {array} enumValues
  * @method toString - return a string representation of the enum
  * @method includes - check if given value is one of the enum
- * @method types - return an array containing all enum types
+ * @method keys - return an array containing all enum keys
+ * @method values - return an array containing all enum values
+ * @method entries - return an array containing all enum entries (key -> value)
  *
  * @example {@lang javascript}
  * const Meal = toEnum( {
@@ -651,13 +539,13 @@ function createInterval ( particles, path, interval ) {
  *     Dessert: 'Mousse au chocolat'
  * } )
  *
- * if( Foo.includes('Tartiflette') {
+ * if( Foo.includes('Tartiflette') ) {
  *     // Happy
  * }
  *
  * const myDrink = 'coke'
  * if( myDrink === Meal.Drink ) {
- *
+ *     // Cheers
  * } else {
  *     // Your life is a pain
  * }
@@ -666,18 +554,25 @@ function createInterval ( particles, path, interval ) {
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
 function toEnum ( enumValues ) {
+    if ( iteeValidators.isNotObject( enumValues ) ) { return }
+    if ( iteeValidators.isDefined( enumValues.toString ) ) {
+        const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' );
+        if ( iteeValidators.isDefined( descriptor ) && descriptor.configurable === false ) {
+            return
+        }
+    }
 
     return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
         toString: {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _toString () {
+            value () {
 
                 const keys = Object.keys( this );
                 let result = '';
                 for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-                    result += `${keys[ index ]}, `;
+                    result += `${ keys[ index ] }, `;
                 }
                 result = result.slice( 0, -2 );
                 return result
@@ -688,16 +583,32 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _includes ( key ) {
+            value ( key ) {
                 return Object.values( this ).includes( key )
             }
         },
-        types: {
+        keys: {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value:        function _types () {
+            value () {
                 return Object.keys( this )
+            }
+        },
+        values: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value () {
+                return Object.values( this )
+            }
+        },
+        entries: {
+            configurable: false,
+            enumerable:   false,
+            writable:     false,
+            value () {
+                return Object.entries( this )
             }
         }
     } ) )
@@ -715,10 +626,15 @@ function toEnum ( enumValues ) {
 
 /**
  * Set the first char to upper case like a classname
- * @param word
- * @returns {string}
+ * @param {String} word
+ * @returns {String}
+ * @throws {TypeError} - If 'word' is not a string
+ * @throws {TypeError} - If 'word' is an empty string
  */
 function classNameify ( word ) {
+    if(iteeValidators.isNotString(word)) { return }
+    if(iteeValidators.isEmptyString(word)) { return }
+
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 }
 
@@ -727,7 +643,7 @@ function classNameify ( word ) {
  * @public
  * @memberOf TApplication
  */
-const diacriticsMap = ( () => {
+const diacriticsMap = /*#__PURE__*/( () => {
 
     /*
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -1110,13 +1026,15 @@ const diacriticsMap = ( () => {
 } )();
 
 /**
+ *
  * @static
  * @public
  * @memberOf TApplication
- *
- * @param string
+ * @param {string} string
+ * @returns {null|string}
  */
 function removeDiacritics ( string ) {
+    if(iteeValidators.isNotString(string)) { return null }
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
@@ -1180,6 +1098,9 @@ function radiansFromDegrees ( degrees ) {
  * @return {number}
  */
 function getYaw ( vector ) {
+    if(iteeValidators.isNotDefined(vector)) { return }
+    if(iteeValidators.isNotObject(vector)) { return }
+
     return -Math.atan2( vector.x, vector.z )
 }
 
@@ -1189,6 +1110,9 @@ function getYaw ( vector ) {
  * @return {number}
  */
 function getPitch ( vector ) {
+    if(iteeValidators.isNotDefined(vector)) { return }
+    if(iteeValidators.isNotObject(vector)) { return }
+
     return Math.asin( vector.y )
 }
 
@@ -1198,6 +1122,8 @@ function getPitch ( vector ) {
  * @return {{yaw: number, pitch: number}}
  */
 function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
+    if(iteeValidators.isNotDefined(vectorDir)) { return }
+    if(iteeValidators.isNotObject(vectorDir)) { return }
 
     function getYaw ( vector ) {
         return Math.atan2( vector.y, vector.x )
@@ -1391,6 +1317,7 @@ function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
  * @return {boolean}
  */
 function ringClockwise ( ring ) {
+    if ( iteeValidators.isNotArray( ring ) ) { return }
 
     if ( ( n = ring.length ) < 4 ) {
         return false
@@ -1412,6 +1339,8 @@ function ringClockwise ( ring ) {
  * @return {boolean}
  */
 function ringContainsSome ( ring, hole ) {
+    if ( iteeValidators.isNotArray( ring ) ) { return }
+    if ( iteeValidators.isNotArray( hole ) ) { return }
 
     let i = 0;
     let n = hole.length;
@@ -1435,6 +1364,8 @@ function ringContainsSome ( ring, hole ) {
  * @return {number}
  */
 function ringContains ( ring, point ) {
+    if ( iteeValidators.isNotArray( ring ) ) { return }
+    if ( iteeValidators.isNotArray( point ) ) { return }
 
     let x        = point[ 0 ];
     let y        = point[ 1 ];
@@ -1469,6 +1400,10 @@ function ringContains ( ring, point ) {
  * @return {boolean}
  */
 function segmentContains ( p0, p1, p2 ) {
+    if ( iteeValidators.isNotArray( p0 ) ) { return }
+    if ( iteeValidators.isNotArray( p1 ) ) { return }
+    if ( iteeValidators.isNotArray( p2 ) ) { return }
+
     var x20 = p2[ 0 ] - p0[ 0 ],
         y20 = p2[ 1 ] - p0[ 1 ];
     if ( x20 === 0 && y20 === 0 ) {
@@ -1505,7 +1440,8 @@ const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955;
 function celsiusToKelvin ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1524,7 +1460,8 @@ function celsiusToKelvin ( celsius, precisionPointAt ) {
 function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1543,7 +1480,8 @@ function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1562,7 +1500,8 @@ function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1581,7 +1520,8 @@ function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1600,7 +1540,8 @@ function kelvinToCelsius ( kelvin, precisionPointAt ) {
 function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
-    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
     //Check optional parameter precisionPointAt and set it to 2 by default
     const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1613,12 +1554,8 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/testing
- *
  */
 
-/* global Itee */
 
 const voids = {
     null:      null,
@@ -1642,13 +1579,15 @@ const numbers = {
     negativeFloat:           -1.01,
     negativeInt:             -1,
     negativeZero:            -0,
-    nan:                     Number.NaN,
+    negativeNan:             -Number.NaN,
+    positiveNan:             Number.NaN,
     positiveZero:            0,
     positiveInt:             1,
     positiveFloat:           1.01,
     positivePowWithDecimals: 1.2345e+2,
     positivePow:             2e+2,
     positiveHexa:            0x123456,
+    epsilon:                 Number.EPSILON,
     positiveMinValue:        Number.MIN_VALUE,
     positiveMaxSafeInteger:  Number.MAX_SAFE_INTEGER,
     positiveMaxValue:        Number.MAX_VALUE,
@@ -1664,7 +1603,7 @@ const numbers = {
     sqrt2:                   Math.SQRT2
 };
 
-const strings = ( () => {
+const strings = /*#__PURE__*/( () => {
 
     const dataMap = {
         empty:       '',
@@ -1672,25 +1611,27 @@ const strings = ( () => {
         stringNull:  String(),
         stringEmpty: String( '' ),
         stringBlank: String( '    ' ),
-        foobar:      'foobar'
+        foobar:      'foobar',
+        stringHexa:  '#123456',
+        stringOcta:  '00101010'
     };
 
     // Convert voids to string
     const voidDataMap = voids;
     for ( let i = 0, m = voidDataMap.length ; i < m ; i++ ) {
-        dataMap[ voidDataMap[ i ] ] = `${voidDataMap[ i ]}`;
+        dataMap[ voidDataMap[ i ] ] = `${ voidDataMap[ i ] }`;
     }
 
     // Convert booleans to string
     const booleanDataMap = booleans;
     for ( let j = 0, n = booleanDataMap.length ; j < n ; j++ ) {
-        dataMap[ booleanDataMap[ j ] ] = `${booleanDataMap[ j ]}`;
+        dataMap[ booleanDataMap[ j ] ] = `${ booleanDataMap[ j ] }`;
     }
 
     // Convert numbers to string
     const numericDataMap = numbers;
     for ( let k = 0, o = numericDataMap.length ; k < o ; k++ ) {
-        dataMap[ numericDataMap[ k ] ] = `${numericDataMap[ k ]}`;
+        dataMap[ numericDataMap[ k ] ] = `${ numericDataMap[ k ] }`;
     }
 
     return dataMap
@@ -1703,7 +1644,7 @@ const functions = {
     arrowFunction:     () => {}
 };
 
-const arrays = ( () => {
+const arrays = /*#__PURE__*/( () => {
 
     const dataMap = {
         emptyArray:       [],
@@ -1837,17 +1778,24 @@ const objects = {
     foo:       { foo: 'bar' }
 };
 
-const globalDataMap = {
-    voids,
-    booleans,
-    numbers,
-    strings,
-    functions,
-    arrays,
-    typedArrays,
-    objects
-};
+var globalDataMap = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	voids: voids,
+	booleans: booleans,
+	numbers: numbers,
+	strings: strings,
+	functions: functions,
+	arrays: arrays,
+	typedArrays: typedArrays,
+	objects: objects
+});
 
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ */
+
+/* eslint-disable no-console */
 const Testing = {
 
     DataMap: undefined,
@@ -1875,7 +1823,7 @@ const Testing = {
 
             const map = globalDataMap[ optionKey ];
             if ( map === undefined ) {
-                throw ReferenceError( `The global data map does not contain element for key: ${optionKey}` )
+                throw ReferenceError( `The global data map does not contain element for key: ${ optionKey }` )
             }
 
             const option = dataMapOptions[ optionKey ];
@@ -1902,40 +1850,166 @@ const Testing = {
 
     },
 
-    createDataMapBenchmarkOptions: function ( dataMapOptions ) {
+    createBenchmarkOptions: function ( dataMapOptions ) {
 
-        Itee.Testing.DataMap = Itee.Testing.createDataMap( dataMapOptions );
+        Testing.DataMap = Testing.createDataMap( dataMapOptions );
 
         return {
 
-            setup: function onSetup () {
-                this.datamap = Itee.Testing.DataMap;
+            // called when the benchmark starts running
+            'onStart': function onStartBench ( /*event*/ ) {
+                this.benchDataMap = Testing.DataMap;
+
+                //                console.log( `${ this.constructor.name } [${ this.name }]` )
+                //                console.group( `${ this.constructor.name } [${ this.name }] onStart` )
+                //                console.log( `Testing: ${ ( ( Testing === undefined ) ? 'not exist' : 'exist' ) }` )
+                //                console.log( `Datamap: ${ ( ( this.datamap === undefined ) ? 'not exist' : 'exist' ) }` )
+                //                console.groupEnd()
             },
 
-            teardown: function onTeardown () {
-                delete this.datamap;
-            }
+            // called after each run cycle
+            'onCycle': function onCycleBench ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onCycle` )
+            },
 
+            // called when aborted
+            'onAbort': function onAbortBench ( /*event*/ ) {
+                console.log( `${ this.constructor.name } [${ this.name }] onAbort` );
+            },
+
+            // called when a test errors
+            'onError': function onErrorBench ( event ) {
+                console.log( `${ this.constructor.name } [${ this.name }] onError` );
+                console.error( event.message );
+            },
+
+            // called when reset
+            'onReset': function onResetBench ( /*event*/ ) {
+                console.log( `${ this.constructor.name } [${ this.name }] onReset` );
+            },
+
+            // called when the benchmark completes running
+            'onComplete': function onCompleteBench ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onComplete` )
+                delete this.benchDataMap;
+            },
+
+            // compiled/called before the test loop
+            'setup': function setupBench ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] setup` )
+            },
+
+            // compiled/called after the test loop
+            'teardown': function teardownBench ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] teardown` )
+            }
         }
 
     },
 
-    iterateOverDataMap: function ( func ) {
+    createSuiteOptions: function ( /*dataMapOptions*/ ) {
+
+        let options;
+
+        // #if IS_BACKEND_SPECIFIC
+        options = {
+
+            // called when the suite starts running
+            'onStart': function onStartSuite ( /*event*/ ) {
+                //eslint-disable-next-line
+                console.log( `Running ${ this.constructor.name }: ${ this.name }` );
+                this.results = [];
+            },
+
+            // called between running benchmarks
+            'onCycle': function onCycleSuite ( event ) {
+                //eslint-disable-next-line
+                console.log( `Running Bench: ${ event.target.name }` );
+                this.results.push( event.target );
+            },
+
+            // called when aborted
+            'onAbort': function onAbortSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onAbort` )
+            },
+
+            // called when a test errors
+            'onError': function onErrorSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onError` )
+            },
+
+            // called when reset
+            'onReset': function onResetSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onReset` )
+            },
+
+            // called when the suite completes running
+            'onComplete': function onCompleteSuite ( /*event*/ ) {
+
+                this.results.sort( ( a, b ) => {
+
+                    if ( a.hz < b.hz ) {
+                        return 1
+                    }
+
+                    if ( a.hz > b.hz ) {
+                        return -1
+                    }
+
+                    return 0
+
+                } );
+
+                for ( let i = 0, num = this.results.length ; i < num ; i++ ) {
+                    //eslint-disable-next-line
+                    console.log( `${ i }: ${ String( this.results[ i ] ) }` );
+                }
+
+                const fastest       = this.results[ 0 ];
+                const slowest       = this.results[ this.results.length - 1 ];
+                const speedIncrease = ( ( fastest.hz - slowest.hz ) / slowest.hz ) * 100;
+
+                //eslint-disable-next-line
+                console.log( `\n${ fastest.name } is ${ Math.round( speedIncrease ) }% fastest than ${ slowest.name }` );
+
+                delete this.results;
+
+            }
+        };
+        // #endif
+
+        // #if IS_FRONTEND_SPECIFIC
+        options = {};
+        // #endif
+
+        return options
+    },
+
+    iterateOverDataMap: function ( method ) {
 
         return function _iterateOverDataMap () {
+            //            console.group( 'iterateOverDataMap' )
+            //            console.log( `Suite Datamap: ${ ( ( this.suiteDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
+            //            console.log( `Bench Datamap: ${ ( ( this.benchDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
+            //            console.groupEnd()
 
-            const datamap = this.datamap;
+            if ( typeof method === 'undefined' ) {
+                throw new ReferenceError('the method param is null or undefined!')
+            }
+
+            const datamap = this.benchDataMap;
             for ( let datasetKey in datamap ) {
 
                 const dataset = datamap[ datasetKey ];
 
                 if ( Array.isArray( dataset ) ) {
 
-                    for ( let i = 0, n = dataset.length ; i < n ; i++ ) {
-
-                        const data = dataset[ i ];
-                        func( data );
-
+                    for ( let datasetElement of dataset ) {
+                        try {
+                            method( datasetElement );
+                        } catch ( error ) {
+                            console.error( `method [${ method.name } fail with [${ datasetElement.toString() }] => ${ error.message }` );
+                        }
                     }
 
                 } else {
@@ -1943,7 +2017,12 @@ const Testing = {
                     for ( let dataKey in dataset ) {
 
                         const data = dataset[ dataKey ];
-                        func( data );
+
+                        try {
+                            method( data );
+                        } catch ( error ) {
+                            console.error( `method [${ method.name } fail with [${ data.toString() }] => ${ error.message }` );
+                        }
 
                     }
 
@@ -2004,7 +2083,7 @@ const Testing = {
         return {
 
             setup: function onSetup () {
-                this.dataset = Itee.Testing.createDataSet()[ datasetName ];
+                this.dataset = Testing.createDataSet()[ datasetName ];
             },
 
             teardown: function onTeardown () {
@@ -2036,11 +2115,115 @@ const Testing = {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/file-system/files
- * @description This is the files main export entry point.
- * It expose all exports of the files validators.
+ * @module sources/file-system/paths/isValidPath
+ * @description Export function to validate if a value is a valid path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isValidPath } from 'itee-validators'
+ *
+ * if( isValidPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
  *
  */
+
+/**
+ * Check if given data is a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isValidPath ( data ) {
+    return fs__default["default"].existsSync( data )
+}
+
+/**
+ * Check if given data is not a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isInvalidPath ( data ) {
+    return !isValidPath( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/directories/isDirectoryPath
+ * @description Export function to validate if a value is a directories path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isDirectoryPath } from 'itee-validators'
+ *
+ * if( isDirectoryPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given path is a directory path
+ *
+ * @param path {string|Buffer|URL} The data to check against the directory path type
+ * @returns {boolean} true if path is a directory path, false otherwise
+ */
+function isDirectoryPath ( path ) {
+    return fs__default["default"].statSync( path ).isDirectory()
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files/isFilePath
+ * @description Export function to validate if a value is a file path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isFilePath } from 'itee-validators'
+ *
+ * if( isFilePath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given path is a file path
+ *
+ * @param path {string|Buffer|URL} The data to check against the file path type
+ * @returns {boolean} true if path is a file path, false otherwise
+ */
+function isFilePath ( path ) {
+    return fs__default["default"].statSync( path ).isFile()
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files
+ * @description This is the files main export entry point.
+ * It exposes all exports of the files validators.
+ *
+ */
+// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
 function getPathsUnder ( directoryPath ) {
     return fs__default["default"].readdirSync( directoryPath )
@@ -2050,7 +2233,7 @@ function getPathsUnder ( directoryPath ) {
  * Allow to search all files under filePaths in a recursive way
  *
  * @param {Array.<string>|string} paths - The files paths where search files
- * @returns {Array} - The paths of finded files
+ * @returns {Array} - The paths of found files
  */
 function getFilesPathsUnder ( paths ) {
 
@@ -2061,15 +2244,15 @@ function getFilesPathsUnder ( paths ) {
 
         const localPath = _paths[ pathIndex ];
 
-        if ( iteeValidators.isInvalidPath( localPath ) ) {
+        if ( isInvalidPath( localPath ) ) {
 
-            throw new Error( `The path "${localPath}" is not valid !` )
+            throw new Error( `The path "${ localPath }" is not valid !` )
 
-        } else if ( iteeValidators.isFilePath( localPath ) ) {
+        } else if ( isFilePath( localPath ) ) {
 
             files.push( localPath );
 
-        } else if ( iteeValidators.isDirectoryPath( localPath ) ) {
+        } else if ( isDirectoryPath( localPath ) ) {
 
             const subPaths      = getPathsUnder( localPath );
             const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default["default"].resolve( localPath, subPath ) ) } );
@@ -2085,6 +2268,186 @@ function getFilesPathsUnder ( paths ) {
 
 }
 
+/**
+ * Return all the files paths under filePaths in a recursive way.
+ *
+ * @param {string} filePaths - An array of string, representing the base path where looking for get all files paths
+ * @return {Array.<string>} - An array of files paths
+ * @private
+ */
+function getFilesPathsUnder_1 ( filePaths ) {
+
+    let files = [];
+
+    if ( Array.isArray( filePaths ) ) {
+
+        let filePath = undefined;
+        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+
+            filePath = filePaths[ pathIndex ];
+            checkStateOf( filePath );
+
+        }
+
+    } else {
+
+        checkStateOf( filePaths );
+
+    }
+
+    return files
+
+    function getFilesPathsUnderFolder ( folder ) {
+
+        fs__default["default"].readdirSync( folder ).forEach( ( name ) => {
+
+            const filePath = path__default["default"].resolve( folder, name );
+            checkStateOf( filePath );
+
+        } );
+
+    }
+
+    function checkStateOf ( filePath ) {
+
+        if ( !fileExistForPath( filePath ) ) {
+            // eslint-disable-next-line no-console
+            console.error( 'ES6Converter: Invalid file path "' + filePath + '"' );
+            return
+        }
+
+        const stats = fs__default["default"].statSync( filePath );
+        if ( stats.isFile() ) {
+
+            files.push( filePath );
+
+        } else if ( stats.isDirectory() ) {
+
+            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) );
+
+        } else {
+
+            // eslint-disable-next-line no-console
+            console.error( 'Invalid stat object !' );
+
+        }
+
+    }
+
+}
+
+function fileExistForPath ( filePath ) {
+
+    return fs__default["default"].existsSync( filePath )
+
+}
+
+function getFileForPath ( filePath ) {
+
+    // In case files doesn't exist
+    if ( !fileExistForPath( filePath ) ) {
+        throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
+    }
+
+    return fs__default["default"].readFileSync( filePath, 'utf8' )
+
+}
+
+function getUncommentedFileForPath ( filePath ) {
+
+    return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
+
+}
+
+/**
+ * Will create an array without the strings in filePaths that are matched in excludes paths
+ *
+ * @param {Array.<string>} filePaths - An array of string to clean
+ * @param {Array.<string>} excludes - The paths to remove
+ * @return {Array.<string>} The cleaned filePaths of excludes paths
+ * @private
+ */
+function excludesFilesPaths ( filePaths, excludes ) {
+
+    let filteredFilesPath = [];
+
+    let filePath = undefined;
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex < numberOfFilePaths ; filePathIndex++ ) {
+        filePath = filePaths[ filePathIndex ];
+
+        if ( isExclude( filePath ) ) {
+            continue
+        }
+
+        filteredFilesPath.push( filePath );
+
+    }
+
+    return filteredFilesPath
+
+    function isExclude ( path ) {
+
+        let isExclude      = false;
+        let excludePattern = undefined;
+        for ( let i = 0, pathLength = excludes.length ; i < pathLength ; i++ ) {
+
+            excludePattern = excludes[ i ];
+
+            // In case this is a file name it must fully match
+            if ( excludePattern.indexOf( '.' ) > -1 ) {
+
+                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' );
+                if ( fileName === excludePattern ) {
+                    isExclude = true;
+                }
+
+            } else if ( path.contains( excludePattern ) ) {
+                isExclude = true;
+            }
+
+        }
+
+        return isExclude
+
+    }
+
+}
+
+/**
+ * Will filter file paths a keep only js files
+ *
+ * @param {Array.<string>} filePaths - An array of path to filter
+ * @param {function} filter - An optional filter to apply instead of internal filter
+ * @return {Array.<string>} The filtered path with only javascript files
+ * @private
+ */
+function filterJavascriptFiles ( filePaths, filter ) {
+
+    let filteredFilesPath = [];
+
+    let filePath = undefined;
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex < numberOfFilePaths ; filePathIndex++ ) {
+
+        filePath = filePaths[ filePathIndex ];
+
+        // Not a js file like fonts or shaders
+        if ( filter && !filter( filePath ) ) {
+            continue
+        } else {
+            const fileExtension = path__default["default"].extname( filePath );
+            if ( filePath.indexOf( 'glsl' ) > -1 || fileExtension !== '.js' ) {
+                continue
+            }
+        }
+
+        filteredFilesPath.push( filePath );
+
+    }
+
+    return filteredFilesPath
+
+}
+
 exports.DEG_TO_RAD = DEG_TO_RAD;
 exports.FAHRENHEIT_CELSIUS_COEFFICIENT = FAHRENHEIT_CELSIUS_COEFFICIENT;
 exports.FAHRENHEIT_CELSIUS_CONSTANTE = FAHRENHEIT_CELSIUS_CONSTANTE;
@@ -2094,7 +2457,9 @@ exports.PI_2 = PI_2;
 exports.PI_4 = PI_4;
 exports.RAD_TO_DEG = RAD_TO_DEG;
 exports.Testing = Testing;
+exports.arrays = arrays;
 exports.bitsToByte = bitsToByte;
+exports.booleans = booleans;
 exports.byteToBits = byteToBits;
 exports.celsiusToFahrenheit = celsiusToFahrenheit;
 exports.celsiusToKelvin = celsiusToKelvin;
@@ -2103,28 +2468,33 @@ exports.convertWebGLRotationToTopogicalYawPitch = convertWebGLRotationToTopogica
 exports.createInterval = createInterval;
 exports.degreesFromRadians = degreesFromRadians;
 exports.degreesToRadians = degreesToRadians;
+exports.excludesFilesPaths = excludesFilesPaths;
 exports.extend = extend;
 exports.extendObject = extendObject;
 exports.fahrenheitToCelsius = fahrenheitToCelsius;
 exports.fahrenheitToKelvin = fahrenheitToKelvin;
+exports.fileExistForPath = fileExistForPath;
+exports.filterJavascriptFiles = filterJavascriptFiles;
+exports.functions = functions;
+exports.getFileForPath = getFileForPath;
 exports.getFilesPathsUnder = getFilesPathsUnder;
+exports.getFilesPathsUnder_1 = getFilesPathsUnder_1;
+exports.getPathsUnder = getPathsUnder;
 exports.getPitch = getPitch;
 exports.getRandom = getRandom;
 exports.getRandomFloatExclusive = getRandomFloatExclusive;
 exports.getRandomFloatInclusive = getRandomFloatInclusive;
 exports.getRandomIntExclusive = getRandomIntExclusive;
 exports.getRandomIntInclusive = getRandomIntInclusive;
+exports.getUncommentedFileForPath = getUncommentedFileForPath;
 exports.getYaw = getYaw;
 exports.internalRepresentationToNumber = internalRepresentationToNumber;
 exports.kelvinToCelsius = kelvinToCelsius;
 exports.kelvinToFahrenheit = kelvinToFahrenheit;
 exports.numberToInternalRepresentation = numberToInternalRepresentation;
 exports.numberToPlainString = numberToPlainString;
-exports.numberToPlainString_alt0 = numberToPlainString_alt0;
-exports.numberToPlainString_alt1 = numberToPlainString_alt1;
-exports.numberToPlainString_alt2 = numberToPlainString_alt2;
-exports.numberToPlainString_alt3 = numberToPlainString_alt3;
-exports.numberToPlainString_alt4 = numberToPlainString_alt4;
+exports.numbers = numbers;
+exports.objects = objects;
 exports.radiansFromDegrees = radiansFromDegrees;
 exports.radiansToDegrees = radiansToDegrees;
 exports.removeDiacritics = removeDiacritics;
@@ -2134,7 +2504,10 @@ exports.ringContainsSome = ringContainsSome;
 exports.segmentContains = segmentContains;
 exports.serializeObject = serializeObject;
 exports.sortBy = sortBy;
+exports.strings = strings;
 exports.toArray = toArray;
 exports.toEnum = toEnum;
+exports.typedArrays = typedArrays;
 exports.uniq = uniq;
+exports.voids = voids;
 //# sourceMappingURL=itee-utils.cjs.js.map

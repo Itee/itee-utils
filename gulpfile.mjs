@@ -1369,5 +1369,4 @@ gulp.task( 'release', gulp.series( 'clean', 'lint', 'doc', 'build-tests', 'test'
 
 //---------
 
-gulp.task( 'default', gulp.series( 'check-bundling' ) )
-// gulp.task( 'default', gulp.series( 'help' ) )
+gulp.task( 'default', gulp.series( 'help' ) )
