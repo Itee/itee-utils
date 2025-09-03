@@ -72,6 +72,8 @@ const packageInfos = JSON.parse( fs.readFileSync(
     new URL( './package.json', import.meta.url )
 ) )
 
+//---------
+
 /**
  * @method npm run help ( default )
  * @global
@@ -114,6 +116,8 @@ gulp.task( 'help', ( done ) => {
 
 } )
 
+//---------
+
 /**
  * @method npm run patch
  * @global
@@ -124,6 +128,8 @@ gulp.task( 'patch', ( done ) => {
     done()
 
 } )
+
+//---------
 
 /**
  * @method npm run clean
@@ -141,6 +147,8 @@ gulp.task( 'clean', () => {
     return deleteAsync( filesToClean )
 
 } )
+
+//---------
 
 /**
  * @method npm run lint
@@ -176,6 +184,8 @@ gulp.task( 'lint', () => {
 
 } )
 
+//---------
+
 /**
  * @method npm run doc
  * @global
@@ -197,8 +207,7 @@ gulp.task( 'doc', ( done ) => {
 
 } )
 
-
-// TESTING
+//---------
 
 /**
  * @description In view to detect bundling side effects this task will
@@ -993,49 +1002,6 @@ gulp.task( 'bundle-unit-tests', async ( done ) => {
  * @description Will compte and generate bundle for unit tests
  */
 gulp.task( 'build-unit-tests', gulp.series( 'compute-unit-tests', 'bundle-unit-tests' ) )
-/**
- * @description Will run unit tests with node
- */
-gulp.task( 'run-unit-tests-for-node', ( done ) => {
-
-    const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
-    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
-    const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
-    mocha.on( 'close', ( code ) => {
-
-        ( code === 0 )
-        ? done()
-        : done( `mocha exited with code ${ code }` )
-
-    } )
-
-} )
-/**
- * @description Will run unit tests with karma
- */
-gulp.task( 'run-unit-tests-for-browser', async ( done ) => {
-
-    const configFile  = path.normalize( `${ __dirname }/configs/karma.units.conf.js` )
-    const karmaConfig = karma.config.parseConfig( configFile )
-    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
-        if ( exitCode === 0 ) {
-            log( `Karma server exit with code ${ exitCode }` )
-            done()
-        } else {
-            done( `Karma server exit with code ${ exitCode }` )
-        }
-    } )
-    karmaServer.on( 'browser_error', ( browser, error ) => {
-        log( red( error.message ) )
-    } )
-
-    await karmaServer.start()
-
-} )
-/**
- * @description Will run unit tests in back and front environments
- */
-gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node'/*, 'run-unit-tests-for-browser'*/ ) )
 
 /**
  * @description Will generate benchmarks files from source code against provided alternatives
@@ -1242,6 +1208,60 @@ gulp.task( 'bundle-benchmarks', async ( done ) => {
  * @description Will compte and generate bundle for benchmarks
  */
 gulp.task( 'build-benchmarks', gulp.series( 'compute-benchmarks', 'bundle-benchmarks' ) )
+
+/**
+ * @method npm run build-test
+ * @global
+ * @description Will build all tests.
+ */
+gulp.task( 'build-tests', gulp.series( 'check-bundling', 'build-unit-tests', 'build-benchmarks' ) )
+
+//---------
+
+/**
+ * @description Will run unit tests with node
+ */
+gulp.task( 'run-unit-tests-for-node', ( done ) => {
+
+    const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
+    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
+    const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
+    mocha.on( 'close', ( code ) => {
+
+        ( code === 0 )
+        ? done()
+        : done( `mocha exited with code ${ code }` )
+
+    } )
+
+} )
+/**
+ * @description Will run unit tests with karma
+ */
+gulp.task( 'run-unit-tests-for-browser', async ( done ) => {
+
+    const configFile  = path.normalize( `${ __dirname }/configs/karma.units.conf.js` )
+    const karmaConfig = karma.config.parseConfig( configFile )
+    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
+        if ( exitCode === 0 ) {
+            log( `Karma server exit with code ${ exitCode }` )
+            done()
+        } else {
+            done( `Karma server exit with code ${ exitCode }` )
+        }
+    } )
+    karmaServer.on( 'browser_error', ( browser, error ) => {
+        log( red( error.message ) )
+    } )
+
+    await karmaServer.start()
+
+} )
+/**
+ * @description Will run unit tests in back and front environments
+ */
+gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node'/*, 'run-unit-tests-for-browser'*/ ) )
+
 /**
  * @description Will run benchmarks with node
  */
@@ -1286,18 +1306,13 @@ gulp.task( 'run-benchmarks-for-browser', async ( done ) => {
 gulp.task( 'run-benchmarks', gulp.series( 'run-benchmarks-for-node'/*, 'run-benchmarks-for-browser'*/ ) )
 
 /**
- * @method npm run build-test
- * @global
- * @description Will build all tests.
- */
-gulp.task( 'build-tests', gulp.series( 'check-bundling', 'build-unit-tests', 'build-benchmarks' ) )
-
-/**
  * @method npm run test
  * @global
  * @description Will run unit tests and benchmarks for node (backend) and karma (frontend) environments
  */
 gulp.task( 'test', gulp.series( 'run-unit-tests', 'run-benchmarks' ) )
+
+//---------
 
 /**
  * @method npm run build
@@ -1360,10 +1375,12 @@ gulp.task( 'build', ( done ) => {
 
 } )
 
+//---------
+
 /**
  * @method npm run release
  * @global
- * @description Will perform a complet release of the library including 'clean', 'lint', 'doc', 'build-test', 'test' and finally 'build'.
+ * @description Will perform a complet release of the library including 'clean', 'lint', 'doc', 'build-tests', 'test' and finally 'build'.
  */
 gulp.task( 'release', gulp.series( 'clean', 'lint', 'doc', 'build-tests', 'test', 'build' ) )
 
