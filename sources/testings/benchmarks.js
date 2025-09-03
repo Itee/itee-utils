@@ -202,9 +202,8 @@ const Testing = {
             //            console.log( `Bench Datamap: ${ ( ( this.benchDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
             //            console.groupEnd()
 
-            if ( ( ( method === null ) || ( typeof method === 'undefined' ) ) ) {
-                console.error( 'Method is undefined !!!' )
-                return
+            if ( typeof method === 'undefined' ) {
+                throw new ReferenceError('the method param is null or undefined!')
             }
 
             const datamap = this.benchDataMap

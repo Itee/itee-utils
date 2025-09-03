@@ -14,7 +14,7 @@ import {
 /**
  *
  * @param {string} propertyName
- * @param {string} ascending
+ * @param {ordering} ascending
  * @returns {Function}
  */
 export function sortBy ( propertyName, ascending = 'asc' ) {
@@ -56,7 +56,7 @@ export function sortBy ( propertyName, ascending = 'asc' ) {
 
     } else {
 
-        throw 'Invalid ascending !'
+        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
 
     }
 
@@ -65,7 +65,7 @@ export function sortBy ( propertyName, ascending = 'asc' ) {
 }
 
 /**
- * Will wrap the object value in a array, if is not already one, and return empty array in case
+ * Will wrap the object value in an array, if is not already one, and return empty array in case
  * where input object is null or undefined.
  * This function is build to ensure the return value will be always an array
  *
