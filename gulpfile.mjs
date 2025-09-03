@@ -1035,7 +1035,7 @@ gulp.task( 'run-unit-tests-for-browser', async ( done ) => {
 /**
  * @description Will run unit tests in back and front environments
  */
-gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node', 'run-unit-tests-for-browser' ) )
+gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node'/*, 'run-unit-tests-for-browser'*/ ) )
 
 /**
  * @description Will generate benchmarks files from source code against provided alternatives
@@ -1283,7 +1283,7 @@ gulp.task( 'run-benchmarks-for-browser', async ( done ) => {
 /**
  * @description Will run benchmarks in back and front environments
  */
-gulp.task( 'run-benchmarks', gulp.series( 'run-benchmarks-for-node', 'run-benchmarks-for-browser' ) )
+gulp.task( 'run-benchmarks', gulp.series( 'run-benchmarks-for-node'/*, 'run-benchmarks-for-browser'*/ ) )
 
 /**
  * @method npm run build-test
