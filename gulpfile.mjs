@@ -54,6 +54,7 @@ import log                         from 'fancy-log'
 import colors                      from 'ansi-colors'
 import {fileURLToPath}             from "url"
 import jsdocConfiguration          from './configs/jsdoc.conf.js'
+import rollupConfigurator          from './configs/rollup.conf.js'
 import rollupUnitTestsConfigurator from './configs/rollup.units.conf.js'
 import rollupBenchesConfigurator   from './configs/rollup.benchs.conf.js'
 
@@ -1312,8 +1313,8 @@ gulp.task( 'build', ( done ) => {
             n: 'Itee.Utils',
             i: path.join( __dirname, 'sources', `${ packageInfos.name }.js` ),
             o: path.join( __dirname, 'builds' ),
-            f: 'esm,cjs,iife',
-            e: 'dev,prod',
+            f: [ 'esm', 'cjs', 'iife' ],
+            e: [ 'dev', 'prod' ],
             s: true,
             t: true
         },
@@ -1321,14 +1322,14 @@ gulp.task( 'build', ( done ) => {
             n: 'name',
             i: 'input',
             o: 'output',
-            f: 'format',
-            e: 'env',
+            f: 'formats',
+            e: 'envs',
             s: 'sourcemap',
             t: 'treeshake'
         }
     } )
 
-    const configs = require( './configs/rollup.conf' )( options )
+    const configs = rollupConfigurator( options )
 
     nextBuild()
 
@@ -1348,7 +1349,7 @@ gulp.task( 'build', ( done ) => {
             const config = configs.pop()
             log( `Building ${ config.output.file }` )
 
-            rollup.rollup( config )
+            rollup( config )
                   .then( ( bundle ) => { return bundle.write( config.output ) } )
                   .then( () => { nextBuild() } )
                   .catch( nextBuild )

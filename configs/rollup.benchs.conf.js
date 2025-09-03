@@ -63,7 +63,7 @@ function CreateBenchmarksRollupConfigs ( /*options*/ ) {
                 tryCatchDeoptimization:           true,
                 unknownGlobalSideEffects:         false
             },
-            output:    {
+            output: {
                 indent:  '\t',
                 format:  'iife',
                 name:    'Itee.Benchmarks',

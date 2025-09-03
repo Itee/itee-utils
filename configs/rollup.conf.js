@@ -2,7 +2,7 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module Config-Rollup
+ * @module configs/Rollup
  * @description The file manage the rollup configuration for build the library using differents arguments. It allow to build with two type of environment (dev and prod), and differents output format.
  * Use npm run help to display all available build options.
  *
@@ -62,13 +62,15 @@ function _computeBanner ( name, format ) {
 function CreateRollupConfigs ( options ) {
     'use strict'
 
-    const name      = options.name
-    const input     = options.input
-    const output    = options.output
-    const formats   = options.format.split( ',' )
-    const envs      = options.env.split( ',' )
-    const treeshake = options.treeshake
-    const fileName  = path.basename( input, '.js' )
+    const {
+              name,
+              input,
+              output,
+              formats,
+              envs,
+              treeshake
+          }        = options
+    const fileName = path.basename( input, '.js' )
 
     const configs = []
 
@@ -87,7 +89,7 @@ function CreateRollupConfigs ( options ) {
                 plugins:  [
                     replace( {
                         defines: {
-                            IS_KEEP_ON_BUILD:    true,
+                            IS_KEEP_ON_BUILD:    false,
                             IS_BACKEND_SPECIFIC: ( format === 'cjs' )
                         }
                     } ),

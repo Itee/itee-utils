@@ -48,7 +48,7 @@ function CreateUnitsRollupConfigs ( /*options*/ ) {
             output:    {
                 indent:  '\t',
                 format:  'iife',
-                name:   'Itee.Units',
+                name:    'Itee.Units',
                 globals: {
                     'mocha': 'Mocha',
                     'chai':  'chai'
