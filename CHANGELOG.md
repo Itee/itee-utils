@@ -1,3 +1,22 @@
+# [5.4.0](https://github.com/Itee/itee-utils/compare/v5.3.2...v5.4.0) (2025-09-03)
+
+
+### Bug Fixes
+
+* **global:** add method inputs validation that not throw ([ca75340](https://github.com/Itee/itee-utils/commit/ca75340133bbf673cc4ab6987f3aac4bc493a930))
+* **global:** apply eslint fixes ([9d3debb](https://github.com/Itee/itee-utils/commit/9d3debbbe5fb11172a47a8e651ba57f21315469b))
+* **gulpfile:** comment unecessary file cleaning that break under node v12 ([4c57dd2](https://github.com/Itee/itee-utils/commit/4c57dd23598d35e5a0fe73e3369ae40cc7f11c55))
+* **gulpfile:** fix broken karma tests due to deprecated packages ([bde96a9](https://github.com/Itee/itee-utils/commit/bde96a9fab4f9b286c37675110357080f6726f6b))
+* **gulpfile:** fix building with latest standards ([45eb022](https://github.com/Itee/itee-utils/commit/45eb02206727f14fef48bca743329619120b9724))
+* **release:** fix npm scripts names and reordering gulp tasks ([a200684](https://github.com/Itee/itee-utils/commit/a20068487f9b7239a59c5765dd2396a36f0b4696))
+* **string:** add rollup comment to avoid bad bundling ([00c2d18](https://github.com/Itee/itee-utils/commit/00c2d18cc1c0fe17f4d3e7962598e44b25573160))
+* **temparture:** avoid throw during input validation ([564d451](https://github.com/Itee/itee-utils/commit/564d451f5fdc76bbd5de9ddebd2e4c9fa3687a55))
+
+
+### Features
+
+* **files:** add new utils methods ([417a16c](https://github.com/Itee/itee-utils/commit/417a16c683271a8cb714f15335934464030cb9bc))
+
 ## [5.3.2](https://github.com/Itee/itee-utils/compare/v5.3.1...v5.3.2) (2022-02-14)
 
 
