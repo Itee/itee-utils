@@ -37,23 +37,25 @@
 
 /* eslint-env node */
 
-import childProcess       from 'child_process'
-import {nodeResolve}      from '@rollup/plugin-node-resolve'
-import cleanup            from 'rollup-plugin-cleanup'
-import fs                 from 'fs'
-import glob               from 'glob'
-import gulp               from 'gulp'
-import jsdoc              from 'gulp-jsdoc3'
-import eslint             from 'gulp-eslint'
-import {deleteAsync}      from 'del'
-import parseArgs          from 'minimist'
-import {rollup}           from 'rollup'
-import path               from 'path'
-import karma              from 'karma'
-import log                from 'fancy-log'
-import colors             from 'ansi-colors'
-import {fileURLToPath}    from "url"
-import jsdocConfiguration from './configs/jsdoc.conf.js'
+import childProcess                from 'child_process'
+import {nodeResolve}               from '@rollup/plugin-node-resolve'
+import cleanup                     from 'rollup-plugin-cleanup'
+import fs                          from 'fs'
+import glob                        from 'glob'
+import gulp                        from 'gulp'
+import jsdoc                       from 'gulp-jsdoc3'
+import eslint                      from 'gulp-eslint'
+import {deleteAsync}               from 'del'
+import parseArgs                   from 'minimist'
+import {rollup}                    from 'rollup'
+import path                        from 'path'
+import karma                       from 'karma'
+import log                         from 'fancy-log'
+import colors                      from 'ansi-colors'
+import {fileURLToPath}             from "url"
+import jsdocConfiguration          from './configs/jsdoc.conf.js'
+import rollupUnitTestsConfigurator from './configs/rollup.units.conf.js'
+import rollupBenchesConfigurator   from './configs/rollup.benchs.conf.js'
 
 const red     = colors.red
 const green   = colors.green
@@ -420,151 +422,86 @@ gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
 gulp.task( 'check-bundling', gulp.series( 'check-bundling-side-effect', 'check-bundling-by-source-file-export' ) )
 
 /**
- *
+ * @description Will generate unit test files from source code using type inference from comments
  */
-gulp.task( 'unit-node', ( done ) => {
+gulp.task( 'compute-unit-tests', async ( done ) => {
 
-    const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
-    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
-    const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
-    mocha.on( 'close', ( code ) => {
+    const basePath   = __dirname
+    const sourcesDir = path.join( basePath, 'sources' )
+    const testsDir   = path.join( basePath, 'tests' )
+    const unitsDir   = path.join( testsDir, 'units' )
 
-        ( code === 0 )
-            ? done()
-            : done( `mocha exited with code ${ code }` )
+    const filePathsToIgnore = [
+        `${ packageInfos.name }.js`,
+        'LineFileSplitter.js',
+        'benchmarks.js',
+        'primitives.js'
+    ]
 
-    } )
-
-} )
-/**
- * @method npm run unit
- * @global
- * @description Will run unit tests using karma
- */
-gulp.task( 'unit-browser', async ( done ) => {
-
-    const karmaConfig = karma.config.parseConfig( `${ __dirname }/configs/karma.units.conf.js` )
-    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
-
-        if ( exitCode !== 0 ) {
-            done( `Karma server exit with code ${ exitCode }` )
-        } else {
-            log( `Karma server exit with code ${ exitCode }` )
-            done()
-        }
-
-    } )
-
-    karmaServer.on( 'browser_error', ( browser, error ) => {
-        log( red( error.message ) )
-    } )
-
-    await karmaServer.start()
-
-} )
-/**
- *
- */
-gulp.task( 'unit', gulp.series( 'unit-node', 'unit-browser' ) )
-
-gulp.task( 'bench-node', ( done ) => {
-
-    const benchsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.benchs.cjs.js` )
-    const benchmark  = childProcess.spawn( 'node', [ benchsPath ], { stdio: 'inherit' } )
-    benchmark.on( 'close', ( code ) => {
-
-        ( code === 0 )
-            ? done()
-            : done( `benchmark exited with code ${ code }` )
-
-    } )
-
-} )
-/**
- * @method npm run bench
- * @global
- * @description Will run benchmarks using karma
- */
-gulp.task( 'bench-browser', async ( done ) => {
-
-    const karmaConfig = karma.config.parseConfig( `${ __dirname }/configs/karma.benchs.conf.js` )
-    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
-
-        if ( exitCode !== 0 ) {
-            done( `Karma server exit with code ${ exitCode }` )
-        } else {
-            log( `Karma server exit with code ${ exitCode }` )
-            done()
-        }
-
-    } )
-
-    karmaServer.on( 'browser_error', ( browser, error ) => {
-        log( red( error ) )
-    } )
-
-    await karmaServer.start()
-
-} )
-/**
- * @method npm run bench
- * @global
- * @description Will run benchmarks using karma
- */
-gulp.task( 'bench', gulp.series( 'bench-node', 'bench-browser' ) )
-
-/**
- * @method npm run test
- * @global
- * @description Will run unit tests and benchmarks using karma
- */
-gulp.task( 'test', gulp.series( 'unit', 'bench' ) )
-
-gulp.task( 'compute-test-unit', async ( done ) => {
-
-    const fsUtils        = require( './builds/itee-utils.cjs' )
-    const sourceBasePath = path.join( __dirname, 'sources' )
-    const testBasePath   = path.join( __dirname, 'tests' )
-    const bundleBasePath = path.join( testBasePath, 'bundles', 'files' )
-    const unitBasePath   = path.join( testBasePath, 'units' )
-
-    const sourcesFilesPaths = fsUtils.getFilesPathsUnder( sourceBasePath ).filter( filePath => {
-        const fileName         = path.basename( filePath )
-        const isJsFile         = fileName.endsWith( '.js' )
-        const isNotPrivateFile = !fileName.startsWith( '_' )
-        const isNotPackageFile = !fileName.includes( packageInfos.name )
-        const isNotIgnoredFile = ![ 'LineFileSplitter.js' ].includes( fileName )
-        return isJsFile && isNotPrivateFile && isNotPackageFile && isNotIgnoredFile
-    } )
+    const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
+                             .map( filePath => path.normalize( filePath ) )
+                             .filter( filePath => {
+                                 const fileName         = path.basename( filePath )
+                                 const isJsFile         = fileName.endsWith( '.js' )
+                                 const isNotPrivateFile = !fileName.startsWith( '_' )
+                                 const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
+                                 return isJsFile && isNotPrivateFile && isNotIgnoredFile
+                             } )
 
     const unitsImportMap = []
-    for ( let sourcesFilesPath of sourcesFilesPaths ) {
+    for ( let sourceFile of sourcesFiles ) {
 
-        const specificFilePath = sourcesFilesPath.replace( sourceBasePath, '' )
-        const specificDirPath  = path.dirname( specificFilePath )
+        const specificFilePath = sourceFile.replace( sourcesDir, '' )
+        const specificDir      = path.dirname( specificFilePath )
 
-        const fileName     = path.basename( sourcesFilesPath, path.extname( sourcesFilesPath ) )
+        const fileName     = path.basename( sourceFile, path.extname( sourceFile ) )
         const unitFileName = `${ fileName }.unit.js`
-        const unitDirPath  = path.join( unitBasePath, specificDirPath )
+        const unitDirPath  = path.join( unitsDir, specificDir )
         const unitFilePath = path.join( unitDirPath, unitFileName )
 
-        const bundleFileName = `${ fileName }.bundle.js`
-        const bundleFilePath = path.join( bundleBasePath, specificDirPath, bundleFileName )
-
-        const className      = fsUtils.classNameify( fileName )
+        const nsName         = `${ fileName }Namespace`
         const unitName       = `${ fileName }Units`
-        const importDirPath  = path.relative( unitDirPath, sourceBasePath )
+        const importDirPath  = path.relative( unitDirPath, sourcesDir )
         const importFilePath = path.join( importDirPath, specificFilePath ).replace( /\\/g, '/' )
 
         try {
 
-            log( `Create [${ unitFilePath }] from [${ bundleFilePath }]` )
+            const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
+            const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
 
-            const jsdocOutput = childProcess.execFileSync( 'node', [ './node_modules/jsdoc/jsdoc.js', '-X', sourcesFilesPath ] ).toString()
-            const jsonData    = JSON.parse( jsdocOutput ).filter( data => {
-                return ( data.kind === 'function' && !data.undocumented )
-            } )
-            const Target      = require( bundleFilePath )
+            const usedLongnames = []
+            const jsonData      = JSON.parse(jsdocOutput).filter(data => {
+
+                const kind         = data.kind
+                const longName     = data.longname
+                const scope        = data.scope
+                const undocumented = data.undocumented
+
+                let isValid
+
+                if (undocumented) {
+                    isValid = false
+                } else if (kind !== 'function') {
+                    isValid = false
+                } else if (!['global', 'static'].includes(scope)) {
+                    isValid = false
+                } else if (longName.includes(' ') || longName.includes('~')) {
+                    isValid = false
+                } else if (usedLongnames.includes(longName)) {
+                    isValid = false
+                } else {
+                    usedLongnames.push(longName)
+                    isValid = true
+                }
+
+                return isValid
+
+            })
+
+            if ( jsonData.length === 0 ) {
+                log( yellow( `No usable exports found in [${ sourceFile }]. Ignore it !` ) )
+                continue
+            }
 
             let describes = ''
             const I       = n => '\t'.repeat( n )
@@ -574,14 +511,9 @@ gulp.task( 'compute-test-unit', async ( done ) => {
             I.____        = I( 4 )
             I._____       = I( 5 )
 
-            for ( let key of Object.keys( Target ) ) {
+            for ( let docData of jsonData ) {
 
                 try {
-
-                    const matchDocData = jsonData.filter( data => data.name === key )
-                    if ( matchDocData.length === 0 ) { continue }
-
-                    const docData = matchDocData[ 0 ]
 
                     //check input parameters and types
                     const docParameters = docData.params || []
@@ -591,7 +523,8 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                         let paramName = param.name
                         if ( !paramName ) {
                             paramName = `param${ pIndex }`
-                            log(yellow(`Missing parameter name for [${ docData.longname }]. Defaulting to [${ paramName }]` ))
+                            // eslint-disable-next-line no-console
+                            console.warn( `Missing parameter name for [${ docData.longname }]. Defaulting to [${ paramName }]` )
                         }
 
                         const paramType = param.type
@@ -636,11 +569,11 @@ gulp.task( 'compute-test-unit', async ( done ) => {
 
                         if ( returns.length === 0 ) {
 
-                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ className }.${ key }()` + '\n'
+                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ nsName }.${ docData.name }()` + '\n'
                             const expect = `${ I( 1 + 1 + 1 + 1 ) }expect(result).to.be.a('undefined')` + '\n'
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is undefined', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is undefined', () => {` + '\n' +
                                 '\n' +
                                 `${ result }` +
                                 `${ expect }` +
@@ -652,7 +585,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             const firstReturnType = returns[ 0 ]
                             const lowerName       = firstReturnType.toLowerCase()
 
-                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ className }.${ key }()` + '\n'
+                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ nsName }.${ docData.name }()` + '\n'
 
                             let expect = ''
                             if ( lowerName.startsWith( 'array' ) ) {
@@ -663,7 +596,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                             }
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is ${ lowerName }', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is ${ lowerName }', () => {` + '\n' +
                                 '\n' +
                                 `${ result }` +
                                 `${ expect }` +
@@ -672,7 +605,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
 
                         } else {
 
-                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ className }.${ key }()` + '\n'
+                            const result = `${ I( 1 + 1 + 1 + 1 ) }const result = ${ nsName }.${ docData.name }()` + '\n'
 
                             let returnTypesLabel = []
                             let expects          = []
@@ -709,7 +642,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 `${ closeTry }`
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is ${ returnTypesLabel.join( ' or ' ) }', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is ${ returnTypesLabel.join( ' or ' ) }', () => {` + '\n' +
                                 '\n' +
                                 `${ result }` +
                                 `${ _expect }` +
@@ -748,7 +681,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ nsName }.${ docData.name }( ${ args.join( ', ' ) } )` + '\n'
                             const expect = `${ I( localIndent ) }expect(result).to.be.a('undefined')` + '\n'
 
                             const param = '' +
@@ -759,7 +692,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 `${ forLoopCloses }`
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is undefined when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is undefined when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
                                 '\n' +
                                 `${ param }` +
                                 '\n' +
@@ -783,8 +716,8 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 const parameterType = parameter.types[ 0 ]
                                 const isAnyType     = ( parameterType === '*' || parameterType.toLowerCase() === 'any' )
                                 const declaration   = ( isAnyType )
-                                    ? `${ parameter.name } is of any type`
-                                    : `${ parameter.name } is of type ${ parameterType }`
+                                                      ? `${ parameter.name } is of any type`
+                                                      : `${ parameter.name } is of type ${ parameterType }`
                                 itDeclaration.push( declaration )
 
                                 if ( isAnyType ) {
@@ -822,7 +755,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ nsName }.${ docData.name }( ${ args.join( ', ' ) } )` + '\n'
 
                             let expect = ''
                             if ( lowerName.startsWith( 'array' ) ) {
@@ -840,7 +773,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 `${ forLoopCloses }`
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is ${ lowerName } when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is ${ lowerName } when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
                                 '\n' +
                                 `${ param }` +
                                 '\n' +
@@ -874,7 +807,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 localIndent++
                             }
 
-                            const result = `${ I( localIndent ) }const result = ${ className }.${ key }( ${ args.join( ', ' ) } )` + '\n'
+                            const result = `${ I( localIndent ) }const result = ${ nsName }.${ docData.name }( ${ args.join( ', ' ) } )` + '\n'
 
                             let returnTypesLabel = []
                             let expects          = []
@@ -916,7 +849,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                                 `${ forLoopCloses }`
 
                             its += '' +
-                                `${ I( 1 + 1 + 1 ) }it( '${ key } return type is ${ returnTypesLabel.join( ' or ' ) } when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
+                                `${ I( 1 + 1 + 1 ) }it( 'return type is ${ returnTypesLabel.join( ' or ' ) } when ${ itDeclaration.join( ' and ' ) }', () => {` + '\n' +
                                 '\n' +
                                 `${ param }` +
                                 '\n' +
@@ -927,17 +860,18 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                     }
 
                     describes += '' +
-                        `${ I.__ }describe( '${ key }', () => {` + '\n' +
+                        `${ I.__ }describe( '${ docData.name }()', () => {` + '\n' +
                         '\n' +
-                        `${ I.___ }it( '${ key } is bundlable', () => {` + '\n' +
+                        `${ I.___ }it( 'is bundlable', () => {` + '\n' +
                         '\n' +
-                        `${ I.____ }expect(${ className }.${ key }).to.exist` + '\n' +
+                        `${ I.____ }expect(${ nsName }.${ docData.name }).to.exist` + '\n' +
                         '\n' +
                         `${ I.___ }} )` + '\n' +
                         '\n' +
                         `${ its }` +
                         '\n' +
-                        `${ I.__ }} )` + '\n\n'
+                        `${ I.__ }} )` + '\n' +
+                        '\n'
 
                 } catch ( error ) {
 
@@ -950,14 +884,15 @@ gulp.task( 'compute-test-unit', async ( done ) => {
             const template = '' +
                 `import { expect }       from 'chai'` + '\n' +
                 `import { describe, it } from 'mocha'` + '\n' +
-                `import { TestsUtils }      from 'itee-utils'` + '\n' +
-                `import * as ${ className } from '${ importFilePath }'` + '\n' +
+                `import { Testing }      from '../../../sources/testings/benchmarks'` + '\n' +
+                `//import { Testing }      from 'itee-utils'` + '\n' +
+                `import * as ${ nsName } from '${ importFilePath }'` + '\n' +
                 '\n' +
                 `function ${ unitName } () {` + '\n' +
                 '\n' +
                 `${ I( 1 ) }beforeEach( () => {` + '\n' +
                 '\n' +
-                `${ I( 1 + 1 ) }this._dataMap = TestsUtils.createDataMap()` + '\n' +
+                `${ I( 1 + 1 ) }this._dataMap = Testing.createDataMap()` + '\n' +
                 '\n' +
                 `${ I( 1 ) }} )` + '\n' +
                 '\n' +
@@ -967,7 +902,7 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                 '\n' +
                 `${ I( 1 ) }} )` + '\n' +
                 '\n' +
-                `${ I( 1 ) }describe( '${ className }', () => {` + '\n' +
+                `${ I( 1 ) }describe( '${ unitName }', () => {` + '\n' +
                 '\n' +
                 `${ describes }` +
                 '' +
@@ -978,12 +913,13 @@ gulp.task( 'compute-test-unit', async ( done ) => {
                 `export { ${ unitName } }` + '\n' +
                 '\n'
 
-            const importUnitFilePath = path.relative( unitBasePath, unitFilePath )
+            const importUnitFilePath = path.relative( unitsDir, unitFilePath )
             unitsImportMap.push( {
                 exportName: unitName,
                 path:       importUnitFilePath.replace( /\\/g, '/' )
             } )
 
+            log( green( `Create ${ unitFilePath }` ) )
             fs.mkdirSync( unitDirPath, { recursive: true } )
             fs.writeFileSync( unitFilePath, template )
 
@@ -1013,215 +949,24 @@ gulp.task( 'compute-test-unit', async ( done ) => {
         '        : global ' + '\n' +
         '    : window' + '\n' +
         '\n' +
-        'describe( \'Itee#Utils\', () => {' + '\n' +
+        'describe( \'Itee#Validators\', () => {' + '\n' +
         '\n' +
         `${ computedUnitCalls }` +
         '\n' +
         '} )' + '\n'
 
-    const unitsFilePath = path.join( unitBasePath, `${ packageInfos.name }.units.js` )
+    const unitsFilePath = path.join( unitsDir, `${ packageInfos.name }.units.js` )
     fs.writeFileSync( unitsFilePath, unitsTemplate )
 
     done()
 
 } )
-gulp.task( 'compute-test-bench', async ( done ) => {
+/**
+ * @description Will generate unit test bundles based on provided configs
+ */
+gulp.task( 'bundle-unit-tests', async ( done ) => {
 
-    function isClass ( v ) {
-        return typeof v === 'function' && /^\s*class\s+/.test( v.toString() )
-    }
-
-    const fsUtils        = require( './builds/itee-utils.cjs' )
-    const sourceBasePath = path.join( __dirname, 'sources' )
-    const testBasePath   = path.join( __dirname, 'tests' )
-    const bundleBasePath = path.join( testBasePath, 'bundles', 'files' )
-    const benchBasePath  = path.join( testBasePath, 'benchmarks' )
-
-    const sourcesFilesPaths = fsUtils.getFilesPathsUnder( sourceBasePath ).filter( filePath => {
-        const fileName         = path.basename( filePath )
-        const isJsFile         = fileName.endsWith( '.js' )
-        const isNotPrivateFile = !fileName.startsWith( '_' )
-        const isNotPackageFile = !fileName.includes( packageInfos.name )
-        const isNotIgnoredFile = ![ 'LineFileSplitter.js' ].includes( fileName )
-        return isJsFile && isNotPrivateFile && isNotPackageFile && isNotIgnoredFile
-    } )
-
-    const benchRootImports = []
-    for ( let sourcesFilesPath of sourcesFilesPaths ) {
-
-        const specificFilePath = sourcesFilesPath.replace( sourceBasePath, '' )
-        const specificDirPath  = path.dirname( specificFilePath )
-
-        const fileName      = path.basename( sourcesFilesPath, path.extname( sourcesFilesPath ) )
-        const benchFileName = `${ fileName }.bench.js`
-        const benchDirPath  = path.join( benchBasePath, specificDirPath )
-        const benchFilePath = path.join( benchDirPath, benchFileName )
-
-        const bundleFileName = `${ fileName }.bundle.js`
-        const bundleFilePath = path.join( bundleBasePath, specificDirPath, bundleFileName )
-
-        const className      = fsUtils.classNameify( fileName )
-        const importDirPath  = path.relative( benchDirPath, sourceBasePath )
-        const importFilePath = path.join( importDirPath, specificFilePath ).replace( /\\/g, '/' )
-
-        try {
-
-            log( `Create [${ benchFilePath }] from [${ bundleFilePath }]` )
-            const Target = require( bundleFilePath )
-
-            const targetEntries = Object.entries( Target ).map( entry => {
-                return {
-                    key:   entry[ 0 ],
-                    value: entry[ 1 ]
-                }
-            } )
-            if ( targetEntries.length === 0 ) {
-                log( yellow( `No usable exports found in [${ bundleFilePath }]. Ignore it !` ) )
-                continue
-            }
-
-            // Compute suite groups
-            const targetKeys      = Object.keys( Target )
-            const suiteGroups     = []
-            let currentSuiteGroup = []
-            const usedIndexes     = []
-            for ( let index = 0 ; index < targetEntries.length ; index++ ) {
-                if ( usedIndexes.includes( index ) ) { continue }
-                usedIndexes.push( index )
-
-                if ( currentSuiteGroup === null ) {
-                    currentSuiteGroup = []
-                }
-
-                const entry = targetEntries[ index ]
-                currentSuiteGroup.push( entry )
-
-                const matchKeys = targetKeys.filter( key => key !== entry.key && key.startsWith( `${ entry.key }_` ) )
-                if ( matchKeys.length > 0 ) {
-
-                    for ( let matchKey of matchKeys ) {
-                        const matchIndex = targetKeys.indexOf( matchKey )
-                        usedIndexes.push( matchIndex )
-
-                        const matchEntry = targetEntries[ matchIndex ]
-                        currentSuiteGroup.push( matchEntry )
-                    }
-
-                }
-
-                suiteGroups.push( currentSuiteGroup )
-                currentSuiteGroup = null
-            }
-
-            // Generate suites
-            const suitesToExports = []
-            let benchSuites       = ''
-            for ( let suiteGroup of suiteGroups ) {
-
-                let firstInGroup = true
-                for ( let suiteGroupElement of suiteGroup ) {
-
-                    const key   = suiteGroupElement.key
-                    const value = suiteGroupElement.value
-
-                    if ( firstInGroup ) {
-                        firstInGroup = false
-
-                        const typeOfValue = typeof ( value )
-                        if ( typeOfValue !== 'function' ) {
-                            log( yellow( `Unable to generate benchmark for [${ key }] of type [${ typeOfValue }]` ) )
-                            break
-                        } else if ( isClass( value ) ) {
-                            log( yellow( `Unable to generate benchmark for class [${ key }]` ) )
-                            break
-                        }
-
-                        suitesToExports.push( `${ key }Suite` )
-
-                        benchSuites += '' +
-                            `const ${ key }Suite = Benchmark.Suite( '${ className }.${ key }', TestsUtils.createSuiteOptions() )` + '\n'
-
-                    }
-
-                    benchSuites += `                                     .add( '${ key }()', TestsUtils.iterateOverDataMap( ${ className }.${ key } ), TestsUtils.createBenchmarkOptions() )` + '\n'
-                }
-
-                //                benchSuites += '\n'
-
-            }
-
-            // In case nothing was genereated just ignore file
-            if ( benchSuites.length === 0 ) {
-                log( yellow( `Nothing was generated for current file. Skip it !` ) )
-                continue
-            }
-
-            const template = '' + '\n' +
-                `import Benchmark      from 'benchmark'` + '\n' +
-                `import { TestsUtils } from '${ path.join( importDirPath, 'testings', 'benchmarks' ).replace( /\\/g, '/' ) }'` + '\n' +
-                `import * as ${ className } from '${ importFilePath }'` + '\n' +
-                '\n' +
-                `${ benchSuites }` +
-                '\n' +
-                `export { ${ suitesToExports } }` + '\n' +
-                '\n'
-
-            const importBenchFilePath = path.relative( benchBasePath, benchFilePath ).replace( /\\/g, '/' )
-            benchRootImports.push( importBenchFilePath )
-
-            fs.mkdirSync( benchDirPath, { recursive: true } )
-            fs.writeFileSync( benchFilePath, template )
-
-        } catch ( error ) {
-
-            log( red( error ) )
-
-        }
-
-    }
-
-    /*
-     // #if IS_FRONTEND_SPECIFIC
-     import './cores/_cores.benchs'
-     //import './maths/_maths.benchs'
-     //import './physics/_physics.benchs'
-     // #endif
-
-     // #if IS_BACKEND_SPECIFIC
-     import * as benchmarks from './_benchmarks.benchs'
-
-     for (const benchmark of Object.values(benchmarks)) {
-     benchmark.run()
-     }
-     // #endif
-     */
-
-    //    let benchsTemplate = ''
-    //    for ( let benchRootImport of benchRootImports ) {
-    //        benchsTemplate += `import './${benchRootImport}'` + '\n'
-    //    }
-
-    let benchsTemplate  = ''
-    let templateImports = ''
-    let templateLoops   = ''
-    for ( let i = 0 ; i < benchRootImports.length ; i++ ) {
-        templateImports += `import * as import_${ i } from './${ benchRootImports[ i ] }'` + '\n'
-        templateLoops += '' +
-            `for (const benchmark of Object.values(import_${ i })) {` + '\n' +
-            `   benchmark.run()` + '\n' +
-            `}` + '\n'
-    }
-    benchsTemplate += `${ templateImports }\n${ templateLoops }`
-
-    const benchsFilePath = path.join( benchBasePath, `${ packageInfos.name }.benchs.js` )
-    fs.writeFileSync( benchsFilePath, benchsTemplate )
-
-    done()
-
-} )
-gulp.task( 'bundle-tests', async ( done ) => {
-
-    const configs = require( './configs/rollup.test.conf' )()
+    const configs = rollupUnitTestsConfigurator()
 
     for ( let config of configs ) {
 
@@ -1244,11 +989,314 @@ gulp.task( 'bundle-tests', async ( done ) => {
 
 } )
 /**
+ * @description Will compte and generate bundle for unit tests
+ */
+gulp.task( 'build-unit-tests', gulp.series( 'compute-unit-tests', 'bundle-unit-tests' ) )
+/**
+ * @description Will run unit tests with node
+ */
+gulp.task( 'run-unit-tests-for-node', ( done ) => {
+
+    const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
+    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
+    const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
+    mocha.on( 'close', ( code ) => {
+
+        ( code === 0 )
+        ? done()
+        : done( `mocha exited with code ${ code }` )
+
+    } )
+
+} )
+/**
+ * @description Will run unit tests with karma
+ */
+gulp.task( 'run-unit-tests-for-browser', async ( done ) => {
+
+    const configFile  = path.normalize( `${ __dirname }/configs/karma.units.conf.js` )
+    const karmaConfig = karma.config.parseConfig( configFile )
+    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
+        if ( exitCode === 0 ) {
+            log( `Karma server exit with code ${ exitCode }` )
+            done()
+        } else {
+            done( `Karma server exit with code ${ exitCode }` )
+        }
+    } )
+    karmaServer.on( 'browser_error', ( browser, error ) => {
+        log( red( error.message ) )
+    } )
+
+    await karmaServer.start()
+
+} )
+/**
+ * @description Will run unit tests in back and front environments
+ */
+gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node', 'run-unit-tests-for-browser' ) )
+
+/**
+ * @description Will generate benchmarks files from source code against provided alternatives
+ */
+gulp.task( 'compute-benchmarks', async ( done ) => {
+
+    const basePath   = __dirname
+    const sourcesDir = path.join( basePath, 'sources' )
+    const testsDir   = path.join( basePath, 'tests' )
+    const benchsDir  = path.join( testsDir, 'benchmarks' )
+
+    const filePathsToIgnore = [
+        `${ packageInfos.name }.js`,
+        'LineFileSplitter.js',
+        'benchmarks.js',
+        'primitives.js'
+    ]
+
+    const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
+                             .map( filePath => path.normalize( filePath ) )
+                             .filter( filePath => {
+                                 const fileName         = path.basename( filePath )
+                                 const isJsFile         = fileName.endsWith( '.js' )
+                                 const isNotPrivateFile = !fileName.startsWith( '_' )
+                                 const isNotIgnoredFile = !filePathsToIgnore.includes( fileName )
+                                 return isJsFile && isNotPrivateFile && isNotIgnoredFile
+                             } )
+
+    const benchRootImports = []
+    for ( let sourceFile of sourcesFiles ) {
+
+        const specificFilePath = sourceFile.replace( sourcesDir, '' )
+        const specificDir  = path.dirname( specificFilePath )
+
+        const fileName      = path.basename( sourceFile, path.extname( sourceFile ) )
+        const benchFileName = `${ fileName }.bench.js`
+        const benchDirPath  = path.join( benchsDir, specificDir )
+        const benchFilePath = path.join( benchDirPath, benchFileName )
+
+        const nsName         = `${ fileName }Namespace`
+        const importDirPath  = path.relative( benchDirPath, sourcesDir )
+        const importFilePath = path.join( importDirPath, specificFilePath ).replace( /\\/g, '/' )
+
+        try {
+
+            const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
+            const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
+
+            const usedLongnames = []
+            const jsonData      = JSON.parse(jsdocOutput).filter(data => {
+
+                const kind     = data.kind
+                const longName = data.longname
+                const scope    = data.scope
+
+                let isValid
+
+                if (kind !== 'function') {
+                    isValid = false
+                } else if (!['global', 'static'].includes(scope)) {
+                    isValid = false
+                } else if (longName.includes(' ') || longName.includes('~')) {
+                    isValid = false
+                } else if (usedLongnames.includes(longName)) {
+                    isValid = false
+                } else {
+                    usedLongnames.push(longName)
+                    isValid = true
+                }
+
+                return isValid
+
+            })
+
+            if ( jsonData.length === 0 ) {
+                log( yellow( `No usable exports found in [${ sourceFile }]. Ignore it !` ) )
+                continue
+            }
+
+            // Compute benchmark suites by grouping logically function by name[_x]
+            const suiteGroups     = {}
+            for ( let docData of jsonData ) {
+
+                try {
+
+                    const functionName = docData.name
+                    const nameSplits = functionName.split('_')
+                    const rootName = nameSplits[0]
+
+                    if(!(rootName in suiteGroups)) {
+                        suiteGroups[rootName] = []
+                    }
+
+                    suiteGroups[rootName].push(functionName)
+
+                } catch ( error ) {
+
+                    log( red( error.message ) )
+
+                }
+
+            }
+
+            // Generate suites
+            let benchSuites       = ''
+            const suitesToExports = []
+            for( let suiteGroupName in suiteGroups) {
+                suitesToExports.push( `${ suiteGroupName }Suite` )
+                benchSuites += `const ${ suiteGroupName }Suite = Benchmark.Suite( '${ nsName }.${ suiteGroupName }', Testing.createSuiteOptions() )` + '\n'
+
+                for( let suiteGroupValue of suiteGroups[suiteGroupName]) {
+                    benchSuites += `                                     .add( '${ suiteGroupValue }()', Testing.iterateOverDataMap( ${ nsName }.${ suiteGroupValue } ), Testing.createBenchmarkOptions() )` + '\n'
+                }
+
+                benchSuites += '\n'
+            }
+
+            const template = '' + '\n' +
+                `import Benchmark   from 'benchmark'` + '\n' +
+                `//import { Testing } from 'itee-utils'` + '\n' +
+                `import { Testing }      from '../../../sources/testings/benchmarks'` + '\n' +
+                `import * as ${ nsName } from '${ importFilePath }'` + '\n' +
+                '\n' +
+                `${ benchSuites }` +
+                // '\n' +
+                `export { ${ suitesToExports } }` + '\n' +
+                '\n'
+
+            const importBenchFilePath = path.relative( benchsDir, benchFilePath ).replace( /\\/g, '/' )
+            benchRootImports.push( {
+                path:    importBenchFilePath,
+                exports: suitesToExports
+            } )
+
+            log( green( `Create ${ benchFilePath }` ) )
+            fs.mkdirSync( benchDirPath, { recursive: true } )
+            fs.writeFileSync( benchFilePath, template )
+
+        } catch ( error ) {
+
+            log( red( error.message ) )
+
+        }
+
+    }
+
+    let templateImports = ''
+    let suites          = []
+    for ( let i = 0 ; i < benchRootImports.length ; i++ ) {
+
+        const currentBench = benchRootImports[ i ]
+        const exports      = currentBench.exports
+        const imports      = exports.join( ', ' )
+        suites.push( ...exports )
+
+        templateImports += `import {${ imports }} from './${ currentBench.path }'` + '\n'
+
+    }
+
+    const benchsTemplate = '' +
+        `${ templateImports }` + '\n' +
+        'const suites = [' + '\n' +
+        `${ suites.map( suite => `\t${ suite }` ).join( ',\n' ) }` + '\n' +
+        ']' + '\n' +
+        '\n' +
+        `for ( const suite of suites ) {` + '\n' +
+        `\tsuite.run()` + '\n' +
+        `}` + '\n'
+
+    const benchsFilePath = path.join( benchsDir, `${ packageInfos.name }.benchs.js` )
+    fs.writeFileSync( benchsFilePath, benchsTemplate )
+
+    done()
+
+} )
+/**
+ * @description Will generate benchmarks bundles based on provided configs
+ */
+gulp.task( 'bundle-benchmarks', async ( done ) => {
+
+    const configs = rollupBenchesConfigurator()
+
+    for ( let config of configs ) {
+
+        log( `Building ${ config.output.file }` )
+
+        try {
+
+            const bundle = await rollup( config )
+            await bundle.write( config.output )
+
+        } catch ( error ) {
+
+            log( red( error ) )
+
+        }
+
+    }
+
+    done()
+
+} )
+/**
+ * @description Will compte and generate bundle for benchmarks
+ */
+gulp.task( 'build-benchmarks', gulp.series( 'compute-benchmarks', 'bundle-benchmarks' ) )
+/**
+ * @description Will run benchmarks with node
+ */
+gulp.task( 'run-benchmarks-for-node', ( done ) => {
+
+    const benchsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.benchs.cjs.js` )
+    const benchmark  = childProcess.spawn( 'node', [ benchsPath ], { stdio: 'inherit' } )
+    benchmark.on( 'close', ( code ) => {
+
+        ( code === 0 )
+        ? done()
+        : done( `benchmark exited with code ${ code }` )
+
+    } )
+
+} )
+/**
+ * @description Will run benchmarks with karma
+ */
+gulp.task( 'run-benchmarks-for-browser', async ( done ) => {
+
+    const configFile  = path.normalize( `${ __dirname }/configs/karma.benchs.conf.js` )
+    const karmaConfig = karma.config.parseConfig( configFile )
+    const karmaServer = new karma.Server( karmaConfig, ( exitCode ) => {
+        if ( exitCode === 0 ) {
+            log( `Karma server exit with code ${ exitCode }` )
+            done()
+        } else {
+            done( `Karma server exit with code ${ exitCode }` )
+        }
+    } )
+    karmaServer.on( 'browser_error', ( browser, error ) => {
+        log( red( error.message ) )
+    } )
+
+    await karmaServer.start()
+
+} )
+/**
+ * @description Will run benchmarks in back and front environments
+ */
+gulp.task( 'run-benchmarks', gulp.series( 'run-benchmarks-for-node', 'run-benchmarks-for-browser' ) )
+
+/**
  * @method npm run build-test
  * @global
- * @description Will build itee client tests.
+ * @description Will build all tests.
  */
-gulp.task( 'build-tests', gulp.series( 'compute-test-unit', 'compute-test-bench', 'bundle-tests' ) )
+gulp.task( 'build-tests', gulp.series( 'check-bundling', 'build-unit-tests', 'build-benchmarks' ) )
+
+/**
+ * @method npm run test
+ * @global
+ * @description Will run unit tests and benchmarks for node (backend) and karma (frontend) environments
+ */
+gulp.task( 'test', gulp.series( 'run-unit-tests', 'run-benchmarks' ) )
 
 /**
  * @method npm run build
