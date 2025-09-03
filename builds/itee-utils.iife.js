@@ -14,6 +14,12 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *
 	 */
 
+	/**
+	 *
+	 * @param {string} propertyName
+	 * @param {ordering} ascending
+	 * @returns {Function}
+	 */
 	function sortBy ( propertyName, ascending = 'asc' ) {
 
 	    const _propertyName = propertyName;
@@ -53,7 +59,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	    } else {
 
-	        throw 'Invalid ascending !'
+	        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
 
 	    }
 
@@ -62,7 +68,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	}
 
 	/**
-	 * Will wrap the object value in a array, if is not already one, and return empty array in case
+	 * Will wrap the object value in an array, if is not already one, and return empty array in case
 	 * where input object is null or undefined.
 	 * This function is build to ensure the return value will be always an array
 	 *
@@ -117,6 +123,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	}
 
 	function bitsToByte ( bits ) {
+	    if ( iteeValidators.isNotString( bits ) ) { return }
 
 	    let byte = 0;
 
@@ -132,6 +139,11 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
+	/**
+	 *
+	 * @param {number} number - The number to convert in this internal representation
+	 * @returns {string}
+	 */
 	function numberToInternalRepresentation ( number ) {
 
 	    //    let buffer  = new Float64Array( [ number ] ).buffer
@@ -151,9 +163,16 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	function internalRepresentationToNumber ( string ) {
 
-	    const bytes = string.replace( / /g, '' )
-	                        .match( /.{8}/g )
-	                        .map( subString => bitsToByte( subString ) );
+	    if ( iteeValidators.isNotDefined( string ) ) { return }
+	    if ( iteeValidators.isNotString( string ) ) { return }
+	    //    if ( isNotDefined( string ) ) { throw ReferenceError( 'string cannot be null or empty !' )}
+
+	    const cleanString = string.replace( / /g, '' );
+	    const matchs      = cleanString.match( /.{8}/g ); // multiple of eight
+	    if ( iteeValidators.isNull( matchs ) ) { return }
+
+	    const bytes = matchs.map( subString => bitsToByte( subString ) );
+	    if ( iteeValidators.isArrayOfUndefined( bytes ) ) { return }
 
 	    let arrayBuffer = new ArrayBuffer( 8 );
 	    let dataView    = new DataView( arrayBuffer );
@@ -180,6 +199,10 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 * Returns a random number between min (inclusive) and max (exclusive)
+	 *
+	 * @param {number} min
+	 * @param {number} max
+	 * @returns {number}
 	 */
 	function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
 	    return Math.random() * ( max - min ) + min
@@ -187,6 +210,10 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 * Returns a random number between min (inclusive) and max (exclusive)
+	 *
+	 * @param {number} min
+	 * @param {number} max
+	 * @returns {number}
 	 */
 	function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
 	    return Math.random() * ( max - min + 1.0 ) + min
@@ -195,6 +222,10 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	/**
 	 * Returns a random integer between min (inclusive) and max (exclusive)
 	 * Using Math.round() will give you a non-uniform distribution!
+	 *
+	 * @param {number} min
+	 * @param {number} max
+	 * @returns {number}
 	 */
 	function getRandomIntExclusive ( min = 0, max = 1 ) {
 	    const _min = Math.ceil( min );
@@ -205,6 +236,10 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	/**
 	 * Returns a random integer between min (inclusive) and max (inclusive)
 	 * Using Math.round() will give you a non-uniform distribution!
+	 *
+	 * @param {number} min
+	 * @param {number} max
+	 * @returns {number}
 	 */
 	function getRandomIntInclusive ( min = 0, max = 1 ) {
 	    const _min = Math.ceil( min );
@@ -215,7 +250,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 * Convert a number to its literral form
-	 * @param value
+	 *
+	 * @param {number} value
 	 * @returns {string}
 	 */
 	function numberToPlainString ( value ) {
@@ -253,169 +289,6 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
-	// #if IS_KEEP_ON_BUILD
-
-	function numberToPlainString_alt0 ( value ) {
-
-	    const stringValue = String( value );
-	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-	    const exponentialSplits   = stringValue.split( 'e' );
-	    const dirtyBase           = exponentialSplits[ 0 ];
-	    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
-	    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-	    const dotBaseSplits       = unsignedBase.split( '.' );
-	    const numberOfSignificant = dotBaseSplits[ 0 ].length;
-	    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
-	    const base                = dotBaseSplits.join( '' );
-	    const dirtyExponent       = exponentialSplits[ 1 ];
-	    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
-	    const exponent            = dirtyExponent.slice( 1 );
-
-	    let result = ( negativeBase ) ? '-' : '';
-	    if ( negativeExponant ) {
-
-	        result += '0.';
-	        for ( let i = 0, e = parseInt( exponent ) - numberOfSignificant ; i < e ; i++ ) {
-	            result += '0';
-	        }
-	        result += base;
-
-	    } else {
-	        result += base;
-	        for ( let i = 0, e = parseInt( exponent ) - numberOfDecimals ; i < e ; i++ ) {
-	            result += '0';
-	        }
-	        result += '.0';
-	    }
-
-	    return result
-
-	}
-
-	function numberToPlainString_alt1 ( value ) {
-
-	    const stringValue = String( value );
-	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-	    const exponentialSplits = stringValue.split( 'e' );
-	    const dirtyBase         = exponentialSplits[ 0 ];
-	    const negativeBase      = ( dirtyBase.indexOf( '-' ) === 0 );
-	    const unsignedBase      = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-	    const base              = unsignedBase.split( '.' ).join( '' );
-	    const dirtyExponent     = exponentialSplits[ 1 ];
-	    const negativeExponant  = ( dirtyExponent.indexOf( '-' ) === 0 );
-	    const exponent          = dirtyExponent.slice( 1 );
-	    const exponentLength    = parseInt( exponent ) + 1;
-
-	    let result = '';
-	    if ( negativeExponant ) {
-	        result += '0.';
-	        result = result.padEnd( exponentLength, '0' );
-	        result += base;
-	    } else {
-	        result += base;
-	        result = result.padEnd( exponentLength, '0' );
-	        result += '.0';
-	    }
-
-	    if ( negativeBase ) {
-	        result = `-${ result }`;
-	    }
-
-	    return result
-
-	}
-
-	function numberToPlainString_alt2 ( value ) {
-
-	    const stringValue = String( value );
-	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
-
-
-	    const exponentialSplits   = stringValue.split( 'e' );
-	    const dirtyBase           = exponentialSplits[ 0 ];
-	    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 );
-	    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase;
-	    const dotBaseSplits       = unsignedBase.split( '.' );
-	    const numberOfSignificant = dotBaseSplits[ 0 ].length;
-	    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0;
-	    const base                = dotBaseSplits.join( '' );
-	    const dirtyExponent       = exponentialSplits[ 1 ];
-	    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 );
-	    const exponent            = dirtyExponent.slice( 1 );
-	    const exponentLength      = parseInt( exponent ) + 1;
-	    const sign                = ( negativeBase ) ? '-' : '';
-
-	    let result = '';
-	    if ( negativeExponant ) {
-	        result = `${ sign }0.${ Array( exponentLength - numberOfSignificant ).join( 0 ) }${ base }`;
-	    } else {
-	        result = `${ sign + base + Array( exponentLength - numberOfDecimals ).join( 0 ) }.0`;
-	    }
-
-	    return result
-
-	}
-
-	function numberToPlainString_alt3 ( value ) {
-
-	    return String( value ).replace( /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
-	        ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
-
-	            const exponentLength = parseInt( exponent );
-	            if ( exponentSign === '-' ) {
-	                return `${ sign }0.${ '0'.repeat( exponentLength - significants.length ) }${ significants }${ decimals }`
-	                //                return sign + '0.' + Array( exponentLength - significants.length + 1 ).join( 0 ) + significants + decimals
-	            } else {
-	                return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
-	                //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
-	            }
-	        } )
-
-	}
-
-	function numberToPlainString_alt4 ( num ) {
-	    const nsign = Math.sign( num );
-	    //remove the sign
-	    let _num    = Math.abs( num );
-	    //if the number is in scientific notation remove it
-	    if ( /\d+\.?\d*e[-+]*\d+/i.test( _num ) ) {
-
-	        const zero        = '0';
-	        const parts       = String( _num ).toLowerCase().split( 'e' ); //split into coeff and exponent
-	        const e           = parseInt( parts.pop() ); //store the exponential part
-	        let l             = Math.abs( e ); //get the number of zeros
-	        const sign        = e / l;
-	        const coeff_array = parts[ 0 ].split( '.' );
-
-	        if ( sign === -1 ) {
-	            l -= coeff_array[ 0 ].length;
-	            if ( l < 0 ) {
-	                _num = `${ coeff_array[ 0 ].slice( 0, l ) }.${ coeff_array[ 0 ].slice( l ) }${ coeff_array.length === 2 ? coeff_array[ 1 ] : '' }`;
-	            } else {
-	                _num = `${ zero }.${ new Array( l + 1 ).join( zero ) }${ coeff_array.join( '' ) }`;
-	            }
-	        } else {
-	            const dec = coeff_array[ 1 ];
-	            if ( dec ) {
-	                l -= dec.length;
-	            }
-	            if ( l < 0 ) {
-	                _num = `${ coeff_array[ 0 ] + dec.slice( 0, l ) }.${ dec.slice( l ) }`;
-	            } else {
-	                _num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero );
-	            }
-	        }
-	    }
-
-	    return nsign < 0 ? `-${ _num }` : _num
-	}
-
-	// #endif
-
 	/**
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -424,7 +297,13 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @description Export the utilities methods about objects
 	 */
 
+	/**
+	 *
+	 * @param {array.<*>} a
+	 * @returns {array.<*>}
+	 */
 	function uniq ( a ) {
+	    if ( iteeValidators.isNotArray( a ) ) { return }
 
 	    const seen = {};
 	    return a.filter( item => Object.prototype.hasOwnProperty.call( seen, item ) ? false : ( seen[ item ] = true ) )
@@ -433,13 +312,13 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 *
-	 * @param target
-	 * @param source
-	 * @return {*}
+	 * @param {object} target
+	 * @param {object} source
+	 * @return {object}
 	 */
 	function extend ( target, source ) {
 
-	    let output = undefined;
+	    let output;
 
 	    if ( iteeValidators.isObject( target ) && iteeValidators.isNotDefined( source ) ) {
 
@@ -514,11 +393,13 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 *
-	 * @param ChildClass
-	 * @param ParentClassOrObject
+	 * @param {class} ChildClass
+	 * @param {class} ParentClassOrObject
 	 * @return {*}
 	 */
 	function extendObject ( ChildClass, ParentClassOrObject ) {
+	    if ( iteeValidators.isUndefined( ChildClass ) ) { return }
+	    if ( iteeValidators.isUndefined( ParentClassOrObject ) ) { return }
 
 	    if ( ChildClass.constructor === Function && ParentClassOrObject.constructor === Function ) {
 
@@ -580,18 +461,21 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 *
-	 * @param particles
-	 * @param path
-	 * @param interval
+	 * @param {cloudpoint} particles
+	 * @param {3dpath} path
+	 * @param {number} interval
 	 */
 	function createInterval ( particles, path, interval ) {
+	    if ( !particles ) {return}
+	    if ( !path ) {return}
+	    if ( !interval ) {return}
 
-	    var globalOffset = 0;
+	    let globalOffset = 0;
 
-	    setInterval( function () {
+	    function moveParticlesOnPath() {
 
-	        var moveOffset             = 0.1;
-	        var DELTA_BETWEEN_PARTICLE = 1; // meter
+	        const moveOffset             = 0.1;
+	        const DELTA_BETWEEN_PARTICLE = 1; // meter
 
 	        if ( globalOffset >= DELTA_BETWEEN_PARTICLE ) {
 	            globalOffset = 0;
@@ -601,13 +485,13 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            globalOffset += moveOffset;
 	        }
 
-	        var pathLength       = path.getLength();
-	        var localOffset      = globalOffset;
-	        var normalizedOffset = undefined;
-	        var particle         = undefined;
-	        var newPosition      = undefined;
+	        const pathLength     = path.getLength();
+	        let localOffset      = globalOffset;
+	        let normalizedOffset = undefined;
+	        let particle         = undefined;
+	        let newPosition      = undefined;
 
-	        for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
+	        for ( let i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
 	            particle         = particles.children[ i ];
 	            normalizedOffset = localOffset / pathLength;
@@ -626,16 +510,20 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	        }
 
-	    }, interval );
+	    }
+
+	    setInterval( moveParticlesOnPath, interval );
 
 	}
 
 	/**
 	 *
-	 * @param enumValues
+	 * @param {array} enumValues
 	 * @method toString - return a string representation of the enum
 	 * @method includes - check if given value is one of the enum
-	 * @method types - return an array containing all enum types
+	 * @method keys - return an array containing all enum keys
+	 * @method values - return an array containing all enum values
+	 * @method entries - return an array containing all enum entries (key -> value)
 	 *
 	 * @example {@lang javascript}
 	 * const Meal = toEnum( {
@@ -644,13 +532,13 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *     Dessert: 'Mousse au chocolat'
 	 * } )
 	 *
-	 * if( Foo.includes('Tartiflette') {
+	 * if( Foo.includes('Tartiflette') ) {
 	 *     // Happy
 	 * }
 	 *
 	 * const myDrink = 'coke'
 	 * if( myDrink === Meal.Drink ) {
-	 *
+	 *     // Cheers
 	 * } else {
 	 *     // Your life is a pain
 	 * }
@@ -659,18 +547,25 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
 	 */
 	function toEnum ( enumValues ) {
+	    if ( iteeValidators.isNotObject( enumValues ) ) { return }
+	    if ( iteeValidators.isDefined( enumValues.toString ) ) {
+	        const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' );
+	        if ( iteeValidators.isDefined( descriptor ) && descriptor.configurable === false ) {
+	            return
+	        }
+	    }
 
 	    return /*#__PURE__*/Object.freeze( /*#__PURE__*/Object.defineProperties( enumValues, {
 	        toString: {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value:        function _toString () {
+	            value () {
 
 	                const keys = Object.keys( this );
 	                let result = '';
 	                for ( let index = 0, numberOfValues = keys.length ; index < numberOfValues ; index++ ) {
-	                    result += `${keys[ index ]}, `;
+	                    result += `${ keys[ index ] }, `;
 	                }
 	                result = result.slice( 0, -2 );
 	                return result
@@ -681,16 +576,32 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value:        function _includes ( key ) {
+	            value ( key ) {
 	                return Object.values( this ).includes( key )
 	            }
 	        },
-	        types: {
+	        keys: {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value:        function _types () {
+	            value () {
 	                return Object.keys( this )
+	            }
+	        },
+	        values: {
+	            configurable: false,
+	            enumerable:   false,
+	            writable:     false,
+	            value () {
+	                return Object.values( this )
+	            }
+	        },
+	        entries: {
+	            configurable: false,
+	            enumerable:   false,
+	            writable:     false,
+	            value () {
+	                return Object.entries( this )
 	            }
 	        }
 	    } ) )
@@ -708,10 +619,15 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	/**
 	 * Set the first char to upper case like a classname
-	 * @param word
-	 * @returns {string}
+	 * @param {String} word
+	 * @returns {String}
+	 * @throws {TypeError} - If 'word' is not a string
+	 * @throws {TypeError} - If 'word' is an empty string
 	 */
 	function classNameify ( word ) {
+	    if(iteeValidators.isNotString(word)) { return }
+	    if(iteeValidators.isEmptyString(word)) { return }
+
 	    return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 	}
 
@@ -720,7 +636,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @public
 	 * @memberOf TApplication
 	 */
-	const diacriticsMap = ( () => {
+	const diacriticsMap = /*#__PURE__*/( () => {
 
 	    /*
 	     Licensed under the Apache License, Version 2.0 (the "License");
@@ -1103,13 +1019,15 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	} )();
 
 	/**
+	 *
 	 * @static
 	 * @public
 	 * @memberOf TApplication
-	 *
-	 * @param string
+	 * @param {string} string
+	 * @returns {null|string}
 	 */
 	function removeDiacritics ( string ) {
+	    if(iteeValidators.isNotString(string)) { return null }
 
 	    // eslint-disable-next-line
 	    return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
@@ -1173,6 +1091,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {number}
 	 */
 	function getYaw ( vector ) {
+	    if(iteeValidators.isNotDefined(vector)) { return }
+	    if(iteeValidators.isNotObject(vector)) { return }
+
 	    return -Math.atan2( vector.x, vector.z )
 	}
 
@@ -1182,6 +1103,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {number}
 	 */
 	function getPitch ( vector ) {
+	    if(iteeValidators.isNotDefined(vector)) { return }
+	    if(iteeValidators.isNotObject(vector)) { return }
+
 	    return Math.asin( vector.y )
 	}
 
@@ -1191,6 +1115,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {{yaw: number, pitch: number}}
 	 */
 	function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
+	    if(iteeValidators.isNotDefined(vectorDir)) { return }
+	    if(iteeValidators.isNotObject(vectorDir)) { return }
 
 	    function getYaw ( vector ) {
 	        return Math.atan2( vector.y, vector.x )
@@ -1384,6 +1310,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {boolean}
 	 */
 	function ringClockwise ( ring ) {
+	    if ( iteeValidators.isNotArray( ring ) ) { return }
 
 	    if ( ( n = ring.length ) < 4 ) {
 	        return false
@@ -1405,6 +1332,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {boolean}
 	 */
 	function ringContainsSome ( ring, hole ) {
+	    if ( iteeValidators.isNotArray( ring ) ) { return }
+	    if ( iteeValidators.isNotArray( hole ) ) { return }
 
 	    let i = 0;
 	    let n = hole.length;
@@ -1428,6 +1357,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {number}
 	 */
 	function ringContains ( ring, point ) {
+	    if ( iteeValidators.isNotArray( ring ) ) { return }
+	    if ( iteeValidators.isNotArray( point ) ) { return }
 
 	    let x        = point[ 0 ];
 	    let y        = point[ 1 ];
@@ -1462,6 +1393,10 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @return {boolean}
 	 */
 	function segmentContains ( p0, p1, p2 ) {
+	    if ( iteeValidators.isNotArray( p0 ) ) { return }
+	    if ( iteeValidators.isNotArray( p1 ) ) { return }
+	    if ( iteeValidators.isNotArray( p2 ) ) { return }
+
 	    var x20 = p2[ 0 ] - p0[ 0 ],
 	        y20 = p2[ 1 ] - p0[ 1 ];
 	    if ( x20 === 0 && y20 === 0 ) {
@@ -1498,7 +1433,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function celsiusToKelvin ( celsius, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+	    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
+	//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1517,7 +1453,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+	    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
+	//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1536,7 +1473,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
+	//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1555,7 +1493,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
+	//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1574,7 +1513,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+	    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
+	//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1593,7 +1533,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
 
 	    //Check if required parameter is valid
-	    if ( iteeValidators.isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+	    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
+	//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
 
 	    //Check optional parameter precisionPointAt and set it to 2 by default
 	    const _precisionPointAt = ( iteeValidators.isNotEmpty( precisionPointAt ) && iteeValidators.isNumber( precisionPointAt ) ? precisionPointAt : 2 );
@@ -1606,12 +1547,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	/**
 	 * @author [Tristan Valcke]{@link https://github.com/Itee}
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
-	 *
-	 * @module sources/testing
-	 *
 	 */
 
-	/* global Itee */
 
 	const voids = {
 	    null:      null,
@@ -1635,13 +1572,15 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    negativeFloat:           -1.01,
 	    negativeInt:             -1,
 	    negativeZero:            -0,
-	    nan:                     Number.NaN,
+	    negativeNan:             -Number.NaN,
+	    positiveNan:             Number.NaN,
 	    positiveZero:            0,
 	    positiveInt:             1,
 	    positiveFloat:           1.01,
 	    positivePowWithDecimals: 1.2345e+2,
 	    positivePow:             2e+2,
 	    positiveHexa:            0x123456,
+	    epsilon:                 Number.EPSILON,
 	    positiveMinValue:        Number.MIN_VALUE,
 	    positiveMaxSafeInteger:  Number.MAX_SAFE_INTEGER,
 	    positiveMaxValue:        Number.MAX_VALUE,
@@ -1657,7 +1596,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    sqrt2:                   Math.SQRT2
 	};
 
-	const strings = ( () => {
+	const strings = /*#__PURE__*/( () => {
 
 	    const dataMap = {
 	        empty:       '',
@@ -1665,25 +1604,27 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	        stringNull:  String(),
 	        stringEmpty: String( '' ),
 	        stringBlank: String( '    ' ),
-	        foobar:      'foobar'
+	        foobar:      'foobar',
+	        stringHexa:  '#123456',
+	        stringOcta:  '00101010'
 	    };
 
 	    // Convert voids to string
 	    const voidDataMap = voids;
 	    for ( let i = 0, m = voidDataMap.length ; i < m ; i++ ) {
-	        dataMap[ voidDataMap[ i ] ] = `${voidDataMap[ i ]}`;
+	        dataMap[ voidDataMap[ i ] ] = `${ voidDataMap[ i ] }`;
 	    }
 
 	    // Convert booleans to string
 	    const booleanDataMap = booleans;
 	    for ( let j = 0, n = booleanDataMap.length ; j < n ; j++ ) {
-	        dataMap[ booleanDataMap[ j ] ] = `${booleanDataMap[ j ]}`;
+	        dataMap[ booleanDataMap[ j ] ] = `${ booleanDataMap[ j ] }`;
 	    }
 
 	    // Convert numbers to string
 	    const numericDataMap = numbers;
 	    for ( let k = 0, o = numericDataMap.length ; k < o ; k++ ) {
-	        dataMap[ numericDataMap[ k ] ] = `${numericDataMap[ k ]}`;
+	        dataMap[ numericDataMap[ k ] ] = `${ numericDataMap[ k ] }`;
 	    }
 
 	    return dataMap
@@ -1696,7 +1637,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    arrowFunction:     () => {}
 	};
 
-	const arrays = ( () => {
+	const arrays = /*#__PURE__*/( () => {
 
 	    const dataMap = {
 	        emptyArray:       [],
@@ -1830,17 +1771,24 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    foo:       { foo: 'bar' }
 	};
 
-	const globalDataMap = {
-	    voids,
-	    booleans,
-	    numbers,
-	    strings,
-	    functions,
-	    arrays,
-	    typedArrays,
-	    objects
-	};
+	var globalDataMap = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		voids: voids,
+		booleans: booleans,
+		numbers: numbers,
+		strings: strings,
+		functions: functions,
+		arrays: arrays,
+		typedArrays: typedArrays,
+		objects: objects
+	});
 
+	/**
+	 * @author [Tristan Valcke]{@link https://github.com/Itee}
+	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+	 */
+
+	/* eslint-disable no-console */
 	const Testing = {
 
 	    DataMap: undefined,
@@ -1868,7 +1816,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	            const map = globalDataMap[ optionKey ];
 	            if ( map === undefined ) {
-	                throw ReferenceError( `The global data map does not contain element for key: ${optionKey}` )
+	                throw ReferenceError( `The global data map does not contain element for key: ${ optionKey }` )
 	            }
 
 	            const option = dataMapOptions[ optionKey ];
@@ -1895,40 +1843,101 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	    },
 
-	    createDataMapBenchmarkOptions: function ( dataMapOptions ) {
+	    createBenchmarkOptions: function ( dataMapOptions ) {
 
-	        Itee.Testing.DataMap = Itee.Testing.createDataMap( dataMapOptions );
+	        Testing.DataMap = Testing.createDataMap( dataMapOptions );
 
 	        return {
 
-	            setup: function onSetup () {
-	                this.datamap = Itee.Testing.DataMap;
+	            // called when the benchmark starts running
+	            'onStart': function onStartBench ( /*event*/ ) {
+	                this.benchDataMap = Testing.DataMap;
+
+	                //                console.log( `${ this.constructor.name } [${ this.name }]` )
+	                //                console.group( `${ this.constructor.name } [${ this.name }] onStart` )
+	                //                console.log( `Testing: ${ ( ( Testing === undefined ) ? 'not exist' : 'exist' ) }` )
+	                //                console.log( `Datamap: ${ ( ( this.datamap === undefined ) ? 'not exist' : 'exist' ) }` )
+	                //                console.groupEnd()
 	            },
 
-	            teardown: function onTeardown () {
-	                delete this.datamap;
-	            }
+	            // called after each run cycle
+	            'onCycle': function onCycleBench ( /*event*/ ) {
+	                //                console.log( `${ this.constructor.name } [${ this.name }] onCycle` )
+	            },
 
+	            // called when aborted
+	            'onAbort': function onAbortBench ( /*event*/ ) {
+	                console.log( `${ this.constructor.name } [${ this.name }] onAbort` );
+	            },
+
+	            // called when a test errors
+	            'onError': function onErrorBench ( event ) {
+	                console.log( `${ this.constructor.name } [${ this.name }] onError` );
+	                console.error( event.message );
+	            },
+
+	            // called when reset
+	            'onReset': function onResetBench ( /*event*/ ) {
+	                console.log( `${ this.constructor.name } [${ this.name }] onReset` );
+	            },
+
+	            // called when the benchmark completes running
+	            'onComplete': function onCompleteBench ( /*event*/ ) {
+	                //                console.log( `${ this.constructor.name } [${ this.name }] onComplete` )
+	                delete this.benchDataMap;
+	            },
+
+	            // compiled/called before the test loop
+	            'setup': function setupBench ( /*event*/ ) {
+	                //                console.log( `${ this.constructor.name } [${ this.name }] setup` )
+	            },
+
+	            // compiled/called after the test loop
+	            'teardown': function teardownBench ( /*event*/ ) {
+	                //                console.log( `${ this.constructor.name } [${ this.name }] teardown` )
+	            }
 	        }
 
 	    },
 
-	    iterateOverDataMap: function ( func ) {
+	    createSuiteOptions: function ( /*dataMapOptions*/ ) {
+
+	        let options;
+
+	        
+
+	        // #if IS_FRONTEND_SPECIFIC
+	        options = {};
+	        // #endif
+
+	        return options
+	    },
+
+	    iterateOverDataMap: function ( method ) {
 
 	        return function _iterateOverDataMap () {
+	            //            console.group( 'iterateOverDataMap' )
+	            //            console.log( `Suite Datamap: ${ ( ( this.suiteDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
+	            //            console.log( `Bench Datamap: ${ ( ( this.benchDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
+	            //            console.groupEnd()
 
-	            const datamap = this.datamap;
+	            if ( typeof method === 'undefined' ) {
+	                throw new ReferenceError('the method param is null or undefined!')
+	            }
+
+	            const datamap = this.benchDataMap;
 	            for ( let datasetKey in datamap ) {
 
 	                const dataset = datamap[ datasetKey ];
 
 	                if ( Array.isArray( dataset ) ) {
 
-	                    for ( let i = 0, n = dataset.length ; i < n ; i++ ) {
-
-	                        const data = dataset[ i ];
-	                        func( data );
-
+	                    for ( let datasetElement of dataset ) {
+	                        try {
+	                            method( datasetElement );
+	                        } catch ( error ) {
+	                            console.error( `method [${ method.name } fail with [${ datasetElement.toString() }] => ${ error.message }` );
+	                        }
 	                    }
 
 	                } else {
@@ -1936,7 +1945,12 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	                    for ( let dataKey in dataset ) {
 
 	                        const data = dataset[ dataKey ];
-	                        func( data );
+
+	                        try {
+	                            method( data );
+	                        } catch ( error ) {
+	                            console.error( `method [${ method.name } fail with [${ data.toString() }] => ${ error.message }` );
+	                        }
 
 	                    }
 
@@ -1997,7 +2011,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	        return {
 
 	            setup: function onSetup () {
-	                this.dataset = Itee.Testing.createDataSet()[ datasetName ];
+	                this.dataset = Testing.createDataSet()[ datasetName ];
 	            },
 
 	            teardown: function onTeardown () {
@@ -2034,7 +2048,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.PI_4 = PI_4;
 	exports.RAD_TO_DEG = RAD_TO_DEG;
 	exports.Testing = Testing;
+	exports.arrays = arrays;
 	exports.bitsToByte = bitsToByte;
+	exports.booleans = booleans;
 	exports.byteToBits = byteToBits;
 	exports.celsiusToFahrenheit = celsiusToFahrenheit;
 	exports.celsiusToKelvin = celsiusToKelvin;
@@ -2047,6 +2063,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.extendObject = extendObject;
 	exports.fahrenheitToCelsius = fahrenheitToCelsius;
 	exports.fahrenheitToKelvin = fahrenheitToKelvin;
+	exports.functions = functions;
 	exports.getPitch = getPitch;
 	exports.getRandom = getRandom;
 	exports.getRandomFloatExclusive = getRandomFloatExclusive;
@@ -2059,11 +2076,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.kelvinToFahrenheit = kelvinToFahrenheit;
 	exports.numberToInternalRepresentation = numberToInternalRepresentation;
 	exports.numberToPlainString = numberToPlainString;
-	exports.numberToPlainString_alt0 = numberToPlainString_alt0;
-	exports.numberToPlainString_alt1 = numberToPlainString_alt1;
-	exports.numberToPlainString_alt2 = numberToPlainString_alt2;
-	exports.numberToPlainString_alt3 = numberToPlainString_alt3;
-	exports.numberToPlainString_alt4 = numberToPlainString_alt4;
+	exports.numbers = numbers;
+	exports.objects = objects;
 	exports.radiansFromDegrees = radiansFromDegrees;
 	exports.radiansToDegrees = radiansToDegrees;
 	exports.removeDiacritics = removeDiacritics;
@@ -2073,9 +2087,12 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.segmentContains = segmentContains;
 	exports.serializeObject = serializeObject;
 	exports.sortBy = sortBy;
+	exports.strings = strings;
 	exports.toArray = toArray;
 	exports.toEnum = toEnum;
+	exports.typedArrays = typedArrays;
 	exports.uniq = uniq;
+	exports.voids = voids;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 

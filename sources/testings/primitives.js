@@ -40,14 +40,14 @@ const numbers = {
     positiveMaxValue:        Number.MAX_VALUE,
     positiveInfinity:        Number.POSITIVE_INFINITY,
     // others
-    e:       Math.E,
-    ln10:    Math.LN10,
-    ln2:     Math.LN2,
-    log10e:  Math.LOG10E,
-    log2e:   Math.LOG2E,
-    pi:      Math.PI,
-    sqrt1_2: Math.SQRT1_2,
-    sqrt2:   Math.SQRT2
+    e:                       Math.E,
+    ln10:                    Math.LN10,
+    ln2:                     Math.LN2,
+    log10e:                  Math.LOG10E,
+    log2e:                   Math.LOG2E,
+    pi:                      Math.PI,
+    sqrt1_2:                 Math.SQRT1_2,
+    sqrt2:                   Math.SQRT2
 }
 
 const strings = /*#__PURE__*/( () => {
@@ -109,7 +109,7 @@ const arrays = /*#__PURE__*/( () => {
             return nullArray
 
         } )(),
-        undefined:        ( () => {
+        undefined: ( () => {
 
             const undefinedArray = []
 
@@ -120,7 +120,7 @@ const arrays = /*#__PURE__*/( () => {
             return undefinedArray
 
         } )(),
-        void:             ( () => {
+        void: ( () => {
 
             const undefinedArray = []
 
@@ -131,7 +131,7 @@ const arrays = /*#__PURE__*/( () => {
             return undefinedArray
 
         } )(),
-        voids:            ( () => {
+        voids: ( () => {
 
             const array = []
 
@@ -143,7 +143,7 @@ const arrays = /*#__PURE__*/( () => {
             return array
 
         } )(),
-        booleans:         ( () => {
+        booleans: ( () => {
 
             const array = []
 
@@ -155,7 +155,7 @@ const arrays = /*#__PURE__*/( () => {
             return array
 
         } )(),
-        numbers:          ( () => {
+        numbers: ( () => {
 
             const array = []
 
@@ -167,7 +167,7 @@ const arrays = /*#__PURE__*/( () => {
             return array
 
         } )(),
-        strings:          ( () => {
+        strings: ( () => {
 
             const array = []
 
@@ -179,7 +179,7 @@ const arrays = /*#__PURE__*/( () => {
             return array
 
         } )(),
-        functions:        ( () => {
+        functions: ( () => {
 
             const array = []
 
@@ -191,7 +191,7 @@ const arrays = /*#__PURE__*/( () => {
             return array
 
         } )(),
-        objects:          [
+        objects: [
             {
                 foo: 'bar'
             },
@@ -199,7 +199,7 @@ const arrays = /*#__PURE__*/( () => {
                 baz: 'qux'
             }
         ],
-        arrays:           [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
     }
 
     return dataMap

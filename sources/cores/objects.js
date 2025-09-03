@@ -15,6 +15,11 @@ import {
     isUndefined
 } from 'itee-validators'
 
+/**
+ *
+ * @param {array.<*>} a
+ * @returns {array.<*>}
+ */
 export function uniq ( a ) {
     if ( isNotArray( a ) ) { return }
 
@@ -183,12 +188,12 @@ export function createInterval ( particles, path, interval ) {
     if ( !path ) {return}
     if ( !interval ) {return}
 
-    var globalOffset = 0
+    let globalOffset = 0
 
-    setInterval( function () {
+    function moveParticlesOnPath() {
 
-        var moveOffset             = 0.1
-        var DELTA_BETWEEN_PARTICLE = 1 // meter
+        const moveOffset             = 0.1
+        const DELTA_BETWEEN_PARTICLE = 1 // meter
 
         if ( globalOffset >= DELTA_BETWEEN_PARTICLE ) {
             globalOffset = 0
@@ -198,13 +203,13 @@ export function createInterval ( particles, path, interval ) {
             globalOffset += moveOffset
         }
 
-        var pathLength       = path.getLength()
-        var localOffset      = globalOffset
-        var normalizedOffset = undefined
-        var particle         = undefined
-        var newPosition      = undefined
+        const pathLength     = path.getLength()
+        let localOffset      = globalOffset
+        let normalizedOffset = undefined
+        let particle         = undefined
+        let newPosition      = undefined
 
-        for ( var i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
+        for ( let i = 0, numberOfParticles = particles.children.length ; i < numberOfParticles ; i++ ) {
 
             particle         = particles.children[ i ]
             normalizedOffset = localOffset / pathLength
@@ -223,16 +228,20 @@ export function createInterval ( particles, path, interval ) {
 
         }
 
-    }, interval )
+    }
+
+    setInterval( moveParticlesOnPath, interval )
 
 }
 
 /**
  *
- * @param enumValues
+ * @param {array} enumValues
  * @method toString - return a string representation of the enum
  * @method includes - check if given value is one of the enum
- * @method types - return an array containing all enum types
+ * @method keys - return an array containing all enum keys
+ * @method values - return an array containing all enum values
+ * @method entries - return an array containing all enum entries (key -> value)
  *
  * @example {@lang javascript}
  * const Meal = toEnum( {
@@ -241,13 +250,13 @@ export function createInterval ( particles, path, interval ) {
  *     Dessert: 'Mousse au chocolat'
  * } )
  *
- * if( Foo.includes('Tartiflette') {
+ * if( Foo.includes('Tartiflette') ) {
  *     // Happy
  * }
  *
  * const myDrink = 'coke'
  * if( myDrink === Meal.Drink ) {
- *
+ *     // Cheers
  * } else {
  *     // Your life is a pain
  * }
@@ -255,7 +264,7 @@ export function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-export function toEnum ( enumValues, ...otherValues ) {
+export function toEnum ( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
     if ( isDefined( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' )
@@ -289,7 +298,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.values( this ).includes( key )
             }
         },
-        keys:     {
+        keys: {
             configurable: false,
             enumerable:   false,
             writable:     false,
@@ -297,7 +306,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.keys( this )
             }
         },
-        values:   {
+        values: {
             configurable: false,
             enumerable:   false,
             writable:     false,
@@ -305,7 +314,7 @@ export function toEnum ( enumValues, ...otherValues ) {
                 return Object.values( this )
             }
         },
-        entries:  {
+        entries: {
             configurable: false,
             enumerable:   false,
             writable:     false,

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Index</title>
+	<title>Itee-Utils Source: configs/rollup.benchs.conf.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -67,214 +67,141 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
 			
 
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-
-
-
-
-
-    <section class="readme-section">
-        <article><h1 align="center">[Itee Utils]</h1>
-<br>
-<p align="center">The itee utils is a common utility library, it include all utils function for itee packages.</p>
-<br>
-<p align="center">
-    <a href="https://www.npmjs.com/package/itee-utils" target="_blank" rel="noopener noreferrer">
-        <img src="https://img.shields.io/npm/v/itee-utils" alt="Current package version">
-    </a>
-    <a href="https://github.com/Itee/itee-utils" target="_blank" rel="noopener noreferrer">
-        <img src="https://github.com/Itee/itee-utils/actions/workflows/node.js.yml/badge.svg" alt="Itee-Utils CI">
-    </a>
-    <a href="https://github.com/semantic-release/semantic-release" target="_blank" rel="noopener noreferrer">
-        <img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="Build status">
-    </a>
-</p>
-<br>
-<h2>How to install</h2>
-<p>From npm:</p>
-<pre><code>npm install itee-utils
-</code></pre>
-<p>If you want to build the repository from source follow these instructions:</p>
-<pre><code>git clone https://github.com/Itee/itee-utils.git
-npm install
-npm run build
-</code></pre>
-<p>then copy/paste the builded module you need from builds folder.</p>
-<br>
-<h2>How to use</h2>
-<p align="center">At begin was <a href="https://itee.github.io/itee-utils/">RTFM</a> !</p>
-<br>
-In case you have clone the repository you could also auto-generate the library documentation using: 
-<pre><code>npm run doc
-</code></pre>
-<p>then you will be able to use like this:</p>
-<pre><code>import { getRandomInt } from 'itee-utils'
+		<h1 class="page-title">Source: configs/rollup.benchs.conf.js</h1>
     
-const myRandomNumber = getRandomInt( 0, 100 )
-console.log( myRandomInt )
-</code></pre>
-<br>
-<h2>License (BSD-3-Clause)</h2>
-<p><strong>Copyright (c) 2015-Present, Itee, Valcke Tristan <a href="https://github.com/Itee">https://github.com/Itee</a>. All rights reserved.</strong></p>
-<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<ul>
-<li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>
-<li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
-<li>Neither the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</li>
-</ul>
-<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
-<p>You should have received a copy of the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a> along
-with this program.  If not, see <a href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>.</p></article>
-    </section>
-
-
-
-
-
-
-
-	<h1 class="page-title">Index</h1>
 <section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module Config-Rollup-Test
+ * @description The file manage the rollup configuration for build tests
+ */
 
-<header>
-    
-        <h2>
-        sources/times/chrono.js
-        </h2>
-        
-    
-</header>
+const packageInfos = require( '../package' )
+const { nodeResolve } = require( '@rollup/plugin-node-resolve' )
+const cleanup         = require( 'rollup-plugin-cleanup' )
+const replace         = require( 'rollup-plugin-re' )
+const alias           = require( '@rollup/plugin-alias' )
 
+/**
+ * Will create an appropriate configuration object for rollup, related to the given arguments.
+ *
+ * @generator
+ * @return {Array.&lt;json>} An array of rollup configuration
+ */
+function CreateBenchmarksRollupConfigs ( /*options*/ ) {
+    'use strict'
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Todo</div>
-        
+    return [
+        // For Karma
+        {
+            input:    `tests/benchmarks/${ packageInfos.name }.benchs.js`,
+            external: [
+                'benchmark'
+            ],
+            plugins: [
+                replace( {
+                    defines: {
+                        IS_KEEP_ON_BUILD:     true,
+                        IS_BACKEND_SPECIFIC:  false,
+                        IS_FRONTEND_SPECIFIC: true,
+                    }
+                } ),
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                        //                                        {
+                        //                                            find:        'itee-validators',
+                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+                        //                                        }
+                    ]
+                } ),
+                cleanup( {
+                    comments: 'none'
+                } )
+            ],
+            treeshake: {
+                moduleSideEffects:                false,
+                annotations:                      true,
+                correctVarValueBeforeDeclaration: true,
+                propertyReadSideEffects:          false,
+                tryCatchDeoptimization:           true,
+                unknownGlobalSideEffects:         false
+            },
+            output: {
+                indent:  '\t',
+                format:  'iife',
+                name:    'Itee.Benchmarks',
+                globals: {
+                    'benchmark': 'Benchmark'
+                },
+                file: `tests/builds/${ packageInfos.name }.benchs.iife.js`
+            }
+        },
+        // For Node
+        {
+            input:    `tests/benchmarks/${ packageInfos.name }.benchs.js`,
+            external: [
+                'benchmark',
+                'fs',
+                'path'
+            ],
+            plugins: [
+                replace( {
+                    defines: {
+                        IS_KEEP_ON_BUILD:     true,
+                        IS_BACKEND_SPECIFIC:  true,
+                        IS_FRONTEND_SPECIFIC: false,
+                    }
+                } ),
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                        //                                        {
+                        //                                            find:        'itee-validators',
+                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+                        //                                        }
+                    ]
+                } ),
+                cleanup( {
+                    comments: 'none'
+                } )
+            ],
+            treeshake: true,
+            output:    {
+                indent: '\t',
+                format: 'cjs',
+                file:   `tests/builds/${ packageInfos.name }.benchs.cjs.js`
+            }
+        }
+    ]
+}
 
-        
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-	<dt class="tag-author method-doc-label method-doc-details-label">Author:</dt>
-	<dd class="tag-author">
-		<ul>
-			<li><a href="https://github.com/Itee">Tristan Valcke</a></li>
-			</ul>
-	</dd>
-	
-
-	
-
-	
-	<dt class="tag-license method-doc-label method-doc-details-label">License:</dt>
-	<dd class="tag-license">
-		<ul class="dummy">
-			<li><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></li>
-		</ul>
-	</dd>
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="sources_times_chrono.js.html">sources/times/chrono.js</a>,
-				 <a href="sources_times_chrono.js.html#sunlight-1-line-1">line 1</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-        
-            <h3>Example</h3>
-            
-    <pre class="sunlight-highlight-javascript">Todo</pre>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
+module.exports = CreateBenchmarksRollupConfigs
+</pre>
+    </article>
 </section>
+
 
 
 
@@ -284,10 +211,6 @@ with this program.  If not, see <a href="https://opensource.org/licenses/BSD-3-C
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

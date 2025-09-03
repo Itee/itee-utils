@@ -4,18 +4,17 @@
  *
  * @module sources/file-system/files
  * @description This is the files main export entry point.
- * It expose all exports of the files validators.
+ * It exposes all exports of the files validators.
  *
  */
 
-import fs   from 'fs'
-import {
-    isArray,
-    isDirectoryPath,
-    isFilePath,
-    isInvalidPath
-}           from 'itee-validators'
-import path from 'path'
+import fs                from 'fs'
+import path              from 'path'
+import {isArray}         from 'itee-validators'
+import {isInvalidPath}   from 'itee-validators/sources/file-system/paths/isValidPath'
+import {isDirectoryPath} from 'itee-validators/sources/file-system/directories/isDirectoryPath'
+import {isFilePath}      from 'itee-validators/sources/file-system/files/isFilePath'
+// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
 function getPathsUnder ( directoryPath ) {
     return fs.readdirSync( directoryPath )
@@ -25,7 +24,7 @@ function getPathsUnder ( directoryPath ) {
  * Allow to search all files under filePaths in a recursive way
  *
  * @param {Array.<string>|string} paths - The files paths where search files
- * @returns {Array} - The paths of finded files
+ * @returns {Array} - The paths of found files
  */
 function getFilesPathsUnder ( paths ) {
 
@@ -107,6 +106,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
     function checkStateOf ( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
+            // eslint-disable-next-line no-console
             console.error( 'ES6Converter: Invalid file path "' + filePath + '"' )
             return
         }
@@ -122,6 +122,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
         } else {
 
+            // eslint-disable-next-line no-console
             console.error( 'Invalid stat object !' )
 
         }
@@ -190,7 +191,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
             // In case this is a file name it must fully match
             if ( excludePattern.indexOf( '.' ) > -1 ) {
 
-                const fileName = path.replace( /^.*(\\|\/|\:)/, '' )
+                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' )
                 if ( fileName === excludePattern ) {
                     isExclude = true
                 }
@@ -208,9 +209,10 @@ function excludesFilesPaths ( filePaths, excludes ) {
 }
 
 /**
- * Will filter file paths an keep only js files
+ * Will filter file paths a keep only js files
  *
  * @param {Array.<string>} filePaths - An array of path to filter
+ * @param {function} filter - An optional filter to apply instead of internal filter
  * @return {Array.<string>} The filtered path with only javascript files
  * @private
  */

@@ -1,13 +1,14 @@
 import { expect }       from 'chai'
 import { describe, it } from 'mocha'
-import { TestsUtils }      from 'itee-utils'
-import * as Arrays from '../../../sources/cores/arrays.js'
+import { Testing }      from '../../../sources/testings/benchmarks'
+//import { Testing }      from 'itee-utils'
+import * as arraysNamespace from '../../../sources/cores/arrays.js'
 
 function arraysUnits () {
 
 	beforeEach( () => {
 
-		this._dataMap = TestsUtils.createDataMap()
+		this._dataMap = Testing.createDataMap()
 
 	} )
 
@@ -17,27 +18,27 @@ function arraysUnits () {
 
 	} )
 
-	describe( 'Arrays', () => {
+	describe( 'arraysUnits', () => {
 
-		describe( 'sortBy', () => {
+		describe( 'sortBy()', () => {
 
-			it( 'sortBy is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Arrays.sortBy).to.exist
+				expect(arraysNamespace.sortBy).to.exist
 
 			} )
 
-			it( 'sortBy return type is function when propertyName is of type string and ascending is of type string', () => {
+			it( 'return type is function when propertyName is of type string and ascending is of type ordering', () => {
 
 				const dataSet0 = this._dataMap[ 'strings' ]
-				const dataSet1 = this._dataMap[ 'strings' ]
+				const dataSet1 = this._dataMap[ 'orderings' ]
 
 				for ( let key0 in dataSet0 ) {
 					const dataSetValue0 = dataSet0[ key0 ]
 
 					for ( let key1 in dataSet1 ) {
 						const dataSetValue1 = dataSet1[ key1 ]
-						const result = Arrays.sortBy( dataSetValue0, dataSetValue1 )
+						const result = arraysNamespace.sortBy( dataSetValue0, dataSetValue1 )
 						expect(result).to.be.a('function')
 					}
 				}
@@ -46,15 +47,15 @@ function arraysUnits () {
 
 		} )
 
-		describe( 'toArray', () => {
+		describe( 'toArray()', () => {
 
-			it( 'toArray is bundlable', () => {
+			it( 'is bundlable', () => {
 
-				expect(Arrays.toArray).to.exist
+				expect(arraysNamespace.toArray).to.exist
 
 			} )
 
-			it( 'toArray return type is array.<*> when object is of any type and options is of type object and options.keepArray is of type boolean and options.keepNull is of type boolean', () => {
+			it( 'return type is array.<*> when object is of any type and options is of type object and options.keepArray is of type boolean and options.keepNull is of type boolean', () => {
 
 				const dataMap0 = this._dataMap
 				for ( let dataSetKey0 in dataMap0 ) {
@@ -74,7 +75,7 @@ function arraysUnits () {
 
 								for ( let key3 in dataSet3 ) {
 									const dataSetValue3 = dataSet3[ key3 ]
-									const result = Arrays.toArray( dataSetValue0, dataSetValue1, dataSetValue2, dataSetValue3 )
+									const result = arraysNamespace.toArray( dataSetValue0, dataSetValue1, dataSetValue2, dataSetValue3 )
 									expect(result).to.be.a('array')
 								}
 							}

@@ -1,13 +1,14 @@
 import { expect }       from 'chai'
 import { describe, it } from 'mocha'
-import { TestsUtils }      from 'itee-utils'
-import * as Temperatures from '../../../sources/physics/temperatures.js'
+import { Testing }      from '../../../sources/testings/benchmarks'
+//import { Testing }      from 'itee-utils'
+import * as temperaturesNamespace from '../../../sources/physics/temperatures.js'
 
 function temperaturesUnits () {
 
 	beforeEach( () => {
 
-		this._dataMap = TestsUtils.createDataMap()
+		this._dataMap = Testing.createDataMap()
 
 	} )
 
@@ -17,7 +18,7 @@ function temperaturesUnits () {
 
 	} )
 
-	describe( 'Temperatures', () => {
+	describe( 'temperaturesUnits', () => {
 
 	} )
 
