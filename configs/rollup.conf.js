@@ -85,12 +85,13 @@ function CreateRollupConfigs ( options ) {
 
             configs.push( {
                 input:    input,
-                external: ( format === 'cjs' ) ? [ 'fs', 'path', 'itee-validators' ] : [ 'itee-validators' ],
+                external: ( ['esm','cjs'].includes(format) ) ? [ 'fs', 'path', 'itee-validators' ] : [ 'itee-validators' ],
                 plugins:  [
                     replace( {
                         defines: {
-                            IS_KEEP_ON_BUILD:    false,
-                            IS_BACKEND_SPECIFIC: ( format === 'cjs' )
+                            IS_KEEP_ON_BUILD:     false,
+                            IS_BACKEND_SPECIFIC:  ( ['esm','cjs'].includes(format) ),
+                            IS_FRONTEND_SPECIFIC: ( ['esm','iife'].includes(format) ),
                         }
                     } ),
                     commonjs( {
