@@ -1,3 +1,11 @@
+## [5.4.2](https://github.com/Itee/itee-utils/compare/v5.4.1...v5.4.2) (2025-09-04)
+
+
+### Bug Fixes
+
+* **benchmarks:** fix error log on null or undefined data ([062e845](https://github.com/Itee/itee-utils/commit/062e84561c28eecc89a4267d129a58a6ed46b5d2))
+* **rollup.conf:** fix build package internal variable usage ([8b3c9a7](https://github.com/Itee/itee-utils/commit/8b3c9a78efd93306df8c7f290ecfc3aeb782bdb2))
+
 ## [5.4.1](https://github.com/Itee/itee-utils/compare/v5.4.0...v5.4.1) (2025-09-03)
 
 

@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.4.1 - CommonJs')
+console.log('Itee.Utils v5.4.2 - CommonJs')
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -1978,9 +1978,7 @@ const Testing = {
         };
         // #endif
 
-        // #if IS_FRONTEND_SPECIFIC
-        options = {};
-        // #endif
+        
 
         return options
     },
@@ -2008,7 +2006,14 @@ const Testing = {
                         try {
                             method( datasetElement );
                         } catch ( error ) {
-                            console.error( `method [${ method.name } fail with [${ datasetElement.toString() }] => ${ error.message }` );
+
+                            const datasetElementType = (datasetElement === null)
+                                             ? 'null'
+                                             : (datasetElement === undefined)
+                                               ? 'undefined'
+                                               : datasetElement.toString();
+
+                            console.error( `method [${ method.name } fail with [${ datasetElementType }] => ${ error.message }` );
                         }
                     }
 
@@ -2021,7 +2026,14 @@ const Testing = {
                         try {
                             method( data );
                         } catch ( error ) {
-                            console.error( `method [${ method.name } fail with [${ data.toString() }] => ${ error.message }` );
+
+                            const dataType = (data === null)
+                                             ? 'null'
+                                             : (data === undefined)
+                                               ? 'undefined'
+                                               : data.toString();
+
+                            console.error( `method [${ method.name } fail with [${ dataType }] => ${ error.message }` );
                         }
 
                     }

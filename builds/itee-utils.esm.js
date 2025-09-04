@@ -1,5 +1,7 @@
-console.log('Itee.Utils v5.4.1 - EsModule')
+console.log('Itee.Utils v5.4.2 - EsModule')
 import { isArray, isObject, isNotString, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -1900,7 +1902,72 @@ const Testing = {
 
         let options;
 
-        
+        // #if IS_BACKEND_SPECIFIC
+        options = {
+
+            // called when the suite starts running
+            'onStart': function onStartSuite ( /*event*/ ) {
+                //eslint-disable-next-line
+                console.log( `Running ${ this.constructor.name }: ${ this.name }` );
+                this.results = [];
+            },
+
+            // called between running benchmarks
+            'onCycle': function onCycleSuite ( event ) {
+                //eslint-disable-next-line
+                console.log( `Running Bench: ${ event.target.name }` );
+                this.results.push( event.target );
+            },
+
+            // called when aborted
+            'onAbort': function onAbortSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onAbort` )
+            },
+
+            // called when a test errors
+            'onError': function onErrorSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onError` )
+            },
+
+            // called when reset
+            'onReset': function onResetSuite ( /*event*/ ) {
+                //                console.log( `${ this.constructor.name } [${ this.name }] onReset` )
+            },
+
+            // called when the suite completes running
+            'onComplete': function onCompleteSuite ( /*event*/ ) {
+
+                this.results.sort( ( a, b ) => {
+
+                    if ( a.hz < b.hz ) {
+                        return 1
+                    }
+
+                    if ( a.hz > b.hz ) {
+                        return -1
+                    }
+
+                    return 0
+
+                } );
+
+                for ( let i = 0, num = this.results.length ; i < num ; i++ ) {
+                    //eslint-disable-next-line
+                    console.log( `${ i }: ${ String( this.results[ i ] ) }` );
+                }
+
+                const fastest       = this.results[ 0 ];
+                const slowest       = this.results[ this.results.length - 1 ];
+                const speedIncrease = ( ( fastest.hz - slowest.hz ) / slowest.hz ) * 100;
+
+                //eslint-disable-next-line
+                console.log( `\n${ fastest.name } is ${ Math.round( speedIncrease ) }% fastest than ${ slowest.name }` );
+
+                delete this.results;
+
+            }
+        };
+        // #endif
 
         // #if IS_FRONTEND_SPECIFIC
         options = {};
@@ -1932,7 +1999,14 @@ const Testing = {
                         try {
                             method( datasetElement );
                         } catch ( error ) {
-                            console.error( `method [${ method.name } fail with [${ datasetElement.toString() }] => ${ error.message }` );
+
+                            const datasetElementType = (datasetElement === null)
+                                             ? 'null'
+                                             : (datasetElement === undefined)
+                                               ? 'undefined'
+                                               : datasetElement.toString();
+
+                            console.error( `method [${ method.name } fail with [${ datasetElementType }] => ${ error.message }` );
                         }
                     }
 
@@ -1945,7 +2019,14 @@ const Testing = {
                         try {
                             method( data );
                         } catch ( error ) {
-                            console.error( `method [${ method.name } fail with [${ data.toString() }] => ${ error.message }` );
+
+                            const dataType = (data === null)
+                                             ? 'null'
+                                             : (data === undefined)
+                                               ? 'undefined'
+                                               : data.toString();
+
+                            console.error( `method [${ method.name } fail with [${ dataType }] => ${ error.message }` );
                         }
 
                     }
@@ -2035,5 +2116,342 @@ const Testing = {
 
 };
 
-export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, Testing, arrays, bitsToByte, booleans, byteToBits, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, functions, getPitch, getRandom, getRandomFloatExclusive, getRandomFloatInclusive, getRandomIntExclusive, getRandomIntInclusive, getYaw, internalRepresentationToNumber, kelvinToCelsius, kelvinToFahrenheit, numberToInternalRepresentation, numberToPlainString, numbers, objects, radiansFromDegrees, radiansToDegrees, removeDiacritics, ringClockwise, ringContains, ringContainsSome, segmentContains, serializeObject, sortBy, strings, toArray, toEnum, typedArrays, uniq, voids };
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/paths/isValidPath
+ * @description Export function to validate if a value is a valid path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isValidPath } from 'itee-validators'
+ *
+ * if( isValidPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isValidPath ( data ) {
+    return fs.existsSync( data )
+}
+
+/**
+ * Check if given data is not a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isInvalidPath ( data ) {
+    return !isValidPath( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/directories/isDirectoryPath
+ * @description Export function to validate if a value is a directories path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isDirectoryPath } from 'itee-validators'
+ *
+ * if( isDirectoryPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given path is a directory path
+ *
+ * @param path {string|Buffer|URL} The data to check against the directory path type
+ * @returns {boolean} true if path is a directory path, false otherwise
+ */
+function isDirectoryPath ( path ) {
+    return fs.statSync( path ).isDirectory()
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files/isFilePath
+ * @description Export function to validate if a value is a file path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isFilePath } from 'itee-validators'
+ *
+ * if( isFilePath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given path is a file path
+ *
+ * @param path {string|Buffer|URL} The data to check against the file path type
+ * @returns {boolean} true if path is a file path, false otherwise
+ */
+function isFilePath ( path ) {
+    return fs.statSync( path ).isFile()
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files
+ * @description This is the files main export entry point.
+ * It exposes all exports of the files validators.
+ *
+ */
+// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
+
+function getPathsUnder ( directoryPath ) {
+    return fs.readdirSync( directoryPath )
+}
+
+/**
+ * Allow to search all files under filePaths in a recursive way
+ *
+ * @param {Array.<string>|string} paths - The files paths where search files
+ * @returns {Array} - The paths of found files
+ */
+function getFilesPathsUnder ( paths ) {
+
+    const _paths = ( isArray( paths ) ) ? paths : [ paths ];
+    let files    = [];
+
+    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+
+        const localPath = _paths[ pathIndex ];
+
+        if ( isInvalidPath( localPath ) ) {
+
+            throw new Error( `The path "${ localPath }" is not valid !` )
+
+        } else if ( isFilePath( localPath ) ) {
+
+            files.push( localPath );
+
+        } else if ( isDirectoryPath( localPath ) ) {
+
+            const subPaths      = getPathsUnder( localPath );
+            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path.resolve( localPath, subPath ) ) } );
+            if ( subFilesPaths ) {
+                files = [].concat( ...subFilesPaths );
+            }
+
+        } else ;
+
+    }
+
+    return files
+
+}
+
+/**
+ * Return all the files paths under filePaths in a recursive way.
+ *
+ * @param {string} filePaths - An array of string, representing the base path where looking for get all files paths
+ * @return {Array.<string>} - An array of files paths
+ * @private
+ */
+function getFilesPathsUnder_1 ( filePaths ) {
+
+    let files = [];
+
+    if ( Array.isArray( filePaths ) ) {
+
+        let filePath = undefined;
+        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex < numberOfPaths ; pathIndex++ ) {
+
+            filePath = filePaths[ pathIndex ];
+            checkStateOf( filePath );
+
+        }
+
+    } else {
+
+        checkStateOf( filePaths );
+
+    }
+
+    return files
+
+    function getFilesPathsUnderFolder ( folder ) {
+
+        fs.readdirSync( folder ).forEach( ( name ) => {
+
+            const filePath = path.resolve( folder, name );
+            checkStateOf( filePath );
+
+        } );
+
+    }
+
+    function checkStateOf ( filePath ) {
+
+        if ( !fileExistForPath( filePath ) ) {
+            // eslint-disable-next-line no-console
+            console.error( 'ES6Converter: Invalid file path "' + filePath + '"' );
+            return
+        }
+
+        const stats = fs.statSync( filePath );
+        if ( stats.isFile() ) {
+
+            files.push( filePath );
+
+        } else if ( stats.isDirectory() ) {
+
+            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) );
+
+        } else {
+
+            // eslint-disable-next-line no-console
+            console.error( 'Invalid stat object !' );
+
+        }
+
+    }
+
+}
+
+function fileExistForPath ( filePath ) {
+
+    return fs.existsSync( filePath )
+
+}
+
+function getFileForPath ( filePath ) {
+
+    // In case files doesn't exist
+    if ( !fileExistForPath( filePath ) ) {
+        throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
+    }
+
+    return fs.readFileSync( filePath, 'utf8' )
+
+}
+
+function getUncommentedFileForPath ( filePath ) {
+
+    return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
+
+}
+
+/**
+ * Will create an array without the strings in filePaths that are matched in excludes paths
+ *
+ * @param {Array.<string>} filePaths - An array of string to clean
+ * @param {Array.<string>} excludes - The paths to remove
+ * @return {Array.<string>} The cleaned filePaths of excludes paths
+ * @private
+ */
+function excludesFilesPaths ( filePaths, excludes ) {
+
+    let filteredFilesPath = [];
+
+    let filePath = undefined;
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex < numberOfFilePaths ; filePathIndex++ ) {
+        filePath = filePaths[ filePathIndex ];
+
+        if ( isExclude( filePath ) ) {
+            continue
+        }
+
+        filteredFilesPath.push( filePath );
+
+    }
+
+    return filteredFilesPath
+
+    function isExclude ( path ) {
+
+        let isExclude      = false;
+        let excludePattern = undefined;
+        for ( let i = 0, pathLength = excludes.length ; i < pathLength ; i++ ) {
+
+            excludePattern = excludes[ i ];
+
+            // In case this is a file name it must fully match
+            if ( excludePattern.indexOf( '.' ) > -1 ) {
+
+                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' );
+                if ( fileName === excludePattern ) {
+                    isExclude = true;
+                }
+
+            } else if ( path.contains( excludePattern ) ) {
+                isExclude = true;
+            }
+
+        }
+
+        return isExclude
+
+    }
+
+}
+
+/**
+ * Will filter file paths a keep only js files
+ *
+ * @param {Array.<string>} filePaths - An array of path to filter
+ * @param {function} filter - An optional filter to apply instead of internal filter
+ * @return {Array.<string>} The filtered path with only javascript files
+ * @private
+ */
+function filterJavascriptFiles ( filePaths, filter ) {
+
+    let filteredFilesPath = [];
+
+    let filePath = undefined;
+    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex < numberOfFilePaths ; filePathIndex++ ) {
+
+        filePath = filePaths[ filePathIndex ];
+
+        // Not a js file like fonts or shaders
+        if ( filter && !filter( filePath ) ) {
+            continue
+        } else {
+            const fileExtension = path.extname( filePath );
+            if ( filePath.indexOf( 'glsl' ) > -1 || fileExtension !== '.js' ) {
+                continue
+            }
+        }
+
+        filteredFilesPath.push( filePath );
+
+    }
+
+    return filteredFilesPath
+
+}
+
+export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, Testing, arrays, bitsToByte, booleans, byteToBits, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, excludesFilesPaths, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, fileExistForPath, filterJavascriptFiles, functions, getFileForPath, getFilesPathsUnder, getFilesPathsUnder_1, getPathsUnder, getPitch, getRandom, getRandomFloatExclusive, getRandomFloatInclusive, getRandomIntExclusive, getRandomIntInclusive, getUncommentedFileForPath, getYaw, internalRepresentationToNumber, kelvinToCelsius, kelvinToFahrenheit, numberToInternalRepresentation, numberToPlainString, numbers, objects, radiansFromDegrees, radiansToDegrees, removeDiacritics, ringClockwise, ringContains, ringContainsSome, segmentContains, serializeObject, sortBy, strings, toArray, toEnum, typedArrays, uniq, voids };
 //# sourceMappingURL=itee-utils.esm.js.map
