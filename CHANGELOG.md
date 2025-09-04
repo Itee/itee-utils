@@ -1,3 +1,11 @@
+## [5.4.1](https://github.com/Itee/itee-utils/compare/v5.4.0...v5.4.1) (2025-09-03)
+
+
+### Bug Fixes
+
+* **package:** apply audit fix and release ([97825ab](https://github.com/Itee/itee-utils/commit/97825abbc112edd1feaabdf4ce79ae6dc8006f8f))
+* **package:** revert karma version and upgrade base node engine requirement to v18 ([99ffa03](https://github.com/Itee/itee-utils/commit/99ffa03f2332305400087ef2ff982f38408d91c8))
+
 # [5.4.0](https://github.com/Itee/itee-utils/compare/v5.3.2...v5.4.0) (2025-09-03)
 
 
