@@ -18,7 +18,7 @@ export const RAD_TO_DEG = ( 180 / PI )
 
 /**
  *
- * @param degrees
+ * @param {number} degrees
  * @return {number}
  */
 export function degreesToRadians ( degrees ) {
@@ -27,7 +27,7 @@ export function degreesToRadians ( degrees ) {
 
 /**
  *
- * @param radians
+ * @param {number} radians
  * @return {number}
  */
 export function degreesFromRadians ( radians ) {
@@ -36,7 +36,7 @@ export function degreesFromRadians ( radians ) {
 
 /**
  *
- * @param radians
+ * @param {number} radians
  * @return {number}
  */
 export function radiansToDegrees ( radians ) {
@@ -45,7 +45,7 @@ export function radiansToDegrees ( radians ) {
 
 /**
  *
- * @param degrees
+ * @param {number} degrees
  * @return {number}
  */
 export function radiansFromDegrees ( degrees ) {
@@ -55,7 +55,7 @@ export function radiansFromDegrees ( degrees ) {
 // PROJECTION 2D/3D
 /**
  *
- * @param vector
+ * @param {Vector} vector
  * @return {number}
  */
 export function getYaw ( vector ) {
@@ -67,7 +67,7 @@ export function getYaw ( vector ) {
 
 /**
  *
- * @param vector
+ * @param {Vector} vector
  * @return {number}
  */
 export function getPitch ( vector ) {
@@ -79,7 +79,7 @@ export function getPitch ( vector ) {
 
 /**
  *
- * @param vectorDir
+ * @param {Vector} vectorDir
  * @return {{yaw: number, pitch: number}}
  */
 export function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {

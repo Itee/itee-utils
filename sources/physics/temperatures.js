@@ -19,8 +19,8 @@ export const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955
 
 /**
  *
- * @param celsius
- * @param precisionPointAt
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function celsiusToKelvin ( celsius, precisionPointAt ) {
@@ -39,8 +39,8 @@ export function celsiusToKelvin ( celsius, precisionPointAt ) {
 
 /**
  *
- * @param celsius
- * @param precisionPointAt
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
@@ -59,8 +59,8 @@ export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
 /**
  *
- * @param fahrenheit
- * @param precisionPointAt
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
@@ -79,8 +79,8 @@ export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
 /**
  *
- * @param fahrenheit
- * @param precisionPointAt
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
@@ -99,8 +99,8 @@ export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
 /**
  *
- * @param kelvin
- * @param precisionPointAt
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function kelvinToCelsius ( kelvin, precisionPointAt ) {
@@ -119,8 +119,8 @@ export function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
 /**
  *
- * @param kelvin
- * @param precisionPointAt
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 export function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
