@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.4.1 - Standalone')
+console.log('Itee.Utils v5.4.2 - Standalone')
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
@@ -1936,7 +1936,14 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	                        try {
 	                            method( datasetElement );
 	                        } catch ( error ) {
-	                            console.error( `method [${ method.name } fail with [${ datasetElement.toString() }] => ${ error.message }` );
+
+	                            const datasetElementType = (datasetElement === null)
+	                                             ? 'null'
+	                                             : (datasetElement === undefined)
+	                                               ? 'undefined'
+	                                               : datasetElement.toString();
+
+	                            console.error( `method [${ method.name } fail with [${ datasetElementType }] => ${ error.message }` );
 	                        }
 	                    }
 
@@ -1949,7 +1956,14 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	                        try {
 	                            method( data );
 	                        } catch ( error ) {
-	                            console.error( `method [${ method.name } fail with [${ data.toString() }] => ${ error.message }` );
+
+	                            const dataType = (data === null)
+	                                             ? 'null'
+	                                             : (data === undefined)
+	                                               ? 'undefined'
+	                                               : data.toString();
+
+	                            console.error( `method [${ method.name } fail with [${ dataType }] => ${ error.message }` );
 	                        }
 
 	                    }
