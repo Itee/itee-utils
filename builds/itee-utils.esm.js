@@ -516,7 +516,7 @@ function createInterval ( particles, path, interval ) {
 
 /**
  *
- * @param {array} enumValues
+ * @param {object} enumValues
  * @method toString - return a string representation of the enum
  * @method includes - check if given value is one of the enum
  * @method keys - return an array containing all enum keys
@@ -1048,7 +1048,7 @@ const RAD_TO_DEG = ( 180 / PI );
 
 /**
  *
- * @param degrees
+ * @param {number} degrees
  * @return {number}
  */
 function degreesToRadians ( degrees ) {
@@ -1057,7 +1057,7 @@ function degreesToRadians ( degrees ) {
 
 /**
  *
- * @param radians
+ * @param {number} radians
  * @return {number}
  */
 function degreesFromRadians ( radians ) {
@@ -1066,7 +1066,7 @@ function degreesFromRadians ( radians ) {
 
 /**
  *
- * @param radians
+ * @param {number} radians
  * @return {number}
  */
 function radiansToDegrees ( radians ) {
@@ -1075,7 +1075,7 @@ function radiansToDegrees ( radians ) {
 
 /**
  *
- * @param degrees
+ * @param {number} degrees
  * @return {number}
  */
 function radiansFromDegrees ( degrees ) {
@@ -1085,7 +1085,7 @@ function radiansFromDegrees ( degrees ) {
 // PROJECTION 2D/3D
 /**
  *
- * @param vector
+ * @param {Vector} vector
  * @return {number}
  */
 function getYaw ( vector ) {
@@ -1097,7 +1097,7 @@ function getYaw ( vector ) {
 
 /**
  *
- * @param vector
+ * @param {Vector} vector
  * @return {number}
  */
 function getPitch ( vector ) {
@@ -1109,7 +1109,7 @@ function getPitch ( vector ) {
 
 /**
  *
- * @param vectorDir
+ * @param {Vector} vectorDir
  * @return {{yaw: number, pitch: number}}
  */
 function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
@@ -1304,34 +1304,34 @@ function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
 
 /**
  *
- * @param ring
+ * @param {array.<number>} ring
  * @return {boolean}
  */
 function ringClockwise ( ring ) {
-    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
 
-    if ( ( n = ring.length ) < 4 ) {
+    let numberOfRingElements = ring.length;
+    if ( numberOfRingElements < 4 ) {
         return false
     }
 
-    var i    = 0,
-        n,
-        area = ring[ n - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ n - 1 ][ 0 ] * ring[ 0 ][ 1 ];
-    while ( ++i < n ) {
-        area += ring[ i - 1 ][ 1 ] * ring[ i ][ 0 ] - ring[ i - 1 ][ 0 ] * ring[ i ][ 1 ];
+    let ringIndex    = 0;
+    let area = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ];
+    while ( ++ringIndex < numberOfRingElements ) {
+        area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ];
     }
     return area >= 0
 }
 
 /**
  *
- * @param ring
- * @param hole
+ * @param {array.<number>} ring
+ * @param {array.<number>} hole
  * @return {boolean}
  */
 function ringContainsSome ( ring, hole ) {
-    if ( isNotArray( ring ) ) { return }
-    if ( isNotArray( hole ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( hole ) ) { return false }
 
     let i = 0;
     let n = hole.length;
@@ -1350,13 +1350,13 @@ function ringContainsSome ( ring, hole ) {
 
 /**
  *
- * @param ring
- * @param point
+ * @param {array.<number>} ring
+ * @param {array.<number>} point
  * @return {number}
  */
 function ringContains ( ring, point ) {
-    if ( isNotArray( ring ) ) { return }
-    if ( isNotArray( point ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( point ) ) { return false }
 
     let x        = point[ 0 ];
     let y        = point[ 1 ];
@@ -1385,28 +1385,35 @@ function ringContains ( ring, point ) {
 
 /**
  *
- * @param p0
- * @param p1
- * @param p2
+ * @param {array.<number>} p0
+ * @param {array.<number>} p1
+ * @param {array.<number>} p2
  * @return {boolean}
  */
 function segmentContains ( p0, p1, p2 ) {
-    if ( isNotArray( p0 ) ) { return }
-    if ( isNotArray( p1 ) ) { return }
-    if ( isNotArray( p2 ) ) { return }
+    if ( isNotArray( p0 ) ) { return false }
+    if ( isNotArray( p1 ) ) { return false }
+    if ( isNotArray( p2 ) ) { return false }
 
-    var x20 = p2[ 0 ] - p0[ 0 ],
-        y20 = p2[ 1 ] - p0[ 1 ];
+    const x20 = p2[ 0 ] - p0[ 0 ];
+    const y20 = p2[ 1 ] - p0[ 1 ];
     if ( x20 === 0 && y20 === 0 ) {
         return true
     }
-    var x10 = p1[ 0 ] - p0[ 0 ],
-        y10 = p1[ 1 ] - p0[ 1 ];
+
+    const x10 = p1[ 0 ] - p0[ 0 ];
+    const y10 = p1[ 1 ] - p0[ 1 ];
     if ( x10 === 0 && y10 === 0 ) {
         return false
     }
-    var t = ( x20 * x10 + y20 * y10 ) / ( x10 * x10 + y10 * y10 );
-    return t < 0 || t > 1 ? false : t === 0 || t === 1 ? true : t * x10 === x20 && t * y10 === y20
+
+    const t = ( (x20 * x10) + (y20 * y10) ) / ( (x10 * x10) + (y10 * y10) );
+
+    return t < 0 || t > 1
+           ? false
+           : t === 0 || t === 1
+             ? true
+             : t * x10 === x20 && t * y10 === y20
 }
 
 /**
@@ -1424,8 +1431,8 @@ const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955;
 
 /**
  *
- * @param celsius
- * @param precisionPointAt
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function celsiusToKelvin ( celsius, precisionPointAt ) {
@@ -1444,8 +1451,8 @@ function celsiusToKelvin ( celsius, precisionPointAt ) {
 
 /**
  *
- * @param celsius
- * @param precisionPointAt
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function celsiusToFahrenheit ( celsius, precisionPointAt ) {
@@ -1464,8 +1471,8 @@ function celsiusToFahrenheit ( celsius, precisionPointAt ) {
 
 /**
  *
- * @param fahrenheit
- * @param precisionPointAt
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
@@ -1484,8 +1491,8 @@ function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
 
 /**
  *
- * @param fahrenheit
- * @param precisionPointAt
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
@@ -1504,8 +1511,8 @@ function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
 
 /**
  *
- * @param kelvin
- * @param precisionPointAt
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function kelvinToCelsius ( kelvin, precisionPointAt ) {
@@ -1524,8 +1531,8 @@ function kelvinToCelsius ( kelvin, precisionPointAt ) {
 
 /**
  *
- * @param kelvin
- * @param precisionPointAt
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
  * @return {string}
  */
 function kelvinToFahrenheit ( kelvin, precisionPointAt ) {

@@ -52,7 +52,7 @@ import path                        from 'path'
 import karma                       from 'karma'
 import log                         from 'fancy-log'
 import colors                      from 'ansi-colors'
-import {fileURLToPath}             from "url"
+import {fileURLToPath}             from 'url'
 import jsdocConfiguration          from './configs/jsdoc.conf.js'
 import rollupConfigurator          from './configs/rollup.conf.js'
 import rollupUnitTestsConfigurator from './configs/rollup.units.conf.js'
@@ -155,7 +155,8 @@ gulp.task( 'clean', () => {
 
     const filesToClean = [
         './builds',
-        './tests/builds',
+        './tests/units/builds',
+        './tests/benchmarks/builds',
         './docs'
     ]
 
@@ -176,8 +177,8 @@ gulp.task( 'lint', () => {
         'configs/**/*.js',
         'sources/**/*.js',
         '!sources/scripts/*.js',
-        '!tests/**/*.js',
-        '!tests/builds/*.js'
+        'tests/**/*.js',
+        '!tests/**/builds/*.js'
     ]
 
     return gulp.src( filesToLint, { base: './' } )
@@ -908,9 +909,8 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
 
             const template = '' +
                 `import { expect }       from 'chai'` + '\n' +
-                `import { describe, it } from 'mocha'` + '\n' +
+                `import { beforeEach, afterEach, describe, it } from 'mocha'` + '\n' +
                 `import { Testing }      from '../../../sources/testings/benchmarks'` + '\n' +
-                `//import { Testing }      from 'itee-utils'` + '\n' +
                 `import * as ${ nsName } from '${ importFilePath }'` + '\n' +
                 '\n' +
                 `function ${ unitName } () {` + '\n' +
@@ -1239,7 +1239,7 @@ gulp.task( 'build-tests', gulp.series( 'check-bundling', 'build-unit-tests', 'bu
 gulp.task( 'run-unit-tests-for-node', ( done ) => {
 
     const mochaPath = path.join( __dirname, 'node_modules/mocha/bin/mocha' )
-    const testsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.units.cjs.js` )
+    const testsPath = path.join( __dirname, `tests/units/builds/${ packageInfos.name }.units.cjs.js` )
     const mocha     = childProcess.spawn( 'node', [ mochaPath, testsPath ], { stdio: 'inherit' } )
     mocha.on( 'close', ( code ) => {
 
@@ -1282,7 +1282,7 @@ gulp.task( 'run-unit-tests', gulp.series( 'run-unit-tests-for-node'/*, 'run-unit
  */
 gulp.task( 'run-benchmarks-for-node', ( done ) => {
 
-    const benchsPath = path.join( __dirname, `tests/builds/${ packageInfos.name }.benchs.cjs.js` )
+    const benchsPath = path.join( __dirname, `tests/benchmarks/builds/${ packageInfos.name }.benchs.cjs.js` )
     const benchmark  = childProcess.spawn( 'node', [ benchsPath ], { stdio: 'inherit' } )
     benchmark.on( 'close', ( code ) => {
 

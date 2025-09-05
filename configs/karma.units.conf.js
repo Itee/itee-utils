@@ -27,7 +27,7 @@ function CreateKarmaUnitsConfiguration ( config ) {
 
         // list of files / patterns to load in the browser
         files: [
-            `builds/${packageInfos.name}.units.iife.js`
+            `units/builds/${packageInfos.name}.units.iife.js`
         ],
 
         // list of files to exclude
