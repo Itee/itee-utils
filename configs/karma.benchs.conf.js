@@ -29,7 +29,7 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         files: [
 //            'builds/itee-validators.iife.js',
             '../node_modules/itee-validators/builds/itee-validators.iife.js',
-            `builds/${ packageInfos.name }.benchs.iife.js`
+            `units/builds/${ packageInfos.name }.benchs.iife.js`
         ],
 
         // list of files to exclude
