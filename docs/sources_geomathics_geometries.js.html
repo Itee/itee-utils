@@ -89,34 +89,34 @@ import { isNotArray } from 'itee-validators'
 
 /**
  *
- * @param ring
+ * @param {array.&lt;number>} ring
  * @return {boolean}
  */
 export function ringClockwise ( ring ) {
-    if ( isNotArray( ring ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
 
-    if ( ( n = ring.length ) &lt; 4 ) {
+    let numberOfRingElements = ring.length
+    if ( numberOfRingElements &lt; 4 ) {
         return false
     }
 
-    var i    = 0,
-        n,
-        area = ring[ n - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ n - 1 ][ 0 ] * ring[ 0 ][ 1 ]
-    while ( ++i &lt; n ) {
-        area += ring[ i - 1 ][ 1 ] * ring[ i ][ 0 ] - ring[ i - 1 ][ 0 ] * ring[ i ][ 1 ]
+    let ringIndex    = 0
+    let area = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ]
+    while ( ++ringIndex &lt; numberOfRingElements ) {
+        area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ]
     }
     return area >= 0
 }
 
 /**
  *
- * @param ring
- * @param hole
+ * @param {array.&lt;number>} ring
+ * @param {array.&lt;number>} hole
  * @return {boolean}
  */
 export function ringContainsSome ( ring, hole ) {
-    if ( isNotArray( ring ) ) { return }
-    if ( isNotArray( hole ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( hole ) ) { return false }
 
     let i = 0
     let n = hole.length
@@ -135,13 +135,13 @@ export function ringContainsSome ( ring, hole ) {
 
 /**
  *
- * @param ring
- * @param point
+ * @param {array.&lt;number>} ring
+ * @param {array.&lt;number>} point
  * @return {number}
  */
 export function ringContains ( ring, point ) {
-    if ( isNotArray( ring ) ) { return }
-    if ( isNotArray( point ) ) { return }
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( point ) ) { return false }
 
     let x        = point[ 0 ]
     let y        = point[ 1 ]
@@ -170,28 +170,35 @@ export function ringContains ( ring, point ) {
 
 /**
  *
- * @param p0
- * @param p1
- * @param p2
+ * @param {array.&lt;number>} p0
+ * @param {array.&lt;number>} p1
+ * @param {array.&lt;number>} p2
  * @return {boolean}
  */
 export function segmentContains ( p0, p1, p2 ) {
-    if ( isNotArray( p0 ) ) { return }
-    if ( isNotArray( p1 ) ) { return }
-    if ( isNotArray( p2 ) ) { return }
+    if ( isNotArray( p0 ) ) { return false }
+    if ( isNotArray( p1 ) ) { return false }
+    if ( isNotArray( p2 ) ) { return false }
 
-    var x20 = p2[ 0 ] - p0[ 0 ],
-        y20 = p2[ 1 ] - p0[ 1 ]
+    const x20 = p2[ 0 ] - p0[ 0 ]
+    const y20 = p2[ 1 ] - p0[ 1 ]
     if ( x20 === 0 &amp;&amp; y20 === 0 ) {
         return true
     }
-    var x10 = p1[ 0 ] - p0[ 0 ],
-        y10 = p1[ 1 ] - p0[ 1 ]
+
+    const x10 = p1[ 0 ] - p0[ 0 ]
+    const y10 = p1[ 1 ] - p0[ 1 ]
     if ( x10 === 0 &amp;&amp; y10 === 0 ) {
         return false
     }
-    var t = ( x20 * x10 + y20 * y10 ) / ( x10 * x10 + y10 * y10 )
-    return t &lt; 0 || t > 1 ? false : t === 0 || t === 1 ? true : t * x10 === x20 &amp;&amp; t * y10 === y20
+
+    const t = ( (x20 * x10) + (y20 * y10) ) / ( (x10 * x10) + (y10 * y10) )
+
+    return t &lt; 0 || t > 1
+           ? false
+           : t === 0 || t === 1
+             ? true
+             : t * x10 === x20 &amp;&amp; t * y10 === y20
 }
 </pre>
     </article>

@@ -100,41 +100,6 @@ function CreateUnitsRollupConfigs ( /*options*/ ) {
     'use strict'
 
     return [
-        // For Karma
-        {
-            input:    `tests/units/${ packageInfos.name }.units.js`,
-            external: [
-                'mocha',
-                'chai'
-            ],
-            plugins: [
-                nodeResolve( {
-                    preferBuiltins: true
-                } ),
-                alias( {
-                    entries: [
-                        {
-                            find:        'itee-utils',
-                            replacement: '../../../builds/itee-utils.esm.js'
-                        }
-                    ]
-                } ),
-                cleanup( {
-                    comments: 'none'
-                } )
-            ],
-            treeshake: true,
-            output:    {
-                indent:  '\t',
-                format:  'iife',
-                name:    'Itee.Units',
-                globals: {
-                    'mocha': 'Mocha',
-                    'chai':  'chai'
-                },
-                file: `tests/builds/${ packageInfos.name }.units.iife.js`
-            }
-        },
         // For Node
         {
             input:    `tests/units/${ packageInfos.name }.units.js`,
@@ -169,9 +134,44 @@ function CreateUnitsRollupConfigs ( /*options*/ ) {
             output:    {
                 indent: '\t',
                 format: 'cjs',
-                file:   `tests/builds/${ packageInfos.name }.units.cjs.js`
+                file:   `tests/units/builds/${ packageInfos.name }.units.cjs.js`
             }
-        }
+        },
+        // For Karma
+        {
+            input:    `tests/units/${ packageInfos.name }.units.js`,
+            external: [
+                'mocha',
+                'chai'
+            ],
+            plugins: [
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                    ]
+                } ),
+                cleanup( {
+                    comments: 'none'
+                } )
+            ],
+            treeshake: true,
+            output:    {
+                indent:  '\t',
+                format:  'iife',
+                name:    'Itee.Units',
+                globals: {
+                    'mocha': 'Mocha',
+                    'chai':  'chai'
+                },
+                file: `tests/units/builds/${ packageInfos.name }.units.iife.js`
+            }
+        },
     ]
 
 }

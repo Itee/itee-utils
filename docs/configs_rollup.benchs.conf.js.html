@@ -101,6 +101,48 @@ function CreateBenchmarksRollupConfigs ( /*options*/ ) {
     'use strict'
 
     return [
+        // For Node
+        {
+            input:    `tests/benchmarks/${ packageInfos.name }.benchs.js`,
+            external: [
+                'benchmark',
+                'fs',
+                'path'
+            ],
+            plugins: [
+                replace( {
+                    defines: {
+                        IS_KEEP_ON_BUILD:     true,
+                        IS_BACKEND_SPECIFIC:  true,
+                        IS_FRONTEND_SPECIFIC: false,
+                    }
+                } ),
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                alias( {
+                    entries: [
+                        {
+                            find:        'itee-utils',
+                            replacement: '../../../builds/itee-utils.esm.js'
+                        }
+                        //                                        {
+                        //                                            find:        'itee-validators',
+                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+                        //                                        }
+                    ]
+                } ),
+                cleanup( {
+                    comments: 'none'
+                } )
+            ],
+            treeshake: true,
+            output:    {
+                indent: '\t',
+                format: 'cjs',
+                file:   `tests/benchmarks/builds/${ packageInfos.name }.benchs.cjs.js`
+            }
+        },
         // For Karma
         {
             input:    `tests/benchmarks/${ packageInfos.name }.benchs.js`,
@@ -149,51 +191,9 @@ function CreateBenchmarksRollupConfigs ( /*options*/ ) {
                 globals: {
                     'benchmark': 'Benchmark'
                 },
-                file: `tests/builds/${ packageInfos.name }.benchs.iife.js`
+                file: `tests/benchmarks/builds/${ packageInfos.name }.benchs.iife.js`
             }
         },
-        // For Node
-        {
-            input:    `tests/benchmarks/${ packageInfos.name }.benchs.js`,
-            external: [
-                'benchmark',
-                'fs',
-                'path'
-            ],
-            plugins: [
-                replace( {
-                    defines: {
-                        IS_KEEP_ON_BUILD:     true,
-                        IS_BACKEND_SPECIFIC:  true,
-                        IS_FRONTEND_SPECIFIC: false,
-                    }
-                } ),
-                nodeResolve( {
-                    preferBuiltins: true
-                } ),
-                alias( {
-                    entries: [
-                        {
-                            find:        'itee-utils',
-                            replacement: '../../../builds/itee-utils.esm.js'
-                        }
-                        //                                        {
-                        //                                            find:        'itee-validators',
-                        //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
-                        //                                        }
-                    ]
-                } ),
-                cleanup( {
-                    comments: 'none'
-                } )
-            ],
-            treeshake: true,
-            output:    {
-                indent: '\t',
-                format: 'cjs',
-                file:   `tests/builds/${ packageInfos.name }.benchs.cjs.js`
-            }
-        }
     ]
 }
 
