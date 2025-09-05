@@ -52,7 +52,7 @@ import path                        from 'path'
 import karma                       from 'karma'
 import log                         from 'fancy-log'
 import colors                      from 'ansi-colors'
-import {fileURLToPath}             from "url"
+import {fileURLToPath}             from 'url'
 import jsdocConfiguration          from './configs/jsdoc.conf.js'
 import rollupConfigurator          from './configs/rollup.conf.js'
 import rollupUnitTestsConfigurator from './configs/rollup.units.conf.js'
