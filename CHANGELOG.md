@@ -1,3 +1,10 @@
+## [5.4.3](https://github.com/Itee/itee-utils/compare/v5.4.2...v5.4.3) (2025-09-05)
+
+
+### Bug Fixes
+
+* **gulpfile:** fix some test and regenerate them ([f0c8b7b](https://github.com/Itee/itee-utils/commit/f0c8b7b79fab6827911cac6e327bc07b1b24015e))
+
 ## [5.4.2](https://github.com/Itee/itee-utils/compare/v5.4.1...v5.4.2) (2025-09-04)
 
 

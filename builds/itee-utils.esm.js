@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.4.2 - EsModule')
+console.log('Itee.Utils v5.4.3 - EsModule')
 import { isArray, isObject, isNotString, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 import fs from 'fs';
 import path from 'path';
