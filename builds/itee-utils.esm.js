@@ -1,5 +1,5 @@
-console.log('Itee.Utils v5.4.3 - EsModule')
-import { isArray, isObject, isNotString, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
+console.log('Itee.Utils v5.4.4 - EsModule')
+import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined as isDefined$1, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 import fs from 'fs';
 import path from 'path';
 
@@ -121,7 +121,7 @@ function byteToBits ( byte ) {
 }
 
 function bitsToByte ( bits ) {
-    if ( isNotString( bits ) ) { return }
+    if ( isNotString$1( bits ) ) { return }
 
     let byte = 0;
 
@@ -162,7 +162,7 @@ function numberToInternalRepresentation ( number ) {
 function internalRepresentationToNumber ( string ) {
 
     if ( isNotDefined( string ) ) { return }
-    if ( isNotString( string ) ) { return }
+    if ( isNotString$1( string ) ) { return }
     //    if ( isNotDefined( string ) ) { throw ReferenceError( 'string cannot be null or empty !' )}
 
     const cleanString = string.replace( / /g, '' );
@@ -546,9 +546,9 @@ function createInterval ( particles, path, interval ) {
  */
 function toEnum ( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
-    if ( isDefined( enumValues.toString ) ) {
+    if ( isDefined$1( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' );
-        if ( isDefined( descriptor ) && descriptor.configurable === false ) {
+        if ( isDefined$1( descriptor ) && descriptor.configurable === false ) {
             return
         }
     }
@@ -623,7 +623,7 @@ function toEnum ( enumValues ) {
  * @throws {TypeError} - If 'word' is an empty string
  */
 function classNameify ( word ) {
-    if(isNotString(word)) { return }
+    if(isNotString$1(word)) { return }
     if(isEmptyString(word)) { return }
 
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
@@ -1025,7 +1025,7 @@ const diacriticsMap = /*#__PURE__*/( () => {
  * @returns {null|string}
  */
 function removeDiacritics ( string ) {
-    if(isNotString(string)) { return null }
+    if(isNotString$1(string)) { return null }
 
     // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
@@ -2168,6 +2168,74 @@ function isInvalidPath ( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined ( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings/isString
+ * @desc Export function to validate if a value is a string
+ * @example
+ *
+ * import { isString } from 'itee-validators'
+ *
+ * if( isString( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is a string, false otherwise.
+ */
+function isString ( data ) {
+    return ( typeof data === 'string' || data instanceof String )
+}
+
+/**
+ * Check if given data is not a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is not a string, false otherwise.
+ */
+function isNotString ( data ) {
+    return !isString( data )
+}
+
+// #endif
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
  * @module sources/file-system/directories/isDirectoryPath
  * @description Export function to validate if a value is a directories path
  *
@@ -2192,7 +2260,12 @@ function isInvalidPath ( data ) {
  * @returns {boolean} true if path is a directory path, false otherwise
  */
 function isDirectoryPath ( path ) {
-    return fs.statSync( path ).isDirectory()
+    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
+        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+    }
+
+    const stat = fs.statSync( path, { throwIfNoEntry: false } );
+    return isDefined(stat) && stat.isDirectory()
 }
 
 /**
@@ -2223,7 +2296,12 @@ function isDirectoryPath ( path ) {
  * @returns {boolean} true if path is a file path, false otherwise
  */
 function isFilePath ( path ) {
-    return fs.statSync( path ).isFile()
+    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
+        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+    }
+
+    const stat = fs.statSync( path, { throwIfNoEntry: false } );
+    return isDefined(stat) && stat.isFile()
 }
 
 /**

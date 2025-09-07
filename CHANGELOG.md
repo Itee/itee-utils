@@ -1,3 +1,10 @@
+## [5.4.4](https://github.com/Itee/itee-utils/compare/v5.4.3...v5.4.4) (2025-09-07)
+
+
+### Bug Fixes
+
+* **npm:** apply npm audit fix ([342f16b](https://github.com/Itee/itee-utils/commit/342f16b5d53952860e5da5ab244b8ae16d84566a))
+
 ## [5.4.3](https://github.com/Itee/itee-utils/compare/v5.4.2...v5.4.3) (2025-09-05)
 
 

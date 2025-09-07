@@ -1,4 +1,4 @@
-console.log('Itee.Utils v5.4.3 - CommonJs')
+console.log('Itee.Utils v5.4.4 - CommonJs')
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -2175,6 +2175,74 @@ function isInvalidPath ( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined ( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings/isString
+ * @desc Export function to validate if a value is a string
+ * @example
+ *
+ * import { isString } from 'itee-validators'
+ *
+ * if( isString( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is a string, false otherwise.
+ */
+function isString ( data ) {
+    return ( typeof data === 'string' || data instanceof String )
+}
+
+/**
+ * Check if given data is not a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is not a string, false otherwise.
+ */
+function isNotString ( data ) {
+    return !isString( data )
+}
+
+// #endif
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
  * @module sources/file-system/directories/isDirectoryPath
  * @description Export function to validate if a value is a directories path
  *
@@ -2199,7 +2267,12 @@ function isInvalidPath ( data ) {
  * @returns {boolean} true if path is a directory path, false otherwise
  */
 function isDirectoryPath ( path ) {
-    return fs__default["default"].statSync( path ).isDirectory()
+    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
+        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+    }
+
+    const stat = fs__default["default"].statSync( path, { throwIfNoEntry: false } );
+    return isDefined(stat) && stat.isDirectory()
 }
 
 /**
@@ -2230,7 +2303,12 @@ function isDirectoryPath ( path ) {
  * @returns {boolean} true if path is a file path, false otherwise
  */
 function isFilePath ( path ) {
-    return fs__default["default"].statSync( path ).isFile()
+    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
+        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+    }
+
+    const stat = fs__default["default"].statSync( path, { throwIfNoEntry: false } );
+    return isDefined(stat) && stat.isFile()
 }
 
 /**
