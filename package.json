@@ -54,7 +54,7 @@
     "postversion": "gulp build"
   },
   "dependencies": {
-    "itee-validators": "^5.3.5"
+    "itee-validators": "^5.3.9"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",

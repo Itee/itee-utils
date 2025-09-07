@@ -25,7 +25,6 @@ function CreateUnitsRollupConfigs ( /*options*/ ) {
         {
             input:    `tests/units/${ packageInfos.name }.units.js`,
             external: [
-                //                'itee-validators',
                 'mocha',
                 'chai',
                 'fs',
