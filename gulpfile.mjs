@@ -283,7 +283,6 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
 
         const config = {
             input: temporaryFile,
-            //                                external:  [ 'itee-validators' ],
             plugins:   [
                 nodeResolve()
                 //                commonJs()
@@ -457,6 +456,8 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
     const testsDir   = path.join( basePath, 'tests' )
     const unitsDir   = path.join( testsDir, 'units' )
 
+    fs.mkdirSync( unitsDir, { recursive: true } )
+
     const filePathsToIgnore = [
         `${ packageInfos.name }.js`,
         'LineFileSplitter.js',
@@ -495,32 +496,43 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
             const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
             const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
 
+            const classNames    = []
             const usedLongnames = []
             const jsonData      = JSON.parse(jsdocOutput).filter(data => {
 
-                const kind         = data.kind
-                const longName     = data.longname
-                const scope        = data.scope
-                const undocumented = data.undocumented
+                const longName = data.longname
 
-                let isValid
-
-                if (undocumented) {
-                    isValid = false
-                } else if (kind !== 'function') {
-                    isValid = false
-                } else if (!['global', 'static'].includes(scope)) {
-                    isValid = false
-                } else if (longName.includes(' ') || longName.includes('~')) {
-                    isValid = false
-                } else if (usedLongnames.includes(longName)) {
-                    isValid = false
-                } else {
-                    usedLongnames.push(longName)
-                    isValid = true
+                const kind = data.kind
+                if (kind !== 'function') {
+                    if (kind === 'class' && !classNames.includes(longName)) {
+                        classNames.push(longName)
+                    }
+                    return false
                 }
 
-                return isValid
+                const undocumented = data.undocumented
+                if (undocumented) {
+                    return false
+                }
+
+                const scope = data.scope
+                if (!['global', 'static'].includes(scope)) {
+                    return false
+                }
+
+                if (longName.includes(' ') || longName.includes('~') || usedLongnames.includes(longName)) {
+                    return false
+                }
+
+                for(let className of classNames) {
+                    if(longName.includes(className)) {
+                        return false
+                    }
+                }
+
+                usedLongnames.push(longName)
+
+                return true
 
             })
 
@@ -981,6 +993,8 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
         '} )' + '\n'
 
     const unitsFilePath = path.join( unitsDir, `${ packageInfos.name }.units.js` )
+
+    log( green( `Create ${ unitsFilePath }` ) )
     fs.writeFileSync( unitsFilePath, unitsTemplate )
 
     done()
@@ -1028,6 +1042,8 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
     const testsDir   = path.join( basePath, 'tests' )
     const benchsDir  = path.join( testsDir, 'benchmarks' )
 
+    fs.mkdirSync( benchsDir, { recursive: true } )
+
     const filePathsToIgnore = [
         `${ packageInfos.name }.js`,
         'LineFileSplitter.js',
@@ -1065,29 +1081,43 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
             const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
             const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
 
+            const classNames    = []
             const usedLongnames = []
             const jsonData      = JSON.parse(jsdocOutput).filter(data => {
 
-                const kind     = data.kind
                 const longName = data.longname
-                const scope    = data.scope
 
-                let isValid
-
+                const kind = data.kind
                 if (kind !== 'function') {
-                    isValid = false
-                } else if (!['global', 'static'].includes(scope)) {
-                    isValid = false
-                } else if (longName.includes(' ') || longName.includes('~')) {
-                    isValid = false
-                } else if (usedLongnames.includes(longName)) {
-                    isValid = false
-                } else {
-                    usedLongnames.push(longName)
-                    isValid = true
+                    if (kind === 'class' && !classNames.includes(longName)) {
+                        classNames.push(longName)
+                    }
+                    return false
                 }
 
-                return isValid
+                const undocumented = data.undocumented
+                if (undocumented) {
+                    return false
+                }
+
+                const scope = data.scope
+                if (!['global', 'static'].includes(scope)) {
+                    return false
+                }
+
+                if (longName.includes(' ') || longName.includes('~') || usedLongnames.includes(longName)) {
+                    return false
+                }
+
+                for(let className of classNames) {
+                    if(longName.includes(className)) {
+                        return false
+                    }
+                }
+
+                usedLongnames.push(longName)
+
+                return true
 
             })
 
@@ -1136,7 +1166,6 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
 
             const template = '' + '\n' +
                 `import Benchmark   from 'benchmark'` + '\n' +
-                `//import { Testing } from 'itee-utils'` + '\n' +
                 `import { Testing }      from '../../../sources/testings/benchmarks'` + '\n' +
                 `import * as ${ nsName } from '${ importFilePath }'` + '\n' +
                 '\n' +
@@ -1187,6 +1216,8 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
         `}` + '\n'
 
     const benchsFilePath = path.join( benchsDir, `${ packageInfos.name }.benchs.js` )
+
+    log( green( `Create ${ benchsFilePath }` ) )
     fs.writeFileSync( benchsFilePath, benchsTemplate )
 
     done()
