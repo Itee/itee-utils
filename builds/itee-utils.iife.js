@@ -1,4 +1,13 @@
-console.log('Itee.Utils v5.4.4 - Standalone')
+/**
+ * ┳      ┳┳ •┓     ┏━ ┏━ ┏┓      ┏┓      ┓  ┓      
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┗┓ ┗┓ ┃┫  ━━  ┗┓╋┏┓┏┓┏┫┏┓┃┏┓┏┓┏┓
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┗┗┻┛┗┗┻┗┻┗┗┛┛┗┗ 
+ *                                                  
+ * @desc    A library of utility functions use in various Itee projects
+ * @author  [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ * 
+ */
 this.Itee = this.Itee || {};
 this.Itee.Utils = (function (exports, iteeValidators) {
 	'use strict';
@@ -1556,7 +1565,6 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
 	 */
 
-
 	const voids = {
 	    null:      null,
 	    undefined: undefined,
@@ -1640,124 +1648,33 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	const functions = {
 	    anonymousFunction: function () {},
-	    namedFunction:     function namedFunction () {},
+	    namedFunction:     function namedFunction() {},
 	    arrowFunction:     () => {}
 	};
 
-	const arrays = /*#__PURE__*/( () => {
-
-	    const dataMap = {
-	        emptyArray:       [],
-	        emptyArrayObject: new Array(),
-	        singleValued:     [ 0 ],
-	        multiValued:      [ 0, 1, 2 ],
-	        null:             ( () => {
-
-	            const nullArray = [];
-
-	            for ( let index = 0 ; index < 3 ; index++ ) {
-	                nullArray.push( null );
-	            }
-
-	            return nullArray
-
-	        } )(),
-	        undefined: ( () => {
-
-	            const undefinedArray = [];
-
-	            for ( let index = 0 ; index < 3 ; index++ ) {
-	                undefinedArray.push( undefined );
-	            }
-
-	            return undefinedArray
-
-	        } )(),
-	        void: ( () => {
-
-	            const undefinedArray = [];
-
-	            for ( let index = 0 ; index < 3 ; index++ ) {
-	                undefinedArray.push( void ( 0 ) );
-	            }
-
-	            return undefinedArray
-
-	        } )(),
-	        voids: ( () => {
-
-	            const array = [];
-
-	            const voidDataMap = voids;
-	            for ( let key in voidDataMap ) {
-	                array.push( voidDataMap[ key ] );
-	            }
-
-	            return array
-
-	        } )(),
-	        booleans: ( () => {
-
-	            const array = [];
-
-	            const booleanDataMap = booleans;
-	            for ( let key in booleanDataMap ) {
-	                array.push( booleanDataMap[ key ] );
-	            }
-
-	            return array
-
-	        } )(),
-	        numbers: ( () => {
-
-	            const array = [];
-
-	            const numericDataMap = numbers;
-	            for ( let key in numericDataMap ) {
-	                array.push( numericDataMap[ key ] );
-	            }
-
-	            return array
-
-	        } )(),
-	        strings: ( () => {
-
-	            const array = [];
-
-	            const stringDataMap = strings;
-	            for ( let key in stringDataMap ) {
-	                array.push( stringDataMap[ key ] );
-	            }
-
-	            return array
-
-	        } )(),
-	        functions: ( () => {
-
-	            const array = [];
-
-	            const functionDataMap = functions;
-	            for ( let key in functionDataMap ) {
-	                array.push( functionDataMap[ key ] );
-	            }
-
-	            return array
-
-	        } )(),
-	        objects: [
-	            {
-	                foo: 'bar'
-	            },
-	            {
-	                baz: 'qux'
-	            }
-	        ],
-	        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
-	    };
-
-	    return dataMap
-
-	} )();
+	const arrays = {
+	    emptyArray:       [],
+	    emptyArrayObject: /*#__PURE__*/new Array(),
+	    singleValued:     [ 0 ],
+	    multiValued:      [ 0, 1, 2 ],
+	    null:             [ null, null, null ],
+	    undefined:        [ undefined, undefined, undefined ],
+	    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+	    voids:            /*#__PURE__*/Object.values( voids ),
+	    booleans:         /*#__PURE__*/Object.values( booleans ),
+	    numbers:          /*#__PURE__*/Object.values( numbers ),
+	    strings:          /*#__PURE__*/Object.values( strings ),
+	    functions:        /*#__PURE__*/Object.values( functions ),
+	    objects:          [
+	        {
+	            foo: 'bar'
+	        },
+	        {
+	            baz: 'qux'
+	        }
+	    ],
+	    arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+	};
 
 	const typedArrays = {
 	    int8Array:    new Int8Array( [ 1, 2, 3 ] ),
@@ -1857,7 +1774,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	        return {
 
 	            // called when the benchmark starts running
-	            'onStart': function onStartBench ( /*event*/ ) {
+	            'onStart': function onStartBench( /*event*/ ) {
 	                this.benchDataMap = Testing.DataMap;
 
 	                //                console.log( `${ this.constructor.name } [${ this.name }]` )
@@ -1868,39 +1785,39 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            },
 
 	            // called after each run cycle
-	            'onCycle': function onCycleBench ( /*event*/ ) {
+	            'onCycle': function onCycleBench( /*event*/ ) {
 	                //                console.log( `${ this.constructor.name } [${ this.name }] onCycle` )
 	            },
 
 	            // called when aborted
-	            'onAbort': function onAbortBench ( /*event*/ ) {
+	            'onAbort': function onAbortBench( /*event*/ ) {
 	                console.log( `${ this.constructor.name } [${ this.name }] onAbort` );
 	            },
 
 	            // called when a test errors
-	            'onError': function onErrorBench ( event ) {
+	            'onError': function onErrorBench( event ) {
 	                console.log( `${ this.constructor.name } [${ this.name }] onError` );
 	                console.error( event.message );
 	            },
 
 	            // called when reset
-	            'onReset': function onResetBench ( /*event*/ ) {
+	            'onReset': function onResetBench( /*event*/ ) {
 	                console.log( `${ this.constructor.name } [${ this.name }] onReset` );
 	            },
 
 	            // called when the benchmark completes running
-	            'onComplete': function onCompleteBench ( /*event*/ ) {
+	            'onComplete': function onCompleteBench( /*event*/ ) {
 	                //                console.log( `${ this.constructor.name } [${ this.name }] onComplete` )
 	                delete this.benchDataMap;
 	            },
 
 	            // compiled/called before the test loop
-	            'setup': function setupBench ( /*event*/ ) {
+	            'setup': function setupBench( /*event*/ ) {
 	                //                console.log( `${ this.constructor.name } [${ this.name }] setup` )
 	            },
 
 	            // compiled/called after the test loop
-	            'teardown': function teardownBench ( /*event*/ ) {
+	            'teardown': function teardownBench( /*event*/ ) {
 	                //                console.log( `${ this.constructor.name } [${ this.name }] teardown` )
 	            }
 	        }
@@ -1922,14 +1839,14 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	    iterateOverDataMap: function ( method ) {
 
-	        return function _iterateOverDataMap () {
+	        return function _iterateOverDataMap() {
 	            //            console.group( 'iterateOverDataMap' )
 	            //            console.log( `Suite Datamap: ${ ( ( this.suiteDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
 	            //            console.log( `Bench Datamap: ${ ( ( this.benchDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
 	            //            console.groupEnd()
 
 	            if ( typeof method === 'undefined' ) {
-	                throw new ReferenceError('the method param is null or undefined!')
+	                throw new ReferenceError( 'the method param is null or undefined!' )
 	            }
 
 	            const datamap = this.benchDataMap;
@@ -1944,11 +1861,11 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	                            method( datasetElement );
 	                        } catch ( error ) {
 
-	                            const datasetElementType = (datasetElement === null)
-	                                             ? 'null'
-	                                             : (datasetElement === undefined)
-	                                               ? 'undefined'
-	                                               : datasetElement.toString();
+	                            const datasetElementType = ( datasetElement === null )
+	                                                       ? 'null'
+	                                                       : ( datasetElement === undefined )
+	                                                         ? 'undefined'
+	                                                         : datasetElement.toString();
 
 	                            console.error( `method [${ method.name } fail with [${ datasetElementType }] => ${ error.message }` );
 	                        }
@@ -1964,9 +1881,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	                            method( data );
 	                        } catch ( error ) {
 
-	                            const dataType = (data === null)
+	                            const dataType = ( data === null )
 	                                             ? 'null'
-	                                             : (data === undefined)
+	                                             : ( data === undefined )
 	                                               ? 'undefined'
 	                                               : data.toString();
 
@@ -2031,11 +1948,11 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	        return {
 
-	            setup: function onSetup () {
+	            setup: function onSetup() {
 	                this.dataset = Testing.createDataSet()[ datasetName ];
 	            },
 
-	            teardown: function onTeardown () {
+	            teardown: function onTeardown() {
 	                delete this.dataset;
 	            }
 

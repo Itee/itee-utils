@@ -1,6 +1,15 @@
-console.log('Itee.Utils v5.4.4 - EsModule')
+/**
+ * ┳      ┳┳ •┓     ┏━ ┏━ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┗┓ ┗┓ ┃┫  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
+ *                                               
+ * @desc    A library of utility functions use in various Itee projects
+ * @author  [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ * 
+ */
 import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined as isDefined$1, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
-import fs from 'fs';
+import fs, { existsSync, statSync } from 'fs';
 import path from 'path';
 
 /**
@@ -1554,7 +1563,6 @@ function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  */
 
-
 const voids = {
     null:      null,
     undefined: undefined,
@@ -1638,124 +1646,33 @@ const strings = /*#__PURE__*/( () => {
 
 const functions = {
     anonymousFunction: function () {},
-    namedFunction:     function namedFunction () {},
+    namedFunction:     function namedFunction() {},
     arrowFunction:     () => {}
 };
 
-const arrays = /*#__PURE__*/( () => {
-
-    const dataMap = {
-        emptyArray:       [],
-        emptyArrayObject: new Array(),
-        singleValued:     [ 0 ],
-        multiValued:      [ 0, 1, 2 ],
-        null:             ( () => {
-
-            const nullArray = [];
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                nullArray.push( null );
-            }
-
-            return nullArray
-
-        } )(),
-        undefined: ( () => {
-
-            const undefinedArray = [];
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                undefinedArray.push( undefined );
-            }
-
-            return undefinedArray
-
-        } )(),
-        void: ( () => {
-
-            const undefinedArray = [];
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                undefinedArray.push( void ( 0 ) );
-            }
-
-            return undefinedArray
-
-        } )(),
-        voids: ( () => {
-
-            const array = [];
-
-            const voidDataMap = voids;
-            for ( let key in voidDataMap ) {
-                array.push( voidDataMap[ key ] );
-            }
-
-            return array
-
-        } )(),
-        booleans: ( () => {
-
-            const array = [];
-
-            const booleanDataMap = booleans;
-            for ( let key in booleanDataMap ) {
-                array.push( booleanDataMap[ key ] );
-            }
-
-            return array
-
-        } )(),
-        numbers: ( () => {
-
-            const array = [];
-
-            const numericDataMap = numbers;
-            for ( let key in numericDataMap ) {
-                array.push( numericDataMap[ key ] );
-            }
-
-            return array
-
-        } )(),
-        strings: ( () => {
-
-            const array = [];
-
-            const stringDataMap = strings;
-            for ( let key in stringDataMap ) {
-                array.push( stringDataMap[ key ] );
-            }
-
-            return array
-
-        } )(),
-        functions: ( () => {
-
-            const array = [];
-
-            const functionDataMap = functions;
-            for ( let key in functionDataMap ) {
-                array.push( functionDataMap[ key ] );
-            }
-
-            return array
-
-        } )(),
-        objects: [
-            {
-                foo: 'bar'
-            },
-            {
-                baz: 'qux'
-            }
-        ],
-        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
-    };
-
-    return dataMap
-
-} )();
+const arrays = {
+    emptyArray:       [],
+    emptyArrayObject: /*#__PURE__*/new Array(),
+    singleValued:     [ 0 ],
+    multiValued:      [ 0, 1, 2 ],
+    null:             [ null, null, null ],
+    undefined:        [ undefined, undefined, undefined ],
+    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+    voids:            /*#__PURE__*/Object.values( voids ),
+    booleans:         /*#__PURE__*/Object.values( booleans ),
+    numbers:          /*#__PURE__*/Object.values( numbers ),
+    strings:          /*#__PURE__*/Object.values( strings ),
+    functions:        /*#__PURE__*/Object.values( functions ),
+    objects:          [
+        {
+            foo: 'bar'
+        },
+        {
+            baz: 'qux'
+        }
+    ],
+    arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+};
 
 const typedArrays = {
     int8Array:    new Int8Array( [ 1, 2, 3 ] ),
@@ -1855,7 +1772,7 @@ const Testing = {
         return {
 
             // called when the benchmark starts running
-            'onStart': function onStartBench ( /*event*/ ) {
+            'onStart': function onStartBench( /*event*/ ) {
                 this.benchDataMap = Testing.DataMap;
 
                 //                console.log( `${ this.constructor.name } [${ this.name }]` )
@@ -1866,39 +1783,39 @@ const Testing = {
             },
 
             // called after each run cycle
-            'onCycle': function onCycleBench ( /*event*/ ) {
+            'onCycle': function onCycleBench( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onCycle` )
             },
 
             // called when aborted
-            'onAbort': function onAbortBench ( /*event*/ ) {
+            'onAbort': function onAbortBench( /*event*/ ) {
                 console.log( `${ this.constructor.name } [${ this.name }] onAbort` );
             },
 
             // called when a test errors
-            'onError': function onErrorBench ( event ) {
+            'onError': function onErrorBench( event ) {
                 console.log( `${ this.constructor.name } [${ this.name }] onError` );
                 console.error( event.message );
             },
 
             // called when reset
-            'onReset': function onResetBench ( /*event*/ ) {
+            'onReset': function onResetBench( /*event*/ ) {
                 console.log( `${ this.constructor.name } [${ this.name }] onReset` );
             },
 
             // called when the benchmark completes running
-            'onComplete': function onCompleteBench ( /*event*/ ) {
+            'onComplete': function onCompleteBench( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onComplete` )
                 delete this.benchDataMap;
             },
 
             // compiled/called before the test loop
-            'setup': function setupBench ( /*event*/ ) {
+            'setup': function setupBench( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] setup` )
             },
 
             // compiled/called after the test loop
-            'teardown': function teardownBench ( /*event*/ ) {
+            'teardown': function teardownBench( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] teardown` )
             }
         }
@@ -1913,36 +1830,36 @@ const Testing = {
         options = {
 
             // called when the suite starts running
-            'onStart': function onStartSuite ( /*event*/ ) {
+            'onStart': function onStartSuite( /*event*/ ) {
                 //eslint-disable-next-line
                 console.log( `Running ${ this.constructor.name }: ${ this.name }` );
                 this.results = [];
             },
 
             // called between running benchmarks
-            'onCycle': function onCycleSuite ( event ) {
+            'onCycle': function onCycleSuite( event ) {
                 //eslint-disable-next-line
                 console.log( `Running Bench: ${ event.target.name }` );
                 this.results.push( event.target );
             },
 
             // called when aborted
-            'onAbort': function onAbortSuite ( /*event*/ ) {
+            'onAbort': function onAbortSuite( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onAbort` )
             },
 
             // called when a test errors
-            'onError': function onErrorSuite ( /*event*/ ) {
+            'onError': function onErrorSuite( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onError` )
             },
 
             // called when reset
-            'onReset': function onResetSuite ( /*event*/ ) {
+            'onReset': function onResetSuite( /*event*/ ) {
                 //                console.log( `${ this.constructor.name } [${ this.name }] onReset` )
             },
 
             // called when the suite completes running
-            'onComplete': function onCompleteSuite ( /*event*/ ) {
+            'onComplete': function onCompleteSuite( /*event*/ ) {
 
                 this.results.sort( ( a, b ) => {
 
@@ -1985,14 +1902,14 @@ const Testing = {
 
     iterateOverDataMap: function ( method ) {
 
-        return function _iterateOverDataMap () {
+        return function _iterateOverDataMap() {
             //            console.group( 'iterateOverDataMap' )
             //            console.log( `Suite Datamap: ${ ( ( this.suiteDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
             //            console.log( `Bench Datamap: ${ ( ( this.benchDataMap === undefined ) ? 'not exist' : 'exist' ) }` )
             //            console.groupEnd()
 
             if ( typeof method === 'undefined' ) {
-                throw new ReferenceError('the method param is null or undefined!')
+                throw new ReferenceError( 'the method param is null or undefined!' )
             }
 
             const datamap = this.benchDataMap;
@@ -2007,11 +1924,11 @@ const Testing = {
                             method( datasetElement );
                         } catch ( error ) {
 
-                            const datasetElementType = (datasetElement === null)
-                                             ? 'null'
-                                             : (datasetElement === undefined)
-                                               ? 'undefined'
-                                               : datasetElement.toString();
+                            const datasetElementType = ( datasetElement === null )
+                                                       ? 'null'
+                                                       : ( datasetElement === undefined )
+                                                         ? 'undefined'
+                                                         : datasetElement.toString();
 
                             console.error( `method [${ method.name } fail with [${ datasetElementType }] => ${ error.message }` );
                         }
@@ -2027,9 +1944,9 @@ const Testing = {
                             method( data );
                         } catch ( error ) {
 
-                            const dataType = (data === null)
+                            const dataType = ( data === null )
                                              ? 'null'
-                                             : (data === undefined)
+                                             : ( data === undefined )
                                                ? 'undefined'
                                                : data.toString();
 
@@ -2094,11 +2011,11 @@ const Testing = {
 
         return {
 
-            setup: function onSetup () {
+            setup: function onSetup() {
                 this.dataset = Testing.createDataSet()[ datasetName ];
             },
 
-            teardown: function onTeardown () {
+            teardown: function onTeardown() {
                 delete this.dataset;
             }
 
@@ -2150,8 +2067,8 @@ const Testing = {
  * @param data {*} The data to check against the path type
  * @returns {boolean} true if data is a valid path, false otherwise
  */
-function isValidPath ( data ) {
-    return fs.existsSync( data )
+function isValidPath( data ) {
+    return existsSync( data )
 }
 
 /**
@@ -2160,7 +2077,7 @@ function isValidPath ( data ) {
  * @param data {*} The data to check against the path type
  * @returns {boolean} true if data is a valid path, false otherwise
  */
-function isInvalidPath ( data ) {
+function isInvalidPath( data ) {
     return !isValidPath( data )
 }
 
@@ -2188,7 +2105,7 @@ function isInvalidPath ( data ) {
  * @param data {*} The data to check against the existence
  * @returns {boolean} true if data is not null and not undefined, false otherwise.
  */
-function isDefined ( data ) {
+function isDefined( data ) {
     return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
 }
 
@@ -2216,7 +2133,7 @@ function isDefined ( data ) {
  * @param data {*} The data to check against the string type
  * @returns {boolean} true if data is a string, false otherwise.
  */
-function isString ( data ) {
+function isString( data ) {
     return ( typeof data === 'string' || data instanceof String )
 }
 
@@ -2226,7 +2143,7 @@ function isString ( data ) {
  * @param data {*} The data to check against the string type
  * @returns {boolean} true if data is not a string, false otherwise.
  */
-function isNotString ( data ) {
+function isNotString( data ) {
     return !isString( data )
 }
 
@@ -2259,13 +2176,13 @@ function isNotString ( data ) {
  * @param path {string|Buffer|URL} The data to check against the directory path type
  * @returns {boolean} true if path is a directory path, false otherwise
  */
-function isDirectoryPath ( path ) {
-    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
-        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+function isDirectoryPath( path ) {
+    if ( isNotString( path ) && !( path instanceof Buffer ) && !( path instanceof URL ) ) {
+        throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
-    const stat = fs.statSync( path, { throwIfNoEntry: false } );
-    return isDefined(stat) && stat.isDirectory()
+    const stat = statSync( path, { throwIfNoEntry: false } );
+    return isDefined( stat ) && stat.isDirectory()
 }
 
 /**
@@ -2295,13 +2212,13 @@ function isDirectoryPath ( path ) {
  * @param path {string|Buffer|URL} The data to check against the file path type
  * @returns {boolean} true if path is a file path, false otherwise
  */
-function isFilePath ( path ) {
-    if( isNotString(path) && !(path instanceof Buffer) && !(path instanceof URL) ) {
-        throw new TypeError('Invalid path type! Expect string, buffer or url.')
+function isFilePath( path ) {
+    if ( isNotString( path ) && !( path instanceof Buffer ) && !( path instanceof URL ) ) {
+        throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
-    const stat = fs.statSync( path, { throwIfNoEntry: false } );
-    return isDefined(stat) && stat.isFile()
+    const stat = statSync( path, { throwIfNoEntry: false } );
+    return isDefined( stat ) && stat.isFile()
 }
 
 /**

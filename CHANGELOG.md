@@ -1,3 +1,13 @@
+# [v5.5.0](https://github.com/Itee/itee-utils/compare/v5.4.4...v5.5.0) (2025-10-16)
+
+## ✨ New Features
+- [`2c1af5f`](https://github.com/Itee/itee-utils/commit/2c1af5f)  (package) use cz-emoji in favor of cz-conventional-changlog 
+
+## 🐛 Bug Fixes
+- [`5e5a887`](https://github.com/Itee/itee-utils/commit/5e5a887)  (gulpfile) fix gulp.conf file extension 
+- [`3cf5c13`](https://github.com/Itee/itee-utils/commit/3cf5c13)  (rollup.conf) fix removed parameter name to fix iife generation 
+- [`82da0e2`](https://github.com/Itee/itee-utils/commit/82da0e2)  (bundling) fix some bundling side effects
+
 ## [5.4.4](https://github.com/Itee/itee-utils/compare/v5.4.3...v5.4.4) (2025-09-07)
 
 
