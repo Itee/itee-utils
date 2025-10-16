@@ -3,7 +3,6 @@
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  */
 
-
 const voids = {
     null:      null,
     undefined: undefined,
@@ -40,14 +39,14 @@ const numbers = {
     positiveMaxValue:        Number.MAX_VALUE,
     positiveInfinity:        Number.POSITIVE_INFINITY,
     // others
-    e:                       Math.E,
-    ln10:                    Math.LN10,
-    ln2:                     Math.LN2,
-    log10e:                  Math.LOG10E,
-    log2e:                   Math.LOG2E,
-    pi:                      Math.PI,
-    sqrt1_2:                 Math.SQRT1_2,
-    sqrt2:                   Math.SQRT2
+    e:       Math.E,
+    ln10:    Math.LN10,
+    ln2:     Math.LN2,
+    log10e:  Math.LOG10E,
+    log2e:   Math.LOG2E,
+    pi:      Math.PI,
+    sqrt1_2: Math.SQRT1_2,
+    sqrt2:   Math.SQRT2
 }
 
 const strings = /*#__PURE__*/( () => {
@@ -87,124 +86,33 @@ const strings = /*#__PURE__*/( () => {
 
 const functions = {
     anonymousFunction: function () {},
-    namedFunction:     function namedFunction () {},
+    namedFunction:     function namedFunction() {},
     arrowFunction:     () => {}
 }
 
-const arrays = /*#__PURE__*/( () => {
-
-    const dataMap = {
-        emptyArray:       [],
-        emptyArrayObject: new Array(),
-        singleValued:     [ 0 ],
-        multiValued:      [ 0, 1, 2 ],
-        null:             ( () => {
-
-            const nullArray = []
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                nullArray.push( null )
-            }
-
-            return nullArray
-
-        } )(),
-        undefined: ( () => {
-
-            const undefinedArray = []
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                undefinedArray.push( undefined )
-            }
-
-            return undefinedArray
-
-        } )(),
-        void: ( () => {
-
-            const undefinedArray = []
-
-            for ( let index = 0 ; index < 3 ; index++ ) {
-                undefinedArray.push( void ( 0 ) )
-            }
-
-            return undefinedArray
-
-        } )(),
-        voids: ( () => {
-
-            const array = []
-
-            const voidDataMap = voids
-            for ( let key in voidDataMap ) {
-                array.push( voidDataMap[ key ] )
-            }
-
-            return array
-
-        } )(),
-        booleans: ( () => {
-
-            const array = []
-
-            const booleanDataMap = booleans
-            for ( let key in booleanDataMap ) {
-                array.push( booleanDataMap[ key ] )
-            }
-
-            return array
-
-        } )(),
-        numbers: ( () => {
-
-            const array = []
-
-            const numericDataMap = numbers
-            for ( let key in numericDataMap ) {
-                array.push( numericDataMap[ key ] )
-            }
-
-            return array
-
-        } )(),
-        strings: ( () => {
-
-            const array = []
-
-            const stringDataMap = strings
-            for ( let key in stringDataMap ) {
-                array.push( stringDataMap[ key ] )
-            }
-
-            return array
-
-        } )(),
-        functions: ( () => {
-
-            const array = []
-
-            const functionDataMap = functions
-            for ( let key in functionDataMap ) {
-                array.push( functionDataMap[ key ] )
-            }
-
-            return array
-
-        } )(),
-        objects: [
-            {
-                foo: 'bar'
-            },
-            {
-                baz: 'qux'
-            }
-        ],
-        arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
-    }
-
-    return dataMap
-
-} )()
+const arrays = {
+    emptyArray:                    [],
+    emptyArrayObject: /*#__PURE__*/new Array(),
+    singleValued:                  [ 0 ],
+    multiValued:                   [ 0, 1, 2 ],
+    null:                          [ null, null, null ],
+    undefined:                     [ undefined, undefined, undefined ],
+    void:                          [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+    voids:            /*#__PURE__*/Object.values( voids ),
+    booleans:         /*#__PURE__*/Object.values( booleans ),
+    numbers:          /*#__PURE__*/Object.values( numbers ),
+    strings:          /*#__PURE__*/Object.values( strings ),
+    functions:        /*#__PURE__*/Object.values( functions ),
+    objects:                       [
+        {
+            foo: 'bar'
+        },
+        {
+            baz: 'qux'
+        }
+    ],
+    arrays:                        [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+}
 
 const typedArrays = {
     int8Array:    new Int8Array( [ 1, 2, 3 ] ),
@@ -233,5 +141,5 @@ export {
     functions,
     arrays,
     typedArrays,
-    objects
+    objects,
 }
