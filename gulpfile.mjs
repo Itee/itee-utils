@@ -38,25 +38,26 @@
 /* eslint-env node */
 
 import childProcess                from 'child_process'
-import {nodeResolve}               from '@rollup/plugin-node-resolve'
+import { nodeResolve }             from '@rollup/plugin-node-resolve'
 import cleanup                     from 'rollup-plugin-cleanup'
 import fs                          from 'fs'
 import glob                        from 'glob'
 import gulp                        from 'gulp'
 import jsdoc                       from 'gulp-jsdoc3'
 import eslint                      from 'gulp-eslint'
-import {deleteAsync}               from 'del'
+import { deleteAsync }             from 'del'
 import parseArgs                   from 'minimist'
-import {rollup}                    from 'rollup'
+import { rollup }                  from 'rollup'
 import path                        from 'path'
 import karma                       from 'karma'
 import log                         from 'fancy-log'
 import colors                      from 'ansi-colors'
-import {fileURLToPath}             from 'url'
+import { fileURLToPath }           from 'url'
 import jsdocConfiguration          from './configs/jsdoc.conf.js'
 import rollupConfigurator          from './configs/rollup.conf.js'
 import rollupUnitTestsConfigurator from './configs/rollup.units.conf.js'
 import rollupBenchesConfigurator   from './configs/rollup.benchs.conf.js'
+import { getGulpConfigForTask }    from './configs/gulp.conf.mjs'
 
 const red     = colors.red
 const green   = colors.green
@@ -81,47 +82,112 @@ const packageInfos = JSON.parse( fs.readFileSync(
  */
 gulp.task( 'help', ( done ) => {
 
-    const iteeVersion = packageInfos.version
-    const iteeVersionLength = iteeVersion.length
-    const iteeSpaceFilling = ' '.repeat( 28 - iteeVersionLength )
+    function getPrettyPackageName() {
 
-    const nodeVersion = childProcess.execFileSync( 'node', [ '--version' ] ).toString().replace(/(\r\n|\n|\r)/gm, '')
-    const nodeVersionLength = nodeVersion.length
-    const nodeSpaceFilling = ' '.repeat( 43 - nodeVersionLength )
+        let packageName = ''
 
-    const npmVersion = childProcess.execFileSync( 'npm', [ '--version' ] ).toString().replace(/(\r\n|\n|\r)/gm, '')
-    const npmVersionLength = npmVersion.length
-    const npmSpaceFilling = ' '.repeat( 42 - npmVersionLength )
+        const nameSplits = packageInfos.name.split( '-' )
+        for ( const nameSplit of nameSplits ) {
+            packageName += nameSplit.charAt( 0 ).toUpperCase() + nameSplit.slice( 1 ) + ' '
+        }
+        packageName = packageName.slice( 0, -1 )
+
+        return packageName
+
+    }
+
+    function getPrettyPackageVersion() {
+
+        return 'v' + packageInfos.version
+
+    }
+
+    function getPrettyNodeVersion() {
+
+        const nodeVersion = childProcess.execFileSync( 'node', [ '--version' ] )
+                                        .toString()
+                                        .replace( /(\r\n|\n|\r)/gm, '' )
+        return ' node: ' + nodeVersion
+
+    }
+
+    function getPrettyNpmVersion() {
+
+        const npmVersion = childProcess.execFileSync( 'npm', [ '--version' ] )
+                                       .toString()
+                                       .replace( /(\r\n|\n|\r)/gm, '' )
+
+        return ' npm:  v' + npmVersion
+
+    }
+
+    function centerText( text, width ) {
+
+        const textLength   = text.length
+        const marginLength = ( width - textLength ) / 2
+
+        let leftMargin, rightMargin
+        if ( Number.isInteger( marginLength ) ) {
+            leftMargin  = marginLength
+            rightMargin = marginLength
+        } else {
+            const flooredMargin = Math.floor( marginLength )
+            leftMargin          = flooredMargin
+            rightMargin         = flooredMargin + 1
+        }
+
+        return ' '.repeat( leftMargin ) + text + ' '.repeat( rightMargin )
+
+    }
+
+    const bannerWidth          = 50
+    const prettyPackageName    = getPrettyPackageName()
+    const prettyPackageVersion = getPrettyPackageVersion()
+    const prettyNodeVersion    = getPrettyNodeVersion()
+    const nodeSpaceFilling     = ' '.repeat( bannerWidth - prettyNodeVersion.length )
+    const prettyNpmVersion     = getPrettyNpmVersion()
+    const npmSpaceFilling      = ' '.repeat( bannerWidth - prettyNpmVersion.length )
+
+    const npmRun = blue( '\tnpm run' )
 
     log( '' )
-    log( '====================================================' )
-    log( '|                      HELP                        |' )
-    log( '|                   Itee Utils                     |' )
-    log( `|                     v${ iteeVersion }${iteeSpaceFilling}|` )
-    log( '|--------------------------------------------------|' )
-    log( `| node: ${nodeVersion}${nodeSpaceFilling}|` )
-    log( `| npm:  v${npmVersion}${npmSpaceFilling}|` )
-    log( '====================================================' )
+    log( '┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓' )
+    log( `┃${ centerText( 'HELP', bannerWidth ) }┃` )
+    log( `┃${ centerText( prettyPackageName, bannerWidth ) }┃` )
+    log( `┃${ centerText( prettyPackageVersion, bannerWidth ) }┃` )
+    log( '┠──────────────────────────────────────────────────┨' )
+    log( `┃${ prettyNodeVersion }${ nodeSpaceFilling }┃` )
+    log( `┃${ prettyNpmVersion }${ npmSpaceFilling }┃` )
+    log( '┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛' )
     log( '' )
     log( 'Available commands are:' )
-    log( '\t', blue( 'npm run' ), cyan( 'help' ), ' - Display this help.' )
-    log( '\t', blue( 'npm run' ), cyan( 'patch' ), ' - Will apply some patch/replacements in dependencies.', red( '(Apply only once after run "npm install")' ) )
-    log( '\t', blue( 'npm run' ), cyan( 'clean' ), ' - Will delete builds and temporary folders.' )
-    log( '\t', blue( 'npm run' ), cyan( 'lint' ), ' - Will run the eslint in pedantic mode with auto fix when possible.' )
-    log( '\t', blue( 'npm run' ), cyan( 'doc' ), ' - Will run jsdoc, and create documentation under `documentation` folder, using the docdash theme' )
-    log( '\t', blue( 'npm run' ), cyan( 'test' ), ' - Will run the test framworks (unit and bench), and create reports under `documentation/report` folder, using the mochawesome theme' )
-    log( '\t', blue( 'npm run' ), cyan( 'unit' ), ' - Will run the karma server for unit tests.' )
-    log( '\t', blue( 'npm run' ), cyan( 'bench' ), ' - Will run the karma server for benchmarks.' )
-    log( '\t', blue( 'npm run' ), cyan( 'build' ), yellow( '--' ), green( '<options>' ), ' - Will build the application for development and/or production environments.', yellow( 'Note: The two dash are only required if you provide options !' ) )
+    log( npmRun, cyan( 'help' ), ' - Display this help.' )
+    log( npmRun, cyan( 'patch' ), ' - Will apply some patch/replacements in dependencies.', red( '(Apply only once after run "npm install")' ) )
+    log( npmRun, cyan( 'clean' ), ' - Will delete builds and temporary folders.' )
+    log( npmRun, cyan( 'lint' ), ' - Will run the eslint in pedantic mode with auto fix when possible.' )
+    log( npmRun, cyan( 'doc' ), ' - Will run jsdoc, and create documentation under `documentation` folder, using the docdash theme' )
+    log( npmRun, cyan( 'test' ), ' - Will run the test framworks (unit and bench), and create reports under `documentation/report` folder, using the mochawesome theme' )
+    log( npmRun, cyan( 'unit' ), ' - Will run the karma server for unit tests.' )
+    log( npmRun, cyan( 'bench' ), ' - Will run the karma server for benchmarks.' )
+    log( npmRun, cyan( 'build' ), yellow( '--' ), green( '<options>' ), ' - Will build the application for development and/or production environments.' )
+    log( yellow( '\tNote: The two dash are only required if you provide options !' ) )
     log( '\t\t The available', green( '<options>' ), 'are:' )
-    log( '\t\t\t', green( '-n' ), 'or', green( '--name' ), ' - The export name of the builded application', red( '(required for UMD module)' ), cyan( '[Default: ""]' ), '.' )
     log( '\t\t\t', green( '-i' ), 'or', green( '--input' ), ' - The main file path to build', cyan( '[Default: "sources/main.js"]' ), '.' )
     log( '\t\t\t', green( '-o' ), 'or', green( '--output' ), ' - The folder where output the build', cyan( '[Default: "builds"]' ), '.' )
-    log( '\t\t\t', green( '-f:' ), magenta( '<format>' ), 'or', green( '--format:' ), magenta( '<format>' ), ' - to specify the output build type. Where format could be any of:', magenta( 'amd' ), magenta( 'cjs' ), magenta( 'es' ), magenta( 'iife' ), magenta( 'umd' ), cyan( '[Default: "amd,cjs,es,iife,umd"]' ), '.' )
-    log( '\t\t\t', green( '-e:' ), magenta( '<env>' ), 'or', green( '--env:' ), magenta( '<env>' ), ' - to specify the build environment. Where env could be any of:', magenta( 'dev' ), magenta( 'prod' ), cyan( '[Default: "dev"]' ), '.' )
+    log(
+        '\t\t\t',
+        green( '-f:' ),
+        magenta( '<format>' ),
+        'or',
+        green( '--format:' ),
+        magenta( '<format>' ),
+        ' - to specify the output build type. Where format could be any of:', magenta( 'cjs, esm, iife, umd' ), '.'
+    )
+    log( '\t\t\t', green( '-e:' ), magenta( '<env>' ), 'or', green( '--env:' ), magenta( '<env>' ), ' - to specify the build environment. Where env could be any of:', magenta(
+        'dev' ), magenta( 'prod' ), cyan( '[Default: "dev"]' ), '.' )
     log( '\t\t\t', green( '-s' ), 'or', green( '--sourcemap' ), ' - to build with related source map', cyan( '[Default: true]' ), '.' )
     log( '\t\t\t', green( '-t' ), 'or', green( '--treeshake' ), ' - allow to perform treeshaking when building', cyan( '[Default: true]' ), '.' )
-    log( '\t', blue( 'npm run' ), cyan( 'release' ), ' - Will run all the lint, test stuff, and if succeed will build the application.' )
+    log( npmRun, cyan( 'release' ), ' - Will run all the lint, test stuff, and if succeed will build the application.' )
     log( '' )
     log( 'In case you have', blue( 'gulp' ), 'installed globally, you could use also:' )
     log( '\t', blue( 'gulp' ), cyan( 'command' ), ' - It will perform the command like using "npm run" but with less characters to type... Because you\'re a developer, right ?' )
@@ -153,13 +219,7 @@ gulp.task( 'patch', ( done ) => {
  */
 gulp.task( 'clean', () => {
 
-    const filesToClean = [
-        './builds',
-        './tests/units/builds',
-        './tests/benchmarks/builds',
-        './docs'
-    ]
-
+    const filesToClean = getGulpConfigForTask( 'clean' )
     return deleteAsync( filesToClean )
 
 } )
@@ -173,13 +233,7 @@ gulp.task( 'clean', () => {
  */
 gulp.task( 'lint', () => {
 
-    const filesToLint = [
-        'configs/**/*.js',
-        'sources/**/*.js',
-        '!sources/scripts/*.js',
-        'tests/**/*.js',
-        '!tests/**/builds/*.js'
-    ]
+    const filesToLint = getGulpConfigForTask( 'lint' )
 
     return gulp.src( filesToLint, { base: './' } )
                .pipe( eslint( {
@@ -210,13 +264,7 @@ gulp.task( 'lint', () => {
 gulp.task( 'doc', ( done ) => {
 
     const config     = jsdocConfiguration
-    const filesToDoc = [
-        'README.md',
-        'gulpfile.mjs',
-        './configs/*.js',
-        './sources/**/*.js',
-        './tests/**/*.js'
-    ]
+    const filesToDoc = getGulpConfigForTask( 'doc' )
 
     gulp.src( filesToDoc, { read: false } )
         .pipe( jsdoc( config, done ) )
@@ -231,19 +279,20 @@ gulp.task( 'doc', ( done ) => {
  * and then create rollup config for each of them and bundle
  * Todo: Check for differents target env like next task below this one
  */
-gulp.task( 'check-bundling-side-effect', async ( done ) => {
+gulp.task( 'check-bundling-from-esm-files-import', async ( done ) => {
 
-    const baseDir        = __dirname
-    const sourcesDir     = path.join( baseDir, 'sources' )
-    const testsDir       = path.join( baseDir, 'tests' )
-    const bundleDir      = path.join( testsDir, 'bundles' )
-    const sideEffectsDir = path.join( bundleDir, 'side-effects' )
-    const temporariesDir = path.join( sideEffectsDir, '_tmp' )
+    const baseDir           = __dirname
+    const sourcesDir        = path.join( baseDir, 'sources' )
+    const testsDir          = path.join( baseDir, 'tests' )
+    const bundleDir         = path.join( testsDir, 'bundles' )
+    const outputDir         = path.join( bundleDir, 'from_files_import' )
+    const temporariesDir    = path.join( outputDir, '.tmp' )
+    const filePathsToIgnore = getGulpConfigForTask( 'check-bundling' )
 
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js'
-    ]
+    if ( fs.existsSync( outputDir ) ) {
+        log( 'Clean up', magenta( outputDir ) )
+        fs.rmSync( outputDir, { recursive: true } )
+    }
 
     let sourcesGlob    = path.join( sourcesDir, '/**' )
     // sourcesGlob        = sourcesGlob.replaceAll( '\\', '/' )
@@ -270,7 +319,7 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
         const specificDir      = path.dirname( specificFilePath )
 
         // Create temp import file per file in package
-        const temporaryFileName = `${ sourceName }.tmp.js`
+        const temporaryFileName = `${ sourceName }.import.js`
         const temporaryDir      = path.join( temporariesDir, specificDir )
         const temporaryFile     = path.join( temporaryDir, temporaryFileName )
         const importDir         = path.relative( temporaryDir, sourceDir )
@@ -279,14 +328,15 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
 
         // Bundle tmp file and check content for side effects
         const bundleFileName = `${ sourceName }.bundle.js`
-        const bundleFilePath = path.join( sideEffectsDir, specificDir, bundleFileName )
+        const bundleFilePath = path.join( outputDir, specificDir, bundleFileName )
 
         const config = {
-            input: temporaryFile,
-            //                                external:  [ 'itee-validators' ],
+            input:     temporaryFile,
             plugins:   [
-                nodeResolve()
-                //                commonJs()
+                nodeResolve(),
+                cleanup( {
+                    comments: 'all' // else remove __PURE__ declaration... -_-'
+                } )
             ],
             onwarn:    ( {
                 loc,
@@ -329,11 +379,10 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
             const bundle     = await rollup( config )
             const { output } = await bundle.generate( config.output )
 
-            if ( output[ 0 ].code.length > 1 ) {
+            let code = output[ 0 ].code
+            if ( code.length > 1 ) {
                 log( red( `[${ specificFilePath }] contain side-effects !` ) )
-                // Todo: make option to log, to write or nothing
-                // log( output[ 0 ].code )
-                // await bundle.write( config.output )
+                await bundle.write( config.output )
             } else {
                 log( green( `[${ specificFilePath }] is side-effect free.` ) )
             }
@@ -344,25 +393,153 @@ gulp.task( 'check-bundling-side-effect', async ( done ) => {
 
     }
 
-    // Todo: depends on option to log or to write
-    fs.rmSync( bundleDir, { recursive: true } )
-    // fs.rmSync( temporariesDir, { recursive: true } )
-
     done()
 
 } )
-gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
+gulp.task( 'check-bundling-from-esm-build-import', async ( done ) => {
 
-    const baseDir    = __dirname
-    const sourcesDir = path.join( baseDir, 'sources' )
-    const testsDir   = path.join( baseDir, 'tests' )
-    const bundlesDir = path.join( testsDir, 'bundles' )
-    const outputDir  = path.join( bundlesDir, 'files' )
+    const baseDir        = __dirname
+    const buildsDir      = path.join( baseDir, 'builds' )
+    const buildFilePath  = path.join( buildsDir, `${ packageInfos.name }.esm.js` )
+    const testsDir       = path.join( baseDir, 'tests' )
+    const bundlesDir     = path.join( testsDir, 'bundles' )
+    const outputDir      = path.join( bundlesDir, 'from_build_import' )
+    const temporaryDir   = path.join( bundlesDir, 'from_build_import', '.tmp' )
+    const importDir      = path.relative( temporaryDir, buildsDir )
+    const importFilePath = path.join( importDir, `${ packageInfos.name }.esm.js` )
 
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js'
-    ]
+    if ( fs.existsSync( outputDir ) ) {
+        log( 'Clean up', magenta( outputDir ) )
+        fs.rmSync( outputDir, { recursive: true } )
+    }
+
+    try {
+
+        // Get build exports list
+        const data  = fs.readFileSync( buildFilePath, 'utf8' )
+        const regex = /export\s{\s(.*)\s}/
+        const found = data.match( regex )
+        if ( found === null ) {
+            log( red( `Unable to find exports in ${ buildFilePath }` ) )
+            return
+        }
+
+        const exports = found[ 1 ].split( ',' )
+                                  .map( item => item.trim() )
+
+        // Create temporary imports files for each build export
+        // And then bundle it
+        let temporaryFilePaths = []
+        for ( let namedExport of exports ) {
+            if ( namedExport.includes( ' as ' ) ) {
+                namedExport = namedExport.split( ' as ' )[ 1 ]
+            }
+
+            const temporaryFileName = `${ namedExport }.import.js`
+            const temporaryFilePath = path.join( temporaryDir, temporaryFileName )
+            const temporaryFileData = `import { ${ namedExport } } from '${ importFilePath.replace( /\\/g, '/' ) }'`
+
+            fs.mkdirSync( temporaryDir, { recursive: true } )
+            fs.writeFileSync( temporaryFilePath, temporaryFileData )
+
+            temporaryFilePaths.push( temporaryFilePath )
+        }
+
+        // Bundle each temporary files and check side-effects
+        const config = {
+            input:     null,
+            external:  [ '' ],
+            plugins:   [
+                nodeResolve( {
+                    preferBuiltins: true
+                } ),
+                cleanup( {
+                    comments: 'all' // else remove __PURE__ declaration... -_-'
+                } )
+            ],
+            onwarn:    ( {
+                loc,
+                frame,
+                message
+            } ) => {
+
+                // Ignore some errors
+                if ( message.includes( 'Circular dependency' ) ) { return }
+                if ( message.includes( 'Generated an empty chunk' ) ) { return }
+
+                if ( loc ) {
+                    process.stderr.write( `/!\\ ${ loc.file } (${ loc.line }:${ loc.column }) ${ frame } ${ message }\n` )
+                } else {
+                    process.stderr.write( `/!\\ ${ message }\n` )
+                }
+
+            },
+            treeshake: {
+                moduleSideEffects:                true,
+                annotations:                      true,
+                correctVarValueBeforeDeclaration: true,
+                propertyReadSideEffects:          true,
+                tryCatchDeoptimization:           true,
+                unknownGlobalSideEffects:         true
+            },
+            output:    {
+                indent: '\t',
+                format: 'esm',
+                file:   null
+            }
+        }
+        let fileName, bundleFileName, bundleFilePath
+        for ( const temporaryFilePath of temporaryFilePaths ) {
+
+            fileName       = path.basename( temporaryFilePath )
+            bundleFileName = fileName.replace( '.tmp.', '.bundle.' )
+            bundleFilePath = path.join( outputDir, bundleFileName )
+
+            try {
+
+                config.input       = temporaryFilePath
+                config.output.file = bundleFilePath
+
+                const bundle     = await rollup( config )
+                const { output } = await bundle.generate( config.output )
+
+                let code = output[ 0 ].code
+                if ( code.length > 1 ) {
+                    log( red( `[${ bundleFileName }] contain side-effects !` ) )
+                    await bundle.write( config.output )
+                } else {
+                    log( green( `[${ bundleFileName }] is side-effect free.` ) )
+                }
+
+            } catch ( error ) {
+
+                log( red( error.message ) )
+
+            }
+        }
+
+    } catch ( err ) {
+        log( red( error.message ) )
+    } finally {
+
+        done()
+
+    }
+
+} )
+gulp.task( 'check-bundling-from-esm-files-direct', async ( done ) => {
+
+    const baseDir           = __dirname
+    const sourcesDir        = path.join( baseDir, 'sources' )
+    const testsDir          = path.join( baseDir, 'tests' )
+    const bundlesDir        = path.join( testsDir, 'bundles' )
+    const outputDir         = path.join( bundlesDir, 'from_files_direct' )
+    const filePathsToIgnore = getGulpConfigForTask( 'check-bundling' )
+
+    if ( fs.existsSync( outputDir ) ) {
+        log( 'Clean up', magenta( outputDir ) )
+        fs.rmSync( outputDir, { recursive: true } )
+    }
 
     const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
                              .map( filePath => path.normalize( filePath ) )
@@ -421,7 +598,7 @@ gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
             },
             output:    {
                 indent: '\t',
-                format: 'cjs',
+                format: 'esm',
                 file:   bundleFilePath
             }
         }
@@ -431,8 +608,8 @@ gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
             log( `Building bundle ${ config.output.file }` )
 
             const bundle = await rollup( config )
-            const { output } = await bundle.generate( config.output )
-            // await bundle.write( config.output )
+            await bundle.generate( config.output )
+            await bundle.write( config.output )
 
         } catch ( error ) {
 
@@ -445,7 +622,7 @@ gulp.task( 'check-bundling-by-source-file-export', async ( done ) => {
     done()
 
 } )
-gulp.task( 'check-bundling', gulp.series( 'check-bundling-side-effect', 'check-bundling-by-source-file-export' ) )
+gulp.task( 'check-bundling', gulp.series( 'check-bundling-from-esm-files-import', 'check-bundling-from-esm-build-import', 'check-bundling-from-esm-files-direct' ) )
 
 /**
  * @description Will generate unit test files from source code using type inference from comments
@@ -457,12 +634,9 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
     const testsDir   = path.join( basePath, 'tests' )
     const unitsDir   = path.join( testsDir, 'units' )
 
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js',
-        'benchmarks.js',
-        'primitives.js'
-    ]
+    fs.mkdirSync( unitsDir, { recursive: true } )
+
+    const filePathsToIgnore = getGulpConfigForTask( 'compute-unit-tests' )
 
     const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
                              .map( filePath => path.normalize( filePath ) )
@@ -488,41 +662,54 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
         const nsName         = `${ fileName }Namespace`
         const unitName       = `${ fileName }Units`
         const importDirPath  = path.relative( unitDirPath, sourcesDir )
-        const importFilePath = path.join( importDirPath, specificFilePath ).replace( /\\/g, '/' )
+        const importFilePath = path.join( importDirPath, specificFilePath )
+                                   .replace( /\\/g, '/' )
 
         try {
 
-            const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
-            const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
+            const jsdocPath   = path.join( basePath, '/node_modules/jsdoc/jsdoc.js' )
+            const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] )
+                                            .toString()
 
+            const classNames    = []
             const usedLongnames = []
-            const jsonData      = JSON.parse(jsdocOutput).filter(data => {
+            const jsonData      = JSON.parse( jsdocOutput ).filter( data => {
 
-                const kind         = data.kind
-                const longName     = data.longname
-                const scope        = data.scope
-                const undocumented = data.undocumented
+                const longName = data.longname
 
-                let isValid
-
-                if (undocumented) {
-                    isValid = false
-                } else if (kind !== 'function') {
-                    isValid = false
-                } else if (!['global', 'static'].includes(scope)) {
-                    isValid = false
-                } else if (longName.includes(' ') || longName.includes('~')) {
-                    isValid = false
-                } else if (usedLongnames.includes(longName)) {
-                    isValid = false
-                } else {
-                    usedLongnames.push(longName)
-                    isValid = true
+                const kind = data.kind
+                if ( kind !== 'function' ) {
+                    if ( kind === 'class' && !classNames.includes( longName ) ) {
+                        classNames.push( longName )
+                    }
+                    return false
                 }
 
-                return isValid
+                const undocumented = data.undocumented
+                if ( undocumented ) {
+                    return false
+                }
 
-            })
+                const scope = data.scope
+                if ( ![ 'global', 'static' ].includes( scope ) ) {
+                    return false
+                }
+
+                if ( longName.includes( ' ' ) || longName.includes( '~' ) || usedLongnames.includes( longName ) ) {
+                    return false
+                }
+
+                for ( let className of classNames ) {
+                    if ( longName.includes( className ) ) {
+                        return false
+                    }
+                }
+
+                usedLongnames.push( longName )
+
+                return true
+
+            } )
 
             if ( jsonData.length === 0 ) {
                 log( yellow( `No usable exports found in [${ sourceFile }]. Ignore it !` ) )
@@ -981,6 +1168,8 @@ gulp.task( 'compute-unit-tests', async ( done ) => {
         '} )' + '\n'
 
     const unitsFilePath = path.join( unitsDir, `${ packageInfos.name }.units.js` )
+
+    log( green( `Create ${ unitsFilePath }` ) )
     fs.writeFileSync( unitsFilePath, unitsTemplate )
 
     done()
@@ -1028,12 +1217,9 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
     const testsDir   = path.join( basePath, 'tests' )
     const benchsDir  = path.join( testsDir, 'benchmarks' )
 
-    const filePathsToIgnore = [
-        `${ packageInfos.name }.js`,
-        'LineFileSplitter.js',
-        'benchmarks.js',
-        'primitives.js'
-    ]
+    fs.mkdirSync( benchsDir, { recursive: true } )
+
+    const filePathsToIgnore = getGulpConfigForTask( 'compute-benchmarks' )
 
     const sourcesFiles = glob.sync( path.join( sourcesDir, '**' ) )
                              .map( filePath => path.normalize( filePath ) )
@@ -1049,7 +1235,7 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
     for ( let sourceFile of sourcesFiles ) {
 
         const specificFilePath = sourceFile.replace( sourcesDir, '' )
-        const specificDir  = path.dirname( specificFilePath )
+        const specificDir      = path.dirname( specificFilePath )
 
         const fileName      = path.basename( sourceFile, path.extname( sourceFile ) )
         const benchFileName = `${ fileName }.bench.js`
@@ -1062,34 +1248,48 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
 
         try {
 
-            const jsdocPath   = path.join(basePath, '/node_modules/jsdoc/jsdoc.js')
+            const jsdocPath   = path.join( basePath, '/node_modules/jsdoc/jsdoc.js' )
             const jsdocOutput = childProcess.execFileSync( 'node', [ jsdocPath, '-X', sourceFile ] ).toString()
 
+            const classNames    = []
             const usedLongnames = []
-            const jsonData      = JSON.parse(jsdocOutput).filter(data => {
+            const jsonData      = JSON.parse( jsdocOutput ).filter( data => {
 
-                const kind     = data.kind
                 const longName = data.longname
-                const scope    = data.scope
 
-                let isValid
-
-                if (kind !== 'function') {
-                    isValid = false
-                } else if (!['global', 'static'].includes(scope)) {
-                    isValid = false
-                } else if (longName.includes(' ') || longName.includes('~')) {
-                    isValid = false
-                } else if (usedLongnames.includes(longName)) {
-                    isValid = false
-                } else {
-                    usedLongnames.push(longName)
-                    isValid = true
+                const kind = data.kind
+                if ( kind !== 'function' ) {
+                    if ( kind === 'class' && !classNames.includes( longName ) ) {
+                        classNames.push( longName )
+                    }
+                    return false
                 }
 
-                return isValid
+                const undocumented = data.undocumented
+                if ( undocumented ) {
+                    return false
+                }
 
-            })
+                const scope = data.scope
+                if ( ![ 'global', 'static' ].includes( scope ) ) {
+                    return false
+                }
+
+                if ( longName.includes( ' ' ) || longName.includes( '~' ) || usedLongnames.includes( longName ) ) {
+                    return false
+                }
+
+                for ( let className of classNames ) {
+                    if ( longName.includes( className ) ) {
+                        return false
+                    }
+                }
+
+                usedLongnames.push( longName )
+
+                return true
+
+            } )
 
             if ( jsonData.length === 0 ) {
                 log( yellow( `No usable exports found in [${ sourceFile }]. Ignore it !` ) )
@@ -1097,20 +1297,20 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
             }
 
             // Compute benchmark suites by grouping logically function by name[_x]
-            const suiteGroups     = {}
+            const suiteGroups = {}
             for ( let docData of jsonData ) {
 
                 try {
 
                     const functionName = docData.name
-                    const nameSplits = functionName.split('_')
-                    const rootName = nameSplits[0]
+                    const nameSplits   = functionName.split( '_' )
+                    const rootName     = nameSplits[ 0 ]
 
-                    if(!(rootName in suiteGroups)) {
-                        suiteGroups[rootName] = []
+                    if ( !( rootName in suiteGroups ) ) {
+                        suiteGroups[ rootName ] = []
                     }
 
-                    suiteGroups[rootName].push(functionName)
+                    suiteGroups[ rootName ].push( functionName )
 
                 } catch ( error ) {
 
@@ -1123,11 +1323,11 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
             // Generate suites
             let benchSuites       = ''
             const suitesToExports = []
-            for( let suiteGroupName in suiteGroups) {
+            for ( let suiteGroupName in suiteGroups ) {
                 suitesToExports.push( `${ suiteGroupName }Suite` )
                 benchSuites += `const ${ suiteGroupName }Suite = Benchmark.Suite( '${ nsName }.${ suiteGroupName }', Testing.createSuiteOptions() )` + '\n'
 
-                for( let suiteGroupValue of suiteGroups[suiteGroupName]) {
+                for ( let suiteGroupValue of suiteGroups[ suiteGroupName ] ) {
                     benchSuites += `                                     .add( '${ suiteGroupValue }()', Testing.iterateOverDataMap( ${ nsName }.${ suiteGroupValue } ), Testing.createBenchmarkOptions() )` + '\n'
                 }
 
@@ -1136,7 +1336,6 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
 
             const template = '' + '\n' +
                 `import Benchmark   from 'benchmark'` + '\n' +
-                `//import { Testing } from 'itee-utils'` + '\n' +
                 `import { Testing }      from '../../../sources/testings/benchmarks'` + '\n' +
                 `import * as ${ nsName } from '${ importFilePath }'` + '\n' +
                 '\n' +
@@ -1187,6 +1386,8 @@ gulp.task( 'compute-benchmarks', async ( done ) => {
         `}` + '\n'
 
     const benchsFilePath = path.join( benchsDir, `${ packageInfos.name }.benchs.js` )
+
+    log( green( `Create ${ benchsFilePath }` ) )
     fs.writeFileSync( benchsFilePath, benchsTemplate )
 
     done()
@@ -1340,7 +1541,6 @@ gulp.task( 'build', ( done ) => {
         string:  [ 'n', 'i', 'f', 'e' ],
         boolean: [ 's', 't' ],
         default: {
-            n: 'Itee.Utils',
             i: path.join( __dirname, 'sources', `${ packageInfos.name }.js` ),
             o: path.join( __dirname, 'builds' ),
             f: [ 'esm', 'cjs', 'iife' ],
@@ -1348,8 +1548,7 @@ gulp.task( 'build', ( done ) => {
             s: true,
             t: true
         },
-        alias: {
-            n: 'name',
+        alias:   {
             i: 'input',
             o: 'output',
             f: 'formats',
@@ -1363,7 +1562,7 @@ gulp.task( 'build', ( done ) => {
 
     nextBuild()
 
-    function nextBuild ( error ) {
+    function nextBuild( error ) {
         'use strict'
 
         if ( error ) {
@@ -1380,9 +1579,9 @@ gulp.task( 'build', ( done ) => {
             log( `Building ${ config.output.file }` )
 
             rollup( config )
-                  .then( ( bundle ) => { return bundle.write( config.output ) } )
-                  .then( () => { nextBuild() } )
-                  .catch( nextBuild )
+                .then( ( bundle ) => { return bundle.write( config.output ) } )
+                .then( () => { nextBuild() } )
+                .catch( nextBuild )
 
         }
 
