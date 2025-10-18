@@ -18,7 +18,6 @@ var path = require('path');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
 
 /**
@@ -2185,7 +2184,8 @@ function isNotString( data ) {
  */
 function isDirectoryPath( path ) {
     if ( isNotString( path ) && !( path instanceof Buffer ) && !( path instanceof URL ) ) {
-        throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
+        return false
+        // throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
     const stat = fs.statSync( path, { throwIfNoEntry: false } );
@@ -2221,7 +2221,8 @@ function isDirectoryPath( path ) {
  */
 function isFilePath( path ) {
     if ( isNotString( path ) && !( path instanceof Buffer ) && !( path instanceof URL ) ) {
-        throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
+        return false
+        // throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
     const stat = fs.statSync( path, { throwIfNoEntry: false } );
@@ -2237,10 +2238,11 @@ function isFilePath( path ) {
  * It exposes all exports of the files validators.
  *
  */
+
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
-function getPathsUnder ( directoryPath ) {
-    return fs__default["default"].readdirSync( directoryPath )
+function getPathsUnder( directoryPath ) {
+    return fs.readdirSync( directoryPath )
 }
 
 /**
@@ -2249,7 +2251,7 @@ function getPathsUnder ( directoryPath ) {
  * @param {Array.<string>|string} paths - The files paths where search files
  * @returns {Array} - The paths of found files
  */
-function getFilesPathsUnder ( paths ) {
+function getFilesPathsUnder( paths ) {
 
     const _paths = ( iteeValidators.isArray( paths ) ) ? paths : [ paths ];
     let files    = [];
@@ -2289,7 +2291,7 @@ function getFilesPathsUnder ( paths ) {
  * @return {Array.<string>} - An array of files paths
  * @private
  */
-function getFilesPathsUnder_1 ( filePaths ) {
+function getFilesPathsUnder_1( filePaths ) {
 
     let files = [];
 
@@ -2311,9 +2313,9 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
     return files
 
-    function getFilesPathsUnderFolder ( folder ) {
+    function getFilesPathsUnderFolder( folder ) {
 
-        fs__default["default"].readdirSync( folder ).forEach( ( name ) => {
+        fs.readdirSync( folder ).forEach( ( name ) => {
 
             const filePath = path__default["default"].resolve( folder, name );
             checkStateOf( filePath );
@@ -2322,7 +2324,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
     }
 
-    function checkStateOf ( filePath ) {
+    function checkStateOf( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
             // eslint-disable-next-line no-console
@@ -2330,7 +2332,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
             return
         }
 
-        const stats = fs__default["default"].statSync( filePath );
+        const stats = fs.statSync( filePath );
         if ( stats.isFile() ) {
 
             files.push( filePath );
@@ -2350,24 +2352,24 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
 }
 
-function fileExistForPath ( filePath ) {
+function fileExistForPath( filePath ) {
 
-    return fs__default["default"].existsSync( filePath )
+    return fs.existsSync( filePath )
 
 }
 
-function getFileForPath ( filePath ) {
+function getFileForPath( filePath ) {
 
     // In case files doesn't exist
     if ( !fileExistForPath( filePath ) ) {
         throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
     }
 
-    return fs__default["default"].readFileSync( filePath, 'utf8' )
+    return fs.readFileSync( filePath, 'utf8' )
 
 }
 
-function getUncommentedFileForPath ( filePath ) {
+function getUncommentedFileForPath( filePath ) {
 
     return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
 
@@ -2381,7 +2383,7 @@ function getUncommentedFileForPath ( filePath ) {
  * @return {Array.<string>} The cleaned filePaths of excludes paths
  * @private
  */
-function excludesFilesPaths ( filePaths, excludes ) {
+function excludesFilesPaths( filePaths, excludes ) {
 
     let filteredFilesPath = [];
 
@@ -2399,7 +2401,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
 
     return filteredFilesPath
 
-    function isExclude ( path ) {
+    function isExclude( path ) {
 
         let isExclude      = false;
         let excludePattern = undefined;
@@ -2435,7 +2437,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
  * @return {Array.<string>} The filtered path with only javascript files
  * @private
  */
-function filterJavascriptFiles ( filePaths, filter ) {
+function filterJavascriptFiles( filePaths, filter ) {
 
     let filteredFilesPath = [];
 
