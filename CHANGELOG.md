@@ -1,3 +1,8 @@
+# [v5.6.0](https://github.com/Itee/itee-utils/compare/v5.5.0...v5.6.0) (2025-10-18)
+
+## ✨ New Features
+- [`cafa2c0`](https://github.com/Itee/itee-utils/commit/cafa2c0)  (gulpfile) split gulpfile tasks into sub-tasks files
+
 # [v5.5.0](https://github.com/Itee/itee-utils/compare/v5.4.4...v5.5.0) (2025-10-16)
 
 ## ✨ New Features
