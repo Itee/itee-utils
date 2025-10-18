@@ -27,7 +27,7 @@
     "url": "https://github.com/Itee/itee-validators/issues"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "os": [
     "win32",
