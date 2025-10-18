@@ -8,16 +8,22 @@
  *
  */
 
-import fs                from 'fs'
-import path              from 'path'
-import {isArray}         from 'itee-validators'
-import {isInvalidPath}   from 'itee-validators/sources/file-system/paths/isValidPath'
-import {isDirectoryPath} from 'itee-validators/sources/file-system/directories/isDirectoryPath'
-import {isFilePath}      from 'itee-validators/sources/file-system/files/isFilePath'
+import {
+    readdirSync,
+    statSync,
+    existsSync,
+    readFileSync
+}                          from 'fs'
+import path                from 'path'
+import { isArray }         from 'itee-validators'
+import { isInvalidPath }   from 'itee-validators/sources/file-system/paths/isValidPath'
+import { isDirectoryPath } from 'itee-validators/sources/file-system/directories/isDirectoryPath'
+import { isFilePath }      from 'itee-validators/sources/file-system/files/isFilePath'
+
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
-function getPathsUnder ( directoryPath ) {
-    return fs.readdirSync( directoryPath )
+function getPathsUnder( directoryPath ) {
+    return readdirSync( directoryPath )
 }
 
 /**
@@ -26,7 +32,7 @@ function getPathsUnder ( directoryPath ) {
  * @param {Array.<string>|string} paths - The files paths where search files
  * @returns {Array} - The paths of found files
  */
-function getFilesPathsUnder ( paths ) {
+function getFilesPathsUnder( paths ) {
 
     const _paths = ( isArray( paths ) ) ? paths : [ paths ]
     let files    = []
@@ -70,7 +76,7 @@ function getFilesPathsUnder ( paths ) {
  * @return {Array.<string>} - An array of files paths
  * @private
  */
-function getFilesPathsUnder_1 ( filePaths ) {
+function getFilesPathsUnder_1( filePaths ) {
 
     let files = []
 
@@ -92,9 +98,9 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
     return files
 
-    function getFilesPathsUnderFolder ( folder ) {
+    function getFilesPathsUnderFolder( folder ) {
 
-        fs.readdirSync( folder ).forEach( ( name ) => {
+        readdirSync( folder ).forEach( ( name ) => {
 
             const filePath = path.resolve( folder, name )
             checkStateOf( filePath )
@@ -103,7 +109,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
     }
 
-    function checkStateOf ( filePath ) {
+    function checkStateOf( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
             // eslint-disable-next-line no-console
@@ -111,7 +117,7 @@ function getFilesPathsUnder_1 ( filePaths ) {
             return
         }
 
-        const stats = fs.statSync( filePath )
+        const stats = statSync( filePath )
         if ( stats.isFile() ) {
 
             files.push( filePath )
@@ -131,24 +137,24 @@ function getFilesPathsUnder_1 ( filePaths ) {
 
 }
 
-function fileExistForPath ( filePath ) {
+function fileExistForPath( filePath ) {
 
-    return fs.existsSync( filePath )
+    return existsSync( filePath )
 
 }
 
-function getFileForPath ( filePath ) {
+function getFileForPath( filePath ) {
 
     // In case files doesn't exist
     if ( !fileExistForPath( filePath ) ) {
         throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
     }
 
-    return fs.readFileSync( filePath, 'utf8' )
+    return readFileSync( filePath, 'utf8' )
 
 }
 
-function getUncommentedFileForPath ( filePath ) {
+function getUncommentedFileForPath( filePath ) {
 
     return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
 
@@ -162,7 +168,7 @@ function getUncommentedFileForPath ( filePath ) {
  * @return {Array.<string>} The cleaned filePaths of excludes paths
  * @private
  */
-function excludesFilesPaths ( filePaths, excludes ) {
+function excludesFilesPaths( filePaths, excludes ) {
 
     let filteredFilesPath = []
 
@@ -180,7 +186,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
 
     return filteredFilesPath
 
-    function isExclude ( path ) {
+    function isExclude( path ) {
 
         let isExclude      = false
         let excludePattern = undefined
@@ -216,7 +222,7 @@ function excludesFilesPaths ( filePaths, excludes ) {
  * @return {Array.<string>} The filtered path with only javascript files
  * @private
  */
-function filterJavascriptFiles ( filePaths, filter ) {
+function filterJavascriptFiles( filePaths, filter ) {
 
     let filteredFilesPath = []
 
