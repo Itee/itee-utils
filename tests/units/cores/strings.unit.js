@@ -1,6 +1,6 @@
 import { expect }       from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import { Testing }      from '../../../sources/testings/benchmarks'
+import { Testing }      from 'itee-utils'
 import * as stringsNamespace from '../../../sources/cores/strings.js'
 
 function stringsUnits () {

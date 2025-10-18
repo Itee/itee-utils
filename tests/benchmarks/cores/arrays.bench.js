@@ -1,7 +1,6 @@
 
 import Benchmark   from 'benchmark'
-//import { Testing } from 'itee-utils'
-import { Testing }      from '../../../sources/testings/benchmarks'
+import { Testing }      from 'itee-utils'
 import * as arraysNamespace from '../../../sources/cores/arrays.js'
 
 const sortBySuite = Benchmark.Suite( 'arraysNamespace.sortBy', Testing.createSuiteOptions() )

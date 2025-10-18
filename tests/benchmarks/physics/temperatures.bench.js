@@ -1,7 +1,6 @@
 
 import Benchmark   from 'benchmark'
-//import { Testing } from 'itee-utils'
-import { Testing }      from '../../../sources/testings/benchmarks'
+import { Testing }      from 'itee-utils'
 import * as temperaturesNamespace from '../../../sources/physics/temperatures.js'
 
 const celsiusToKelvinSuite = Benchmark.Suite( 'temperaturesNamespace.celsiusToKelvin', Testing.createSuiteOptions() )

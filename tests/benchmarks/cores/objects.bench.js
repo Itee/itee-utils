@@ -1,7 +1,6 @@
 
 import Benchmark   from 'benchmark'
-//import { Testing } from 'itee-utils'
-import { Testing }      from '../../../sources/testings/benchmarks'
+import { Testing }      from 'itee-utils'
 import * as objectsNamespace from '../../../sources/cores/objects.js'
 
 const uniqSuite = Benchmark.Suite( 'objectsNamespace.uniq', Testing.createSuiteOptions() )

@@ -1,6 +1,6 @@
 import { expect }       from 'chai'
 import { beforeEach, afterEach, describe, it } from 'mocha'
-import { Testing }      from '../../../sources/testings/benchmarks'
+import { Testing }      from 'itee-utils'
 import * as binariesNamespace from '../../../sources/cores/binaries.js'
 
 function binariesUnits () {
