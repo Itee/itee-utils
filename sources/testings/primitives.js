@@ -39,14 +39,14 @@ const numbers = {
     positiveMaxValue:        Number.MAX_VALUE,
     positiveInfinity:        Number.POSITIVE_INFINITY,
     // others
-    e:       Math.E,
-    ln10:    Math.LN10,
-    ln2:     Math.LN2,
-    log10e:  Math.LOG10E,
-    log2e:   Math.LOG2E,
-    pi:      Math.PI,
-    sqrt1_2: Math.SQRT1_2,
-    sqrt2:   Math.SQRT2
+    e:                       Math.E,
+    ln10:                    Math.LN10,
+    ln2:                     Math.LN2,
+    log10e:                  Math.LOG10E,
+    log2e:                   Math.LOG2E,
+    pi:                      Math.PI,
+    sqrt1_2:                 Math.SQRT1_2,
+    sqrt2:                   Math.SQRT2
 }
 
 const strings = /*#__PURE__*/( () => {
@@ -91,19 +91,19 @@ const functions = {
 }
 
 const arrays = {
-    emptyArray:                    [],
+    emptyArray:       [],
     emptyArrayObject: /*#__PURE__*/new Array(),
-    singleValued:                  [ 0 ],
-    multiValued:                   [ 0, 1, 2 ],
-    null:                          [ null, null, null ],
-    undefined:                     [ undefined, undefined, undefined ],
-    void:                          [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+    singleValued:     [ 0 ],
+    multiValued:      [ 0, 1, 2 ],
+    null:             [ null, null, null ],
+    undefined:        [ undefined, undefined, undefined ],
+    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
     voids:            /*#__PURE__*/Object.values( voids ),
     booleans:         /*#__PURE__*/Object.values( booleans ),
     numbers:          /*#__PURE__*/Object.values( numbers ),
     strings:          /*#__PURE__*/Object.values( strings ),
     functions:        /*#__PURE__*/Object.values( functions ),
-    objects:                       [
+    objects:          [
         {
             foo: 'bar'
         },
@@ -111,7 +111,7 @@ const arrays = {
             baz: 'qux'
         }
     ],
-    arrays:                        [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+    arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
 }
 
 const typedArrays = {
