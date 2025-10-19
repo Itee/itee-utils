@@ -1,10 +1,10 @@
-import { join }           from 'path'
-import rollupConfigurator from '../../configs/rollup.conf.js'
-import parseArgs          from 'minimist'
-import { getDirname }     from '../_utils.mjs'
-import { packageInfos }   from '../_utils.mjs'
-import { rollup }         from 'rollup'
-import log                from 'fancy-log'
+import { join }               from 'path'
+import { CreateRollupConfigs } from '../../configs/rollup.conf.mjs'
+import parseArgs              from 'minimist'
+import { getDirname }         from '../_utils.mjs'
+import { packageInfos }       from '../_utils.mjs'
+import { rollup }             from 'rollup'
+import log                    from 'fancy-log'
 
 function build( done ) {
 
@@ -31,7 +31,7 @@ function build( done ) {
         }
     } )
 
-    const configs = rollupConfigurator( options )
+    const configs = CreateRollupConfigs( options )
 
     nextBuild()
 
