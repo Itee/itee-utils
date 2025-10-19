@@ -15,11 +15,11 @@
 function CreateJsdocConfiguration() {
 
     return {
-        tags:         {
+        tags: {
             allowUnknownTags: false,
             dictionaries:     [ 'jsdoc', 'closure' ]
         },
-        source:       {
+        source: {
             include:        [ 'README.md' ],
             includePattern: '.+\\.(js|mjs|jsx)?$',
             excludePattern: '(node_modules|docs|builds)',
@@ -38,11 +38,11 @@ function CreateJsdocConfiguration() {
             verbose:     true,
             private:     true
         },
-        templates:    {
-            cleverLinks:       false,
-            monospaceLinks:    false,
-            navType:           'inline',
-            theme:             [
+        templates: {
+            cleverLinks:    false,
+            monospaceLinks: false,
+            navType:        'inline',
+            theme:          [
                                    'cerulean',
                                    'cosmo',
                                    'darkly',

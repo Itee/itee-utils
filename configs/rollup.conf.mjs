@@ -126,9 +126,7 @@ function _computeBanner( format ) {
 function _computeIntro() {
 
     return '' +
-        'if( iteeValidators === undefined ) { throw new Error(\'Itee.Client need Itee.Validators to be defined first. Please check your scripts loading order.\') }' + '\n' +
-        'if( iteeUtils === undefined ) { throw new Error(\'Itee.Client need Itee.Utils to be defined first. Please check your scripts loading order.\') }' + '\n' +
-        'if( iteeCore === undefined ) { throw new Error(\'Itee.Client need Itee.Core to be defined first. Please check your scripts loading order.\') }' + '\n'
+        'if( iteeValidators === undefined ) { throw new Error(\'Itee.Utils need Itee.Validators to be defined first. Please check your scripts loading order.\') }' + '\n'
 
 }
 
