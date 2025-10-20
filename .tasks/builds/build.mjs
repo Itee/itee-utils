@@ -1,37 +1,12 @@
-import { join }               from 'path'
-import { CreateRollupConfigs } from '../../configs/rollup.conf.mjs'
-import parseArgs              from 'minimist'
-import { getDirname }         from '../_utils.mjs'
-import { packageInfos }       from '../_utils.mjs'
-import { rollup }             from 'rollup'
-import log                    from 'fancy-log'
+import rollupConfigurator from '../../configs/rollup.conf.js'
+import { rollup }         from 'rollup'
+import log                from 'fancy-log'
+import { getGulpConfigForTask } from '../../configs/gulp.conf.mjs'
 
 function build( done ) {
 
-    const __dirname = getDirname()
-
-    const options = parseArgs( process.argv, {
-        string:  [ 'n', 'i', 'f', 'e' ],
-        boolean: [ 's', 't' ],
-        default: {
-            i: join( __dirname, 'sources', `${ packageInfos.name }.js` ),
-            o: join( __dirname, 'builds' ),
-            f: [ 'esm', 'cjs', 'iife' ],
-            e: [ 'dev', 'prod' ],
-            s: true,
-            t: true
-        },
-        alias:   {
-            i: 'input',
-            o: 'output',
-            f: 'formats',
-            e: 'envs',
-            s: 'sourcemap',
-            t: 'treeshake'
-        }
-    } )
-
-    const configs = CreateRollupConfigs( options )
+    const options = getGulpConfigForTask('builds')
+    const configs = rollupConfigurator( options )
 
     nextBuild()
 
