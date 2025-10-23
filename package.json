@@ -89,7 +89,6 @@
     "karma-htmlfile-reporter": "^0.3.8",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "leveldown": "^6.1.0",
     "mocha": "^10.8.2",
     "mochawesome": "^7.0.1",
     "rollup": "^2.67.2",
