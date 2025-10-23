@@ -14,7 +14,7 @@ const packageInfos = require( '../../package.json' )
  * @generator
  * @param {object} config - The karma configuration object to extend
  */
-function CreateKarmaBenchmarkConfiguration ( config ) {
+function CreateKarmaBenchmarkConfiguration( config ) {
 
     config.set( {
 
@@ -48,7 +48,7 @@ function CreateKarmaBenchmarkConfiguration ( config ) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters:         [ 'benchmark' ],
         benchmarkReporter: {
-            colors:           true,
+            colors: true,
             //            style: {
             //                benchmark: chalk.stripColor,
             //                summaryBenchmark: chalk.underline,

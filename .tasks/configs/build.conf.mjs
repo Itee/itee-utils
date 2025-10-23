@@ -12,25 +12,25 @@
  * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
  * @requires {@link module: [rollup-plugin-terser]{@link https://github.com/TrySound/rollup-plugin-terser}}
  */
-import {
-    packageSourcesDirectory,
-    packageBuildsDirectory,
-    packageName,
-    packageDescription,
-    getPrettyPackageName,
-    getPrettyPackageVersion
-}                  from '../_utils.mjs'
-import {
-    join,
-    basename
-}                  from 'path'
+import alias       from '@rollup/plugin-alias'
 import commonjs    from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
-import { terser }  from 'rollup-plugin-terser'
+import figlet      from 'figlet'
+import {
+    basename,
+    join
+}                  from 'path'
 import cleanup     from 'rollup-plugin-cleanup'
 import replace     from 'rollup-plugin-re'
-import alias       from '@rollup/plugin-alias'
-import figlet      from 'figlet'
+import { terser }  from 'rollup-plugin-terser'
+import {
+    getPrettyPackageName,
+    getPrettyPackageVersion,
+    packageBuildsDirectory,
+    packageDescription,
+    packageName,
+    packageSourcesDirectory
+}                  from '../_utils.mjs'
 
 // Utils
 
@@ -125,7 +125,7 @@ function _createRollupConfigs( options ) {
               envs,
               treeshake
           }        = options
-    const name     = getPrettyPackageName('.')
+    const name     = getPrettyPackageName( '.' )
     const fileName = basename( input, '.js' )
 
     const configs = []

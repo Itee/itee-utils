@@ -23,7 +23,7 @@ export const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function celsiusToKelvin ( celsius, precisionPointAt ) {
+export function celsiusToKelvin( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( celsius ) ) { return }
@@ -43,7 +43,7 @@ export function celsiusToKelvin ( celsius, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
+export function celsiusToFahrenheit( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( celsius ) ) { return }
@@ -63,7 +63,7 @@ export function celsiusToFahrenheit ( celsius, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
+export function fahrenheitToCelsius( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( fahrenheit ) ) { return }
@@ -83,7 +83,7 @@ export function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
+export function fahrenheitToKelvin( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( fahrenheit ) ) { return }
@@ -103,7 +103,7 @@ export function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function kelvinToCelsius ( kelvin, precisionPointAt ) {
+export function kelvinToCelsius( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( kelvin ) ) { return }
@@ -123,7 +123,7 @@ export function kelvinToCelsius ( kelvin, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-export function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
+export function kelvinToFahrenheit( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( kelvin ) ) { return }

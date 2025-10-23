@@ -9,16 +9,16 @@
  */
 
 import {
-    readdirSync,
-    statSync,
     existsSync,
-    readFileSync
+    readdirSync,
+    readFileSync,
+    statSync
 }                          from 'fs'
-import path                from 'path'
 import { isArray }         from 'itee-validators'
-import { isInvalidPath }   from 'itee-validators/sources/file-system/paths/isValidPath'
 import { isDirectoryPath } from 'itee-validators/sources/file-system/directories/isDirectoryPath'
 import { isFilePath }      from 'itee-validators/sources/file-system/files/isFilePath'
+import { isInvalidPath }   from 'itee-validators/sources/file-system/paths/isValidPath'
+import path                from 'path'
 
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 

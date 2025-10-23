@@ -20,7 +20,7 @@ import {
  * @param {array.<*>} a
  * @returns {array.<*>}
  */
-export function uniq ( a ) {
+export function uniq( a ) {
     if ( isNotArray( a ) ) { return }
 
     const seen = {}
@@ -34,7 +34,7 @@ export function uniq ( a ) {
  * @param {object} source
  * @return {object}
  */
-export function extend ( target, source ) {
+export function extend( target, source ) {
 
     let output
 
@@ -89,7 +89,7 @@ export function extend ( target, source ) {
 /**
  * Remove old inheritance stuff due to es6 class !
  */
-export function serializeObject () {
+export function serializeObject() {
 
     //    var object = {}
     //    var a = this.serializeArray()
@@ -115,7 +115,7 @@ export function serializeObject () {
  * @param {class} ParentClassOrObject
  * @return {*}
  */
-export function extendObject ( ChildClass, ParentClassOrObject ) {
+export function extendObject( ChildClass, ParentClassOrObject ) {
     if ( isUndefined( ChildClass ) ) { return }
     if ( isUndefined( ParentClassOrObject ) ) { return }
 
@@ -183,7 +183,7 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
  * @param {3dpath} path
  * @param {number} interval
  */
-export function createInterval ( particles, path, interval ) {
+export function createInterval( particles, path, interval ) {
     if ( !particles ) {return}
     if ( !path ) {return}
     if ( !interval ) {return}
@@ -264,7 +264,7 @@ export function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-export function toEnum ( enumValues ) {
+export function toEnum( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
     if ( isDefined( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' )
@@ -278,7 +278,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
 
                 const keys = Object.keys( this )
                 let result = ''
@@ -294,7 +294,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value ( key ) {
+            value( key ) {
                 return Object.values( this ).includes( key )
             }
         },
@@ -302,7 +302,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.keys( this )
             }
         },
@@ -310,7 +310,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.values( this )
             }
         },
@@ -318,7 +318,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.entries( this )
             }
         }

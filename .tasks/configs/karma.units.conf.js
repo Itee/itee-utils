@@ -14,7 +14,7 @@ const packageInfos = require( '../../package.json' )
  * @generator
  * @param {object} config - The karma configuration object to extend
  */
-function CreateKarmaUnitsConfiguration ( config ) {
+function CreateKarmaUnitsConfiguration( config ) {
 
     config.set( {
 
@@ -27,7 +27,7 @@ function CreateKarmaUnitsConfiguration ( config ) {
 
         // list of files / patterns to load in the browser
         files: [
-            `units/builds/${packageInfos.name}.units.iife.js`
+            `units/builds/${ packageInfos.name }.units.iife.js`
         ],
 
         // list of files to exclude
