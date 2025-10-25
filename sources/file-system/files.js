@@ -112,7 +112,6 @@ function getFilesPathsUnder_1( filePaths ) {
     function checkStateOf( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
-            // eslint-disable-next-line no-console
             console.error( 'ES6Converter: Invalid file path "' + filePath + '"' )
             return
         }
@@ -128,7 +127,6 @@ function getFilesPathsUnder_1( filePaths ) {
 
         } else {
 
-            // eslint-disable-next-line no-console
             console.error( 'Invalid stat object !' )
 
         }

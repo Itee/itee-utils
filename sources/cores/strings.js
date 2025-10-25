@@ -424,7 +424,6 @@ const diacriticsMap = /*#__PURE__*/( /*#__PURE__*/() => {
 export function removeDiacritics( string ) {
     if ( isNotString( string ) ) { return null }
 
-    // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
 
 }
