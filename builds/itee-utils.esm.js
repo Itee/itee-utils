@@ -9,7 +9,7 @@
  * 
  */
 import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined as isDefined$1, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
-import { existsSync, statSync, readdirSync, readFileSync } from 'fs';
+import { statSync, existsSync, readdirSync, readFileSync } from 'fs';
 import path from 'path';
 
 /**
@@ -27,7 +27,7 @@ import path from 'path';
  * @param {ordering} ascending
  * @returns {Function}
  */
-function sortBy ( propertyName, ascending = 'asc' ) {
+function sortBy( propertyName, ascending = 'asc' ) {
 
     const _propertyName = propertyName;
     let resultSorter    = undefined;
@@ -66,7 +66,7 @@ function sortBy ( propertyName, ascending = 'asc' ) {
 
     } else {
 
-        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
+        throw RangeError( `Got invalid ascending [${ ascending }], but expect one of ['asc','desc']!` )
 
     }
 
@@ -85,7 +85,7 @@ function sortBy ( propertyName, ascending = 'asc' ) {
  * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
  * @returns {Array.<*>}
  */
-function toArray ( object, options = {
+function toArray( object, options = {
     keepArray: false,
     keepNull:  false
 } ) {
@@ -111,7 +111,7 @@ function toArray ( object, options = {
  *
  */
 
-function byteToBits ( byte ) {
+function byteToBits( byte ) {
 
     let bits = '';
 
@@ -129,7 +129,7 @@ function byteToBits ( byte ) {
 
 }
 
-function bitsToByte ( bits ) {
+function bitsToByte( bits ) {
     if ( isNotString$1( bits ) ) { return }
 
     let byte = 0;
@@ -151,7 +151,7 @@ function bitsToByte ( bits ) {
  * @param {number} number - The number to convert in this internal representation
  * @returns {string}
  */
-function numberToInternalRepresentation ( number ) {
+function numberToInternalRepresentation( number ) {
 
     //    let buffer  = new Float64Array( [ number ] ).buffer
     let bufferA = new ArrayBuffer( 8 );
@@ -168,7 +168,7 @@ function numberToInternalRepresentation ( number ) {
 
 }
 
-function internalRepresentationToNumber ( string ) {
+function internalRepresentationToNumber( string ) {
 
     if ( isNotDefined( string ) ) { return }
     if ( isNotString$1( string ) ) { return }
@@ -200,7 +200,7 @@ function internalRepresentationToNumber ( string ) {
  *
  */
 
-function getRandom () {
+function getRandom() {
     return Math.random()
 }
 
@@ -211,7 +211,7 @@ function getRandom () {
  * @param {number} max
  * @returns {number}
  */
-function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
+function getRandomFloatExclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min ) + min
 }
 
@@ -222,7 +222,7 @@ function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
+function getRandomFloatInclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min + 1.0 ) + min
 }
 
@@ -234,7 +234,7 @@ function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-function getRandomIntExclusive ( min = 0, max = 1 ) {
+function getRandomIntExclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min );
     const _max = Math.floor( max );
     return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
@@ -248,7 +248,7 @@ function getRandomIntExclusive ( min = 0, max = 1 ) {
  * @param {number} max
  * @returns {number}
  */
-function getRandomIntInclusive ( min = 0, max = 1 ) {
+function getRandomIntInclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min );
     const _max = Math.floor( max );
     return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
@@ -261,7 +261,7 @@ function getRandomIntInclusive ( min = 0, max = 1 ) {
  * @param {number} value
  * @returns {string}
  */
-function numberToPlainString ( value ) {
+function numberToPlainString( value ) {
 
     const stringValue = String( value );
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -309,7 +309,7 @@ function numberToPlainString ( value ) {
  * @param {array.<*>} a
  * @returns {array.<*>}
  */
-function uniq ( a ) {
+function uniq( a ) {
     if ( isNotArray( a ) ) { return }
 
     const seen = {};
@@ -323,7 +323,7 @@ function uniq ( a ) {
  * @param {object} source
  * @return {object}
  */
-function extend ( target, source ) {
+function extend( target, source ) {
 
     let output;
 
@@ -378,7 +378,7 @@ function extend ( target, source ) {
 /**
  * Remove old inheritance stuff due to es6 class !
  */
-function serializeObject () {
+function serializeObject() {
 
     //    var object = {}
     //    var a = this.serializeArray()
@@ -404,7 +404,7 @@ function serializeObject () {
  * @param {class} ParentClassOrObject
  * @return {*}
  */
-function extendObject ( ChildClass, ParentClassOrObject ) {
+function extendObject( ChildClass, ParentClassOrObject ) {
     if ( isUndefined( ChildClass ) ) { return }
     if ( isUndefined( ParentClassOrObject ) ) { return }
 
@@ -472,7 +472,7 @@ function extendObject ( ChildClass, ParentClassOrObject ) {
  * @param {3dpath} path
  * @param {number} interval
  */
-function createInterval ( particles, path, interval ) {
+function createInterval( particles, path, interval ) {
     if ( !particles ) {return}
     if ( !path ) {return}
     if ( !interval ) {return}
@@ -553,7 +553,7 @@ function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-function toEnum ( enumValues ) {
+function toEnum( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
     if ( isDefined$1( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' );
@@ -567,7 +567,7 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
 
                 const keys = Object.keys( this );
                 let result = '';
@@ -583,7 +583,7 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value ( key ) {
+            value( key ) {
                 return Object.values( this ).includes( key )
             }
         },
@@ -591,7 +591,7 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.keys( this )
             }
         },
@@ -599,7 +599,7 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.values( this )
             }
         },
@@ -607,7 +607,7 @@ function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.entries( this )
             }
         }
@@ -631,9 +631,9 @@ function toEnum ( enumValues ) {
  * @throws {TypeError} - If 'word' is not a string
  * @throws {TypeError} - If 'word' is an empty string
  */
-function classNameify ( word ) {
-    if(isNotString$1(word)) { return }
-    if(isEmptyString(word)) { return }
+function classNameify( word ) {
+    if ( isNotString$1( word ) ) { return }
+    if ( isEmptyString( word ) ) { return }
 
     return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 }
@@ -1033,10 +1033,9 @@ const diacriticsMap = /*#__PURE__*/( () => {
  * @param {string} string
  * @returns {null|string}
  */
-function removeDiacritics ( string ) {
-    if(isNotString$1(string)) { return null }
+function removeDiacritics( string ) {
+    if ( isNotString$1( string ) ) { return null }
 
-    // eslint-disable-next-line
     return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
 
 }
@@ -1060,7 +1059,7 @@ const RAD_TO_DEG = ( 180 / PI );
  * @param {number} degrees
  * @return {number}
  */
-function degreesToRadians ( degrees ) {
+function degreesToRadians( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -1069,7 +1068,7 @@ function degreesToRadians ( degrees ) {
  * @param {number} radians
  * @return {number}
  */
-function degreesFromRadians ( radians ) {
+function degreesFromRadians( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -1078,7 +1077,7 @@ function degreesFromRadians ( radians ) {
  * @param {number} radians
  * @return {number}
  */
-function radiansToDegrees ( radians ) {
+function radiansToDegrees( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -1087,7 +1086,7 @@ function radiansToDegrees ( radians ) {
  * @param {number} degrees
  * @return {number}
  */
-function radiansFromDegrees ( degrees ) {
+function radiansFromDegrees( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -1097,9 +1096,9 @@ function radiansFromDegrees ( degrees ) {
  * @param {Vector} vector
  * @return {number}
  */
-function getYaw ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+function getYaw( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return -Math.atan2( vector.x, vector.z )
 }
@@ -1109,9 +1108,9 @@ function getYaw ( vector ) {
  * @param {Vector} vector
  * @return {number}
  */
-function getPitch ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+function getPitch( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return Math.asin( vector.y )
 }
@@ -1121,15 +1120,15 @@ function getPitch ( vector ) {
  * @param {Vector} vectorDir
  * @return {{yaw: number, pitch: number}}
  */
-function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
-    if(isNotDefined(vectorDir)) { return }
-    if(isNotObject(vectorDir)) { return }
+function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
+    if ( isNotDefined( vectorDir ) ) { return }
+    if ( isNotObject( vectorDir ) ) { return }
 
-    function getYaw ( vector ) {
+    function getYaw( vector ) {
         return Math.atan2( vector.y, vector.x )
     }
 
-    function getPitch ( vector ) {
+    function getPitch( vector ) {
         return Math.asin( vector.z )
     }
 
@@ -1316,7 +1315,7 @@ function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
  * @param {array.<number>} ring
  * @return {boolean}
  */
-function ringClockwise ( ring ) {
+function ringClockwise( ring ) {
     if ( isNotArray( ring ) ) { return false }
 
     let numberOfRingElements = ring.length;
@@ -1324,8 +1323,8 @@ function ringClockwise ( ring ) {
         return false
     }
 
-    let ringIndex    = 0;
-    let area = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ];
+    let ringIndex = 0;
+    let area      = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ];
     while ( ++ringIndex < numberOfRingElements ) {
         area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ];
     }
@@ -1338,7 +1337,7 @@ function ringClockwise ( ring ) {
  * @param {array.<number>} hole
  * @return {boolean}
  */
-function ringContainsSome ( ring, hole ) {
+function ringContainsSome( ring, hole ) {
     if ( isNotArray( ring ) ) { return false }
     if ( isNotArray( hole ) ) { return false }
 
@@ -1363,7 +1362,7 @@ function ringContainsSome ( ring, hole ) {
  * @param {array.<number>} point
  * @return {number}
  */
-function ringContains ( ring, point ) {
+function ringContains( ring, point ) {
     if ( isNotArray( ring ) ) { return false }
     if ( isNotArray( point ) ) { return false }
 
@@ -1399,7 +1398,7 @@ function ringContains ( ring, point ) {
  * @param {array.<number>} p2
  * @return {boolean}
  */
-function segmentContains ( p0, p1, p2 ) {
+function segmentContains( p0, p1, p2 ) {
     if ( isNotArray( p0 ) ) { return false }
     if ( isNotArray( p1 ) ) { return false }
     if ( isNotArray( p2 ) ) { return false }
@@ -1416,7 +1415,7 @@ function segmentContains ( p0, p1, p2 ) {
         return false
     }
 
-    const t = ( (x20 * x10) + (y20 * y10) ) / ( (x10 * x10) + (y10 * y10) );
+    const t = ( ( x20 * x10 ) + ( y20 * y10 ) ) / ( ( x10 * x10 ) + ( y10 * y10 ) );
 
     return t < 0 || t > 1
            ? false
@@ -1444,7 +1443,7 @@ const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955;
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function celsiusToKelvin ( celsius, precisionPointAt ) {
+function celsiusToKelvin( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( celsius ) ) { return }
@@ -1464,7 +1463,7 @@ function celsiusToKelvin ( celsius, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function celsiusToFahrenheit ( celsius, precisionPointAt ) {
+function celsiusToFahrenheit( celsius, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( celsius ) ) { return }
@@ -1484,7 +1483,7 @@ function celsiusToFahrenheit ( celsius, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
+function fahrenheitToCelsius( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( fahrenheit ) ) { return }
@@ -1504,7 +1503,7 @@ function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
+function fahrenheitToKelvin( fahrenheit, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( fahrenheit ) ) { return }
@@ -1524,7 +1523,7 @@ function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function kelvinToCelsius ( kelvin, precisionPointAt ) {
+function kelvinToCelsius( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( kelvin ) ) { return }
@@ -1544,7 +1543,7 @@ function kelvinToCelsius ( kelvin, precisionPointAt ) {
  * @param {integer} precisionPointAt
  * @return {string}
  */
-function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
+function kelvinToFahrenheit( kelvin, precisionPointAt ) {
 
     //Check if required parameter is valid
     if ( isNotTemperature( kelvin ) ) { return }
@@ -1710,7 +1709,6 @@ var globalDataMap = /*#__PURE__*/Object.freeze({
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  */
 
-/* eslint-disable no-console */
 const Testing = {
 
     DataMap: undefined,
@@ -1831,14 +1829,12 @@ const Testing = {
 
             // called when the suite starts running
             'onStart': function onStartSuite( /*event*/ ) {
-                //eslint-disable-next-line
                 console.log( `Running ${ this.constructor.name }: ${ this.name }` );
                 this.results = [];
             },
 
             // called between running benchmarks
             'onCycle': function onCycleSuite( event ) {
-                //eslint-disable-next-line
                 console.log( `Running Bench: ${ event.target.name }` );
                 this.results.push( event.target );
             },
@@ -1876,7 +1872,6 @@ const Testing = {
                 } );
 
                 for ( let i = 0, num = this.results.length ; i < num ; i++ ) {
-                    //eslint-disable-next-line
                     console.log( `${ i }: ${ String( this.results[ i ] ) }` );
                 }
 
@@ -1884,7 +1879,6 @@ const Testing = {
                 const slowest       = this.results[ this.results.length - 1 ];
                 const speedIncrease = ( ( fastest.hz - slowest.hz ) / slowest.hz ) * 100;
 
-                //eslint-disable-next-line
                 console.log( `\n${ fastest.name } is ${ Math.round( speedIncrease ) }% fastest than ${ slowest.name }` );
 
                 delete this.results;
@@ -2044,47 +2038,6 @@ const Testing = {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/file-system/paths/isValidPath
- * @description Export function to validate if a value is a valid path
- *
- * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
- *
- * @example
- *
- * import { isValidPath } from 'itee-validators'
- *
- * if( isValidPath( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */
-
-/**
- * Check if given data is a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isValidPath( data ) {
-    return existsSync( data )
-}
-
-/**
- * Check if given data is not a valid file path
- *
- * @param data {*} The data to check against the path type
- * @returns {boolean} true if data is a valid path, false otherwise
- */
-function isInvalidPath( data ) {
-    return !isValidPath( data )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/voids/isDefined
  * @desc Export function to validate if a value is a defined or not
  * @example
@@ -2227,6 +2180,47 @@ function isFilePath( path ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
+ * @module sources/file-system/paths/isValidPath
+ * @description Export function to validate if a value is a valid path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isValidPath } from 'itee-validators'
+ *
+ * if( isValidPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isValidPath( data ) {
+    return existsSync( data )
+}
+
+/**
+ * Check if given data is not a valid file path
+ *
+ * @param data {*} The data to check against the path type
+ * @returns {boolean} true if data is a valid path, false otherwise
+ */
+function isInvalidPath( data ) {
+    return !isValidPath( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
  * @module sources/file-system/files
  * @description This is the files main export entry point.
  * It exposes all exports of the files validators.
@@ -2321,7 +2315,6 @@ function getFilesPathsUnder_1( filePaths ) {
     function checkStateOf( filePath ) {
 
         if ( !fileExistForPath( filePath ) ) {
-            // eslint-disable-next-line no-console
             console.error( 'ES6Converter: Invalid file path "' + filePath + '"' );
             return
         }
@@ -2337,7 +2330,6 @@ function getFilesPathsUnder_1( filePaths ) {
 
         } else {
 
-            // eslint-disable-next-line no-console
             console.error( 'Invalid stat object !' );
 
         }

@@ -29,7 +29,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {ordering} ascending
 	 * @returns {Function}
 	 */
-	function sortBy ( propertyName, ascending = 'asc' ) {
+	function sortBy( propertyName, ascending = 'asc' ) {
 
 	    const _propertyName = propertyName;
 	    let resultSorter    = undefined;
@@ -68,7 +68,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	    } else {
 
-	        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
+	        throw RangeError( `Got invalid ascending [${ ascending }], but expect one of ['asc','desc']!` )
 
 	    }
 
@@ -87,7 +87,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
 	 * @returns {Array.<*>}
 	 */
-	function toArray ( object, options = {
+	function toArray( object, options = {
 	    keepArray: false,
 	    keepNull:  false
 	} ) {
@@ -113,7 +113,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *
 	 */
 
-	function byteToBits ( byte ) {
+	function byteToBits( byte ) {
 
 	    let bits = '';
 
@@ -131,7 +131,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
-	function bitsToByte ( bits ) {
+	function bitsToByte( bits ) {
 	    if ( iteeValidators.isNotString( bits ) ) { return }
 
 	    let byte = 0;
@@ -153,7 +153,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} number - The number to convert in this internal representation
 	 * @returns {string}
 	 */
-	function numberToInternalRepresentation ( number ) {
+	function numberToInternalRepresentation( number ) {
 
 	    //    let buffer  = new Float64Array( [ number ] ).buffer
 	    let bufferA = new ArrayBuffer( 8 );
@@ -170,7 +170,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	}
 
-	function internalRepresentationToNumber ( string ) {
+	function internalRepresentationToNumber( string ) {
 
 	    if ( iteeValidators.isNotDefined( string ) ) { return }
 	    if ( iteeValidators.isNotString( string ) ) { return }
@@ -202,7 +202,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *
 	 */
 
-	function getRandom () {
+	function getRandom() {
 	    return Math.random()
 	}
 
@@ -213,7 +213,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} max
 	 * @returns {number}
 	 */
-	function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
+	function getRandomFloatExclusive( min = 0.0, max = 1.0 ) {
 	    return Math.random() * ( max - min ) + min
 	}
 
@@ -224,7 +224,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} max
 	 * @returns {number}
 	 */
-	function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
+	function getRandomFloatInclusive( min = 0.0, max = 1.0 ) {
 	    return Math.random() * ( max - min + 1.0 ) + min
 	}
 
@@ -236,7 +236,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} max
 	 * @returns {number}
 	 */
-	function getRandomIntExclusive ( min = 0, max = 1 ) {
+	function getRandomIntExclusive( min = 0, max = 1 ) {
 	    const _min = Math.ceil( min );
 	    const _max = Math.floor( max );
 	    return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
@@ -250,7 +250,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} max
 	 * @returns {number}
 	 */
-	function getRandomIntInclusive ( min = 0, max = 1 ) {
+	function getRandomIntInclusive( min = 0, max = 1 ) {
 	    const _min = Math.ceil( min );
 	    const _max = Math.floor( max );
 	    return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
@@ -263,7 +263,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} value
 	 * @returns {string}
 	 */
-	function numberToPlainString ( value ) {
+	function numberToPlainString( value ) {
 
 	    const stringValue = String( value );
 	    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -311,7 +311,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {array.<*>} a
 	 * @returns {array.<*>}
 	 */
-	function uniq ( a ) {
+	function uniq( a ) {
 	    if ( iteeValidators.isNotArray( a ) ) { return }
 
 	    const seen = {};
@@ -325,7 +325,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {object} source
 	 * @return {object}
 	 */
-	function extend ( target, source ) {
+	function extend( target, source ) {
 
 	    let output;
 
@@ -380,7 +380,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	/**
 	 * Remove old inheritance stuff due to es6 class !
 	 */
-	function serializeObject () {
+	function serializeObject() {
 
 	    //    var object = {}
 	    //    var a = this.serializeArray()
@@ -406,7 +406,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {class} ParentClassOrObject
 	 * @return {*}
 	 */
-	function extendObject ( ChildClass, ParentClassOrObject ) {
+	function extendObject( ChildClass, ParentClassOrObject ) {
 	    if ( iteeValidators.isUndefined( ChildClass ) ) { return }
 	    if ( iteeValidators.isUndefined( ParentClassOrObject ) ) { return }
 
@@ -474,7 +474,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {3dpath} path
 	 * @param {number} interval
 	 */
-	function createInterval ( particles, path, interval ) {
+	function createInterval( particles, path, interval ) {
 	    if ( !particles ) {return}
 	    if ( !path ) {return}
 	    if ( !interval ) {return}
@@ -555,7 +555,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * const MealTypes = Meal.types
 	 * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
 	 */
-	function toEnum ( enumValues ) {
+	function toEnum( enumValues ) {
 	    if ( iteeValidators.isNotObject( enumValues ) ) { return }
 	    if ( iteeValidators.isDefined( enumValues.toString ) ) {
 	        const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' );
@@ -569,7 +569,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value () {
+	            value() {
 
 	                const keys = Object.keys( this );
 	                let result = '';
@@ -585,7 +585,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value ( key ) {
+	            value( key ) {
 	                return Object.values( this ).includes( key )
 	            }
 	        },
@@ -593,7 +593,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value () {
+	            value() {
 	                return Object.keys( this )
 	            }
 	        },
@@ -601,7 +601,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value () {
+	            value() {
 	                return Object.values( this )
 	            }
 	        },
@@ -609,7 +609,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	            configurable: false,
 	            enumerable:   false,
 	            writable:     false,
-	            value () {
+	            value() {
 	                return Object.entries( this )
 	            }
 	        }
@@ -633,9 +633,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @throws {TypeError} - If 'word' is not a string
 	 * @throws {TypeError} - If 'word' is an empty string
 	 */
-	function classNameify ( word ) {
-	    if(iteeValidators.isNotString(word)) { return }
-	    if(iteeValidators.isEmptyString(word)) { return }
+	function classNameify( word ) {
+	    if ( iteeValidators.isNotString( word ) ) { return }
+	    if ( iteeValidators.isEmptyString( word ) ) { return }
 
 	    return word.charAt( 0 ).toUpperCase() + word.slice( 1 )
 	}
@@ -1035,10 +1035,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {string} string
 	 * @returns {null|string}
 	 */
-	function removeDiacritics ( string ) {
-	    if(iteeValidators.isNotString(string)) { return null }
+	function removeDiacritics( string ) {
+	    if ( iteeValidators.isNotString( string ) ) { return null }
 
-	    // eslint-disable-next-line
 	    return string.replace( /[^\u0000-\u007E]/g, a => diacriticsMap[ a ] || a )
 
 	}
@@ -1062,7 +1061,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} degrees
 	 * @return {number}
 	 */
-	function degreesToRadians ( degrees ) {
+	function degreesToRadians( degrees ) {
 	    return degrees * DEG_TO_RAD
 	}
 
@@ -1071,7 +1070,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} radians
 	 * @return {number}
 	 */
-	function degreesFromRadians ( radians ) {
+	function degreesFromRadians( radians ) {
 	    return radians * RAD_TO_DEG
 	}
 
@@ -1080,7 +1079,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} radians
 	 * @return {number}
 	 */
-	function radiansToDegrees ( radians ) {
+	function radiansToDegrees( radians ) {
 	    return radians * RAD_TO_DEG
 	}
 
@@ -1089,7 +1088,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {number} degrees
 	 * @return {number}
 	 */
-	function radiansFromDegrees ( degrees ) {
+	function radiansFromDegrees( degrees ) {
 	    return degrees * DEG_TO_RAD
 	}
 
@@ -1099,9 +1098,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {Vector} vector
 	 * @return {number}
 	 */
-	function getYaw ( vector ) {
-	    if(iteeValidators.isNotDefined(vector)) { return }
-	    if(iteeValidators.isNotObject(vector)) { return }
+	function getYaw( vector ) {
+	    if ( iteeValidators.isNotDefined( vector ) ) { return }
+	    if ( iteeValidators.isNotObject( vector ) ) { return }
 
 	    return -Math.atan2( vector.x, vector.z )
 	}
@@ -1111,9 +1110,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {Vector} vector
 	 * @return {number}
 	 */
-	function getPitch ( vector ) {
-	    if(iteeValidators.isNotDefined(vector)) { return }
-	    if(iteeValidators.isNotObject(vector)) { return }
+	function getPitch( vector ) {
+	    if ( iteeValidators.isNotDefined( vector ) ) { return }
+	    if ( iteeValidators.isNotObject( vector ) ) { return }
 
 	    return Math.asin( vector.y )
 	}
@@ -1123,15 +1122,15 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {Vector} vectorDir
 	 * @return {{yaw: number, pitch: number}}
 	 */
-	function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
-	    if(iteeValidators.isNotDefined(vectorDir)) { return }
-	    if(iteeValidators.isNotObject(vectorDir)) { return }
+	function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
+	    if ( iteeValidators.isNotDefined( vectorDir ) ) { return }
+	    if ( iteeValidators.isNotObject( vectorDir ) ) { return }
 
-	    function getYaw ( vector ) {
+	    function getYaw( vector ) {
 	        return Math.atan2( vector.y, vector.x )
 	    }
 
-	    function getPitch ( vector ) {
+	    function getPitch( vector ) {
 	        return Math.asin( vector.z )
 	    }
 
@@ -1318,7 +1317,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {array.<number>} ring
 	 * @return {boolean}
 	 */
-	function ringClockwise ( ring ) {
+	function ringClockwise( ring ) {
 	    if ( iteeValidators.isNotArray( ring ) ) { return false }
 
 	    let numberOfRingElements = ring.length;
@@ -1326,8 +1325,8 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	        return false
 	    }
 
-	    let ringIndex    = 0;
-	    let area = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ];
+	    let ringIndex = 0;
+	    let area      = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ];
 	    while ( ++ringIndex < numberOfRingElements ) {
 	        area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ];
 	    }
@@ -1340,7 +1339,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {array.<number>} hole
 	 * @return {boolean}
 	 */
-	function ringContainsSome ( ring, hole ) {
+	function ringContainsSome( ring, hole ) {
 	    if ( iteeValidators.isNotArray( ring ) ) { return false }
 	    if ( iteeValidators.isNotArray( hole ) ) { return false }
 
@@ -1365,7 +1364,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {array.<number>} point
 	 * @return {number}
 	 */
-	function ringContains ( ring, point ) {
+	function ringContains( ring, point ) {
 	    if ( iteeValidators.isNotArray( ring ) ) { return false }
 	    if ( iteeValidators.isNotArray( point ) ) { return false }
 
@@ -1401,7 +1400,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {array.<number>} p2
 	 * @return {boolean}
 	 */
-	function segmentContains ( p0, p1, p2 ) {
+	function segmentContains( p0, p1, p2 ) {
 	    if ( iteeValidators.isNotArray( p0 ) ) { return false }
 	    if ( iteeValidators.isNotArray( p1 ) ) { return false }
 	    if ( iteeValidators.isNotArray( p2 ) ) { return false }
@@ -1418,7 +1417,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	        return false
 	    }
 
-	    const t = ( (x20 * x10) + (y20 * y10) ) / ( (x10 * x10) + (y10 * y10) );
+	    const t = ( ( x20 * x10 ) + ( y20 * y10 ) ) / ( ( x10 * x10 ) + ( y10 * y10 ) );
 
 	    return t < 0 || t > 1
 	           ? false
@@ -1446,7 +1445,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function celsiusToKelvin ( celsius, precisionPointAt ) {
+	function celsiusToKelvin( celsius, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
@@ -1466,7 +1465,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function celsiusToFahrenheit ( celsius, precisionPointAt ) {
+	function celsiusToFahrenheit( celsius, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( celsius ) ) { return }
@@ -1486,7 +1485,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function fahrenheitToCelsius ( fahrenheit, precisionPointAt ) {
+	function fahrenheitToCelsius( fahrenheit, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
@@ -1506,7 +1505,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function fahrenheitToKelvin ( fahrenheit, precisionPointAt ) {
+	function fahrenheitToKelvin( fahrenheit, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( fahrenheit ) ) { return }
@@ -1526,7 +1525,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function kelvinToCelsius ( kelvin, precisionPointAt ) {
+	function kelvinToCelsius( kelvin, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
@@ -1546,7 +1545,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @param {integer} precisionPointAt
 	 * @return {string}
 	 */
-	function kelvinToFahrenheit ( kelvin, precisionPointAt ) {
+	function kelvinToFahrenheit( kelvin, precisionPointAt ) {
 
 	    //Check if required parameter is valid
 	    if ( iteeValidators.isNotTemperature( kelvin ) ) { return }
@@ -1712,7 +1711,6 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
 	 */
 
-	/* eslint-disable no-console */
 	const Testing = {
 
 	    DataMap: undefined,
