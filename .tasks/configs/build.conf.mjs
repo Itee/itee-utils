@@ -15,6 +15,7 @@
 import alias       from '@rollup/plugin-alias'
 import commonjs    from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
+import terser      from '@rollup/plugin-terser'
 import figlet      from 'figlet'
 import {
     basename,
@@ -22,7 +23,6 @@ import {
 }                  from 'path'
 import cleanup     from 'rollup-plugin-cleanup'
 import replace     from 'rollup-plugin-re'
-import { terser }  from 'rollup-plugin-terser'
 import {
     getPrettyPackageName,
     getPrettyPackageVersion,
