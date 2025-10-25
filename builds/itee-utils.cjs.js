@@ -10,15 +10,13 @@
  */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var iteeValidators = require('itee-validators');
 var fs = require('fs');
 var path = require('path');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
-var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
+var path__default = /*#__PURE__*/_interopDefault(path);
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -118,6 +116,7 @@ function toArray( object, options = {
  *
  *
  */
+
 
 function byteToBits( byte ) {
 
@@ -311,6 +310,7 @@ function numberToPlainString( value ) {
  * @module sources/cores/objects
  * @description Export the utilities methods about objects
  */
+
 
 /**
  *
@@ -631,6 +631,7 @@ function toEnum( enumValues ) {
  * @description Export the utilities methods about strings
  *
  */
+
 
 /**
  * Set the first char to upper case like a classname
@@ -1318,6 +1319,7 @@ function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
  *
  */
 
+
 /**
  *
  * @param {array.<number>} ring
@@ -1440,6 +1442,7 @@ function segmentContains( p0, p1, p2 ) {
  * @description Export the utilities methods about temperatures
  * @requires {@link module:sources/cores/numbers}
  */
+
 
 const FAHRENHEIT_CELSIUS_COEFFICIENT = 1.8;
 const FAHRENHEIT_CELSIUS_CONSTANTE   = 32.0;
@@ -1573,7 +1576,7 @@ function kelvinToFahrenheit( kelvin, precisionPointAt ) {
 const voids = {
     null:      null,
     undefined: undefined,
-    void:      void ( 0 )
+    void:      void 0
 };
 
 const booleans = {
@@ -1586,9 +1589,9 @@ const numbers = {
     negativeMaxValue:        -Number.MAX_VALUE,
     negativeMinSafeInteger:  Number.MIN_SAFE_INTEGER,
     negativeMinValue:        -Number.MIN_VALUE,
-    negativeHexa:            -0x123456,
-    negativePow:             -2e+2,
-    negativePowWithDecimals: -1.2345e+2,
+    negativeHexa:            -1193046,
+    negativePow:             -200,
+    negativePowWithDecimals: -123.45,
     negativeFloat:           -1.01,
     negativeInt:             -1,
     negativeZero:            -0,
@@ -1664,7 +1667,7 @@ const arrays = {
     multiValued:      [ 0, 1, 2 ],
     null:             [ null, null, null ],
     undefined:        [ undefined, undefined, undefined ],
-    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+    void:             [ void 0, void 0, void 0 ],
     voids:            /*#__PURE__*/Object.values( voids ),
     booleans:         /*#__PURE__*/Object.values( booleans ),
     numbers:          /*#__PURE__*/Object.values( numbers ),
@@ -1702,14 +1705,14 @@ const objects = {
 
 var globalDataMap = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	voids: voids,
-	booleans: booleans,
-	numbers: numbers,
-	strings: strings,
-	functions: functions,
 	arrays: arrays,
+	booleans: booleans,
+	functions: functions,
+	numbers: numbers,
+	objects: objects,
+	strings: strings,
 	typedArrays: typedArrays,
-	objects: objects
+	voids: voids
 });
 
 /**
@@ -2129,6 +2132,7 @@ function isNotString( data ) {
  *
  */
 
+
 /**
  * Check if given path is a directory path
  *
@@ -2165,6 +2169,7 @@ function isDirectoryPath( path ) {
  * }
  *
  */
+
 
 /**
  * Check if given path is a file path
@@ -2203,6 +2208,7 @@ function isFilePath( path ) {
  *
  */
 
+
 /**
  * Check if given data is a valid file path
  *
@@ -2232,6 +2238,7 @@ function isInvalidPath( data ) {
  * It exposes all exports of the files validators.
  *
  */
+
 
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
@@ -2265,7 +2272,7 @@ function getFilesPathsUnder( paths ) {
         } else if ( isDirectoryPath( localPath ) ) {
 
             const subPaths      = getPathsUnder( localPath );
-            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default["default"].resolve( localPath, subPath ) ) } );
+            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path__default.default.resolve( localPath, subPath ) ) } );
             if ( subFilesPaths ) {
                 files = [].concat( ...subFilesPaths );
             }
@@ -2311,7 +2318,7 @@ function getFilesPathsUnder_1( filePaths ) {
 
         fs.readdirSync( folder ).forEach( ( name ) => {
 
-            const filePath = path__default["default"].resolve( folder, name );
+            const filePath = path__default.default.resolve( folder, name );
             checkStateOf( filePath );
 
         } );
@@ -2442,7 +2449,7 @@ function filterJavascriptFiles( filePaths, filter ) {
         if ( filter && !filter( filePath ) ) {
             continue
         } else {
-            const fileExtension = path__default["default"].extname( filePath );
+            const fileExtension = path__default.default.extname( filePath );
             if ( filePath.indexOf( 'glsl' ) > -1 || fileExtension !== '.js' ) {
                 continue
             }

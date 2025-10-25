@@ -113,6 +113,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *
 	 */
 
+
 	function byteToBits( byte ) {
 
 	    let bits = '';
@@ -305,6 +306,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @module sources/cores/objects
 	 * @description Export the utilities methods about objects
 	 */
+
 
 	/**
 	 *
@@ -625,6 +627,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @description Export the utilities methods about strings
 	 *
 	 */
+
 
 	/**
 	 * Set the first char to upper case like a classname
@@ -1312,6 +1315,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 *
 	 */
 
+
 	/**
 	 *
 	 * @param {array.<number>} ring
@@ -1434,6 +1438,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	 * @description Export the utilities methods about temperatures
 	 * @requires {@link module:sources/cores/numbers}
 	 */
+
 
 	const FAHRENHEIT_CELSIUS_COEFFICIENT = 1.8;
 	const FAHRENHEIT_CELSIUS_CONSTANTE   = 32.0;
@@ -1567,7 +1572,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	const voids = {
 	    null:      null,
 	    undefined: undefined,
-	    void:      void ( 0 )
+	    void:      void 0
 	};
 
 	const booleans = {
@@ -1580,9 +1585,9 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    negativeMaxValue:        -Number.MAX_VALUE,
 	    negativeMinSafeInteger:  Number.MIN_SAFE_INTEGER,
 	    negativeMinValue:        -Number.MIN_VALUE,
-	    negativeHexa:            -0x123456,
-	    negativePow:             -2e+2,
-	    negativePowWithDecimals: -1.2345e+2,
+	    negativeHexa:            -1193046,
+	    negativePow:             -200,
+	    negativePowWithDecimals: -123.45,
 	    negativeFloat:           -1.01,
 	    negativeInt:             -1,
 	    negativeZero:            -0,
@@ -1658,7 +1663,7 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	    multiValued:      [ 0, 1, 2 ],
 	    null:             [ null, null, null ],
 	    undefined:        [ undefined, undefined, undefined ],
-	    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+	    void:             [ void 0, void 0, void 0 ],
 	    voids:            /*#__PURE__*/Object.values( voids ),
 	    booleans:         /*#__PURE__*/Object.values( booleans ),
 	    numbers:          /*#__PURE__*/Object.values( numbers ),
@@ -1696,14 +1701,14 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 
 	var globalDataMap = /*#__PURE__*/Object.freeze({
 		__proto__: null,
-		voids: voids,
-		booleans: booleans,
-		numbers: numbers,
-		strings: strings,
-		functions: functions,
 		arrays: arrays,
+		booleans: booleans,
+		functions: functions,
+		numbers: numbers,
+		objects: objects,
+		strings: strings,
 		typedArrays: typedArrays,
-		objects: objects
+		voids: voids
 	});
 
 	/**
@@ -2029,8 +2034,6 @@ this.Itee.Utils = (function (exports, iteeValidators) {
 	exports.typedArrays = typedArrays;
 	exports.uniq = uniq;
 	exports.voids = voids;
-
-	Object.defineProperty(exports, '__esModule', { value: true });
 
 	return exports;
 
