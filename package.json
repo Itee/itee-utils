@@ -24,7 +24,7 @@
   "homepage":        "https://github.com/Itee/itee-utils#readme",
   "man":             "./docs/index.html",
   "bugs":            {
-    "url": "https://github.com/Itee/itee-validators/issues"
+    "url": "https://github.com/Itee/itee-utils/issues"
   },
   "engines":         {
     "node": ">=20"
