@@ -21,7 +21,7 @@
   "main":            "builds/itee-utils.cjs.js",
   "module":          "builds/itee-utils.esm.js",
   "browser":         "builds/itee-utils.iife.js",
-  "homepage":        "https://github.com/Itee/itee-validators#readme",
+  "homepage":        "https://github.com/Itee/itee-utils#readme",
   "man":             "./docs/index.html",
   "bugs":            {
     "url": "https://github.com/Itee/itee-validators/issues"
