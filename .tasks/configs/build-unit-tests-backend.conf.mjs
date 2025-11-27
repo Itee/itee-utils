@@ -33,18 +33,18 @@ const buildUnitTestsBackendConfig = {
         nodeResolve( {
             preferBuiltins: true
         } ),
-        alias( {
-            entries: [
-                {
-                    find:        'itee-utils',
-                    replacement: '../../../builds/itee-utils.esm.js'
-                }
-                //                                        {
-                //                                            find:        'itee-validators',
-                //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
-                //                                        }
-            ]
-        } ),
+        // alias( {
+        //     entries: [
+        //         {
+        //             find:        'itee-utils',
+        //             replacement: '../../../builds/itee-utils.esm.js'
+        //         }
+        //         //                                        {
+        //         //                                            find:        'itee-validators',
+        //         //                                            replacement: 'node_modules/itee-validators/builds/itee-validators.cjs.js'
+        //         //                                        }
+        //     ]
+        // } ),
         cleanup( {
             comments: 'none'
         } )
