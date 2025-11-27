@@ -1,6 +1,4 @@
-
-import Benchmark   from 'benchmark'
-import { Testing }      from 'itee-utils'
+import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as trigonometriesNamespace from '../../../sources/geomathics/trigonometries.js'
 
 const degreesToRadiansSuite = Benchmark.Suite( 'trigonometriesNamespace.degreesToRadians', Testing.createSuiteOptions() )

@@ -1,6 +1,4 @@
-
-import Benchmark   from 'benchmark'
-import { Testing }      from 'itee-utils'
+import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as binariesNamespace from '../../../sources/cores/binaries.js'
 
 const byteToBitsSuite = Benchmark.Suite( 'binariesNamespace.byteToBits', Testing.createSuiteOptions() )

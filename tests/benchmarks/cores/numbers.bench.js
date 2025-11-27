@@ -1,6 +1,4 @@
-
-import Benchmark   from 'benchmark'
-import { Testing }      from 'itee-utils'
+import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as numbersNamespace from '../../../sources/cores/numbers.js'
 
 const getRandomSuite = Benchmark.Suite( 'numbersNamespace.getRandom', Testing.createSuiteOptions() )

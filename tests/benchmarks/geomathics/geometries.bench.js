@@ -1,6 +1,4 @@
-
-import Benchmark   from 'benchmark'
-import { Testing }      from 'itee-utils'
+import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as geometriesNamespace from '../../../sources/geomathics/geometries.js'
 
 const ringClockwiseSuite = Benchmark.Suite( 'geometriesNamespace.ringClockwise', Testing.createSuiteOptions() )
