@@ -2,7 +2,7 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  */
-import * as globalDataMap from './primitives'
+import * as globalDataMap from './primitives.js'
 
 const Testing = {
 
