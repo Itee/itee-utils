@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as temperaturesNamespace from '../../../sources/physics/temperatures.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const celsiusToKelvinSuite = Benchmark.Suite( 'temperaturesNamespace.celsiusToKelvin', Testing.createSuiteOptions() )
                                      .add( 'celsiusToKelvin()', Testing.iterateOverDataMap( temperaturesNamespace.celsiusToKelvin ), Testing.createBenchmarkOptions() )

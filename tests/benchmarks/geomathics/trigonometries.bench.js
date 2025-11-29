@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as trigonometriesNamespace from '../../../sources/geomathics/trigonometries.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const degreesToRadiansSuite = Benchmark.Suite( 'trigonometriesNamespace.degreesToRadians', Testing.createSuiteOptions() )
                                      .add( 'degreesToRadians()', Testing.iterateOverDataMap( trigonometriesNamespace.degreesToRadians ), Testing.createBenchmarkOptions() )

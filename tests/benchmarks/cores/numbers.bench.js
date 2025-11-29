@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as numbersNamespace from '../../../sources/cores/numbers.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const getRandomSuite = Benchmark.Suite( 'numbersNamespace.getRandom', Testing.createSuiteOptions() )
                                      .add( 'getRandom()', Testing.iterateOverDataMap( numbersNamespace.getRandom ), Testing.createBenchmarkOptions() )

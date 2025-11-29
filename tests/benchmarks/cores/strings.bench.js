@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as stringsNamespace from '../../../sources/cores/strings.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const classNameifySuite = Benchmark.Suite( 'stringsNamespace.classNameify', Testing.createSuiteOptions() )
                                      .add( 'classNameify()', Testing.iterateOverDataMap( stringsNamespace.classNameify ), Testing.createBenchmarkOptions() )

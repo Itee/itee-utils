@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as binariesNamespace from '../../../sources/cores/binaries.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const byteToBitsSuite = Benchmark.Suite( 'binariesNamespace.byteToBits', Testing.createSuiteOptions() )
                                      .add( 'byteToBits()', Testing.iterateOverDataMap( binariesNamespace.byteToBits ), Testing.createBenchmarkOptions() )

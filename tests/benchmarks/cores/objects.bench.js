@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as objectsNamespace from '../../../sources/cores/objects.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const uniqSuite = Benchmark.Suite( 'objectsNamespace.uniq', Testing.createSuiteOptions() )
                                      .add( 'uniq()', Testing.iterateOverDataMap( objectsNamespace.uniq ), Testing.createBenchmarkOptions() )

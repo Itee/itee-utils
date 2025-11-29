@@ -1,5 +1,9 @@
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
 import * as geometriesNamespace from '../../../sources/geomathics/geometries.js'
+import { getBenchmarkPackage } from '../../import.benchmarks.js'
+import { getTestingPackage } from '../../import.testing.js'
+
+const Benchmark = await getBenchmarkPackage()
+const Testing   = await getTestingPackage()
 
 const ringClockwiseSuite = Benchmark.Suite( 'geometriesNamespace.ringClockwise', Testing.createSuiteOptions() )
                                      .add( 'ringClockwise()', Testing.iterateOverDataMap( geometriesNamespace.ringClockwise ), Testing.createBenchmarkOptions() )
