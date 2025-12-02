@@ -6,5 +6,5 @@
  *
  */
 
-export * from './primitives'
-export * from './benchmarks'
+export * from './primitives.js'
+export * from './benchmarks.js'

@@ -7,5 +7,5 @@
  * It expose all exports of the geometries sub-files.
  */
 
-export * from './trigonometries'
-export * from './geometries'
+export * from './trigonometries.js'
+export * from './geometries.js'
