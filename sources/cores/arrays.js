@@ -17,7 +17,7 @@ import {
  * @param {ordering} ascending
  * @returns {Function}
  */
-export function sortBy ( propertyName, ascending = 'asc' ) {
+export function sortBy( propertyName, ascending = 'asc' ) {
 
     const _propertyName = propertyName
     let resultSorter    = undefined
@@ -56,7 +56,7 @@ export function sortBy ( propertyName, ascending = 'asc' ) {
 
     } else {
 
-        throw RangeError( `Got invalid ascending [${ascending}], but expect one of ['asc','desc']!` )
+        throw RangeError( `Got invalid ascending [${ ascending }], but expect one of ['asc','desc']!` )
 
     }
 
@@ -75,7 +75,7 @@ export function sortBy ( propertyName, ascending = 'asc' ) {
  * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
  * @returns {Array.<*>}
  */
-export function toArray ( object, options = {
+export function toArray( object, options = {
     keepArray: false,
     keepNull:  false
 } ) {

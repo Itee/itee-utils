@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="module-Config-EsLint.html">Config-EsLint</a></li><li><a href="module-Config-JsDoc.html">Config-JsDoc</a></li><li><a href="module-Config-Karma-Benchs.html">Config-Karma-Benchs</a></li><li><a href="module-Config-Karma-Units.html">Config-Karma-Units</a></li><li><a href="module-Config-Rollup-Test.html">Config-Rollup-Test</a></li><li><a href="module-configs_Rollup.html">configs/Rollup</a></li><li><a href="module-configs_Rollup-Test.html">configs/Rollup-Test</a></li><li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
+					<li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
 				</ul>
 			</li>
 			
@@ -86,7 +86,7 @@
  *
  */
 
-export function getRandom () {
+export function getRandom() {
     return Math.random()
 }
 
@@ -97,7 +97,7 @@ export function getRandom () {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
+export function getRandomFloatExclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min ) + min
 }
 
@@ -108,7 +108,7 @@ export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
+export function getRandomFloatInclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min + 1.0 ) + min
 }
 
@@ -120,7 +120,7 @@ export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomIntExclusive ( min = 0, max = 1 ) {
+export function getRandomIntExclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
     const _max = Math.floor( max )
     return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
@@ -134,7 +134,7 @@ export function getRandomIntExclusive ( min = 0, max = 1 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomIntInclusive ( min = 0, max = 1 ) {
+export function getRandomIntInclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
     const _max = Math.floor( max )
     return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
@@ -147,7 +147,7 @@ export function getRandomIntInclusive ( min = 0, max = 1 ) {
  * @param {number} value
  * @returns {string}
  */
-export function numberToPlainString ( value ) {
+export function numberToPlainString( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -184,7 +184,7 @@ export function numberToPlainString ( value ) {
 
 // #if IS_KEEP_ON_BUILD
 
-export function numberToPlainString_alt0 ( value ) {
+export function numberToPlainString_alt0( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -223,7 +223,7 @@ export function numberToPlainString_alt0 ( value ) {
 
 }
 
-export function numberToPlainString_alt1 ( value ) {
+export function numberToPlainString_alt1( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -258,7 +258,7 @@ export function numberToPlainString_alt1 ( value ) {
 
 }
 
-export function numberToPlainString_alt2 ( value ) {
+export function numberToPlainString_alt2( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -289,9 +289,10 @@ export function numberToPlainString_alt2 ( value ) {
 
 }
 
-export function numberToPlainString_alt3 ( value ) {
+export function numberToPlainString_alt3( value ) {
 
-    return String( value ).replace( /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
+    return String( value ).replace(
+        /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
         ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
 
             const exponentLength = parseInt( exponent )
@@ -302,11 +303,12 @@ export function numberToPlainString_alt3 ( value ) {
                 return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
                 //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
             }
-        } )
+        }
+    )
 
 }
 
-export function numberToPlainString_alt4 ( num ) {
+export function numberToPlainString_alt4( num ) {
     const nsign = Math.sign( num )
     //remove the sign
     let _num    = Math.abs( num )
@@ -387,7 +389,7 @@ export function numberToPlainString_alt4 ( num ) {
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a>
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

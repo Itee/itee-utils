@@ -7,7 +7,7 @@
  *
  */
 
-export function getRandom () {
+export function getRandom() {
     return Math.random()
 }
 
@@ -18,7 +18,7 @@ export function getRandom () {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
+export function getRandomFloatExclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min ) + min
 }
 
@@ -29,7 +29,7 @@ export function getRandomFloatExclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
+export function getRandomFloatInclusive( min = 0.0, max = 1.0 ) {
     return Math.random() * ( max - min + 1.0 ) + min
 }
 
@@ -41,7 +41,7 @@ export function getRandomFloatInclusive ( min = 0.0, max = 1.0 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomIntExclusive ( min = 0, max = 1 ) {
+export function getRandomIntExclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
     const _max = Math.floor( max )
     return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
@@ -55,7 +55,7 @@ export function getRandomIntExclusive ( min = 0, max = 1 ) {
  * @param {number} max
  * @returns {number}
  */
-export function getRandomIntInclusive ( min = 0, max = 1 ) {
+export function getRandomIntInclusive( min = 0, max = 1 ) {
     const _min = Math.ceil( min )
     const _max = Math.floor( max )
     return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
@@ -68,7 +68,7 @@ export function getRandomIntInclusive ( min = 0, max = 1 ) {
  * @param {number} value
  * @returns {string}
  */
-export function numberToPlainString ( value ) {
+export function numberToPlainString( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -105,7 +105,7 @@ export function numberToPlainString ( value ) {
 
 // #if IS_KEEP_ON_BUILD
 
-export function numberToPlainString_alt0 ( value ) {
+export function numberToPlainString_alt0( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -144,7 +144,7 @@ export function numberToPlainString_alt0 ( value ) {
 
 }
 
-export function numberToPlainString_alt1 ( value ) {
+export function numberToPlainString_alt1( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -179,7 +179,7 @@ export function numberToPlainString_alt1 ( value ) {
 
 }
 
-export function numberToPlainString_alt2 ( value ) {
+export function numberToPlainString_alt2( value ) {
 
     const stringValue = String( value )
     if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
@@ -210,9 +210,10 @@ export function numberToPlainString_alt2 ( value ) {
 
 }
 
-export function numberToPlainString_alt3 ( value ) {
+export function numberToPlainString_alt3( value ) {
 
-    return String( value ).replace( /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
+    return String( value ).replace(
+        /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
         ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
 
             const exponentLength = parseInt( exponent )
@@ -223,11 +224,12 @@ export function numberToPlainString_alt3 ( value ) {
                 return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
                 //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
             }
-        } )
+        }
+    )
 
 }
 
-export function numberToPlainString_alt4 ( num ) {
+export function numberToPlainString_alt4( num ) {
     const nsign = Math.sign( num )
     //remove the sign
     let _num    = Math.abs( num )

@@ -11,13 +11,13 @@
 
 class Chrono {
 
-    constructor () {
+    constructor() {
 
         this._cache = {}
 
     }
 
-    start ( key ) {
+    start( key ) {
 
         this._cache[ key ] = {
             start: 0,
@@ -28,25 +28,25 @@ class Chrono {
 
     }
 
-    stop ( key ) {
+    stop( key ) {
 
         this._cache[ key ].stop = this._getTimeStamp()
 
     }
 
-    getDurationOf ( key ) {
+    getDurationOf( key ) {
 
         return this._getDurationInSecond( this._cache[ key ].start, this._cache[ key ].stop )
 
     }
 
-    getResults () {
+    getResults() {
 
         let results = ''
 
         for ( let [ key, times ] of Object.entries( this._cache ) ) {
 
-            results += `${key}: ${times.stop - times.start}ms\n`
+            results += `${ key }: ${ times.stop - times.start }ms\n`
 
         }
 
@@ -54,14 +54,14 @@ class Chrono {
 
     }
 
-    _getTimeStamp () {
+    _getTimeStamp() {
 
         return window.performance &&
-        window.performance.now &&
-        window.performance.timing &&
-        window.performance.timing.navigationStart ?
-            window.performance.now() + window.performance.timing.navigationStart :
-            Date.now()
+               window.performance.now &&
+               window.performance.timing &&
+               window.performance.timing.navigationStart ?
+               window.performance.now() + window.performance.timing.navigationStart :
+               Date.now()
 
     }
 

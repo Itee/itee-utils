@@ -8,4 +8,4 @@
  *
  */
 
-export * from './temperatures'
+export * from './temperatures.js'

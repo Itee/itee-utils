@@ -21,7 +21,7 @@ export const RAD_TO_DEG = ( 180 / PI )
  * @param {number} degrees
  * @return {number}
  */
-export function degreesToRadians ( degrees ) {
+export function degreesToRadians( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -30,7 +30,7 @@ export function degreesToRadians ( degrees ) {
  * @param {number} radians
  * @return {number}
  */
-export function degreesFromRadians ( radians ) {
+export function degreesFromRadians( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -39,7 +39,7 @@ export function degreesFromRadians ( radians ) {
  * @param {number} radians
  * @return {number}
  */
-export function radiansToDegrees ( radians ) {
+export function radiansToDegrees( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -48,7 +48,7 @@ export function radiansToDegrees ( radians ) {
  * @param {number} degrees
  * @return {number}
  */
-export function radiansFromDegrees ( degrees ) {
+export function radiansFromDegrees( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -58,9 +58,9 @@ export function radiansFromDegrees ( degrees ) {
  * @param {Vector} vector
  * @return {number}
  */
-export function getYaw ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+export function getYaw( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return -Math.atan2( vector.x, vector.z )
 }
@@ -70,9 +70,9 @@ export function getYaw ( vector ) {
  * @param {Vector} vector
  * @return {number}
  */
-export function getPitch ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+export function getPitch( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return Math.asin( vector.y )
 }
@@ -82,15 +82,15 @@ export function getPitch ( vector ) {
  * @param {Vector} vectorDir
  * @return {{yaw: number, pitch: number}}
  */
-export function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
-    if(isNotDefined(vectorDir)) { return }
-    if(isNotObject(vectorDir)) { return }
+export function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
+    if ( isNotDefined( vectorDir ) ) { return }
+    if ( isNotObject( vectorDir ) ) { return }
 
-    function getYaw ( vector ) {
+    function getYaw( vector ) {
         return Math.atan2( vector.y, vector.x )
     }
 
-    function getPitch ( vector ) {
+    function getPitch( vector ) {
         return Math.asin( vector.z )
     }
 

@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="module-Config-EsLint.html">Config-EsLint</a></li><li><a href="module-Config-JsDoc.html">Config-JsDoc</a></li><li><a href="module-Config-Karma-Benchs.html">Config-Karma-Benchs</a></li><li><a href="module-Config-Karma-Units.html">Config-Karma-Units</a></li><li><a href="module-Config-Rollup-Test.html">Config-Rollup-Test</a></li><li><a href="module-configs_Rollup.html">configs/Rollup</a></li><li><a href="module-configs_Rollup-Test.html">configs/Rollup-Test</a></li><li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
+					<li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
 				</ul>
 			</li>
 			
@@ -100,7 +100,7 @@ export const RAD_TO_DEG = ( 180 / PI )
  * @param {number} degrees
  * @return {number}
  */
-export function degreesToRadians ( degrees ) {
+export function degreesToRadians( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -109,7 +109,7 @@ export function degreesToRadians ( degrees ) {
  * @param {number} radians
  * @return {number}
  */
-export function degreesFromRadians ( radians ) {
+export function degreesFromRadians( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -118,7 +118,7 @@ export function degreesFromRadians ( radians ) {
  * @param {number} radians
  * @return {number}
  */
-export function radiansToDegrees ( radians ) {
+export function radiansToDegrees( radians ) {
     return radians * RAD_TO_DEG
 }
 
@@ -127,7 +127,7 @@ export function radiansToDegrees ( radians ) {
  * @param {number} degrees
  * @return {number}
  */
-export function radiansFromDegrees ( degrees ) {
+export function radiansFromDegrees( degrees ) {
     return degrees * DEG_TO_RAD
 }
 
@@ -137,9 +137,9 @@ export function radiansFromDegrees ( degrees ) {
  * @param {Vector} vector
  * @return {number}
  */
-export function getYaw ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+export function getYaw( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return -Math.atan2( vector.x, vector.z )
 }
@@ -149,9 +149,9 @@ export function getYaw ( vector ) {
  * @param {Vector} vector
  * @return {number}
  */
-export function getPitch ( vector ) {
-    if(isNotDefined(vector)) { return }
-    if(isNotObject(vector)) { return }
+export function getPitch( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
     return Math.asin( vector.y )
 }
@@ -161,15 +161,15 @@ export function getPitch ( vector ) {
  * @param {Vector} vectorDir
  * @return {{yaw: number, pitch: number}}
  */
-export function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
-    if(isNotDefined(vectorDir)) { return }
-    if(isNotObject(vectorDir)) { return }
+export function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
+    if ( isNotDefined( vectorDir ) ) { return }
+    if ( isNotObject( vectorDir ) ) { return }
 
-    function getYaw ( vector ) {
+    function getYaw( vector ) {
         return Math.atan2( vector.y, vector.x )
     }
 
-    function getPitch ( vector ) {
+    function getPitch( vector ) {
         return Math.asin( vector.z )
     }
 
@@ -385,7 +385,7 @@ export function convertWebGLRotationToTopogicalYawPitch ( vectorDir ) {
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a>
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

@@ -12,7 +12,7 @@ import {
     isNull
 } from 'itee-validators'
 
-export function byteToBits ( byte ) {
+export function byteToBits( byte ) {
 
     let bits = ''
 
@@ -30,7 +30,7 @@ export function byteToBits ( byte ) {
 
 }
 
-export function bitsToByte ( bits ) {
+export function bitsToByte( bits ) {
     if ( isNotString( bits ) ) { return }
 
     let byte = 0
@@ -54,7 +54,7 @@ export function bitsToByte ( bits ) {
  * @param {number} number - The number to convert in this internal representation
  * @returns {string}
  */
-export function numberToInternalRepresentation ( number ) {
+export function numberToInternalRepresentation( number ) {
 
     //    let buffer  = new Float64Array( [ number ] ).buffer
     let bufferA = new ArrayBuffer( 8 )
@@ -71,7 +71,7 @@ export function numberToInternalRepresentation ( number ) {
 
 }
 
-export function internalRepresentationToNumber ( string ) {
+export function internalRepresentationToNumber( string ) {
 
     if ( isNotDefined( string ) ) { return }
     if ( isNotString( string ) ) { return }

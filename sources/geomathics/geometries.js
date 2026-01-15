@@ -13,7 +13,7 @@ import { isNotArray } from 'itee-validators'
  * @param {array.<number>} ring
  * @return {boolean}
  */
-export function ringClockwise ( ring ) {
+export function ringClockwise( ring ) {
     if ( isNotArray( ring ) ) { return false }
 
     let numberOfRingElements = ring.length
@@ -21,8 +21,8 @@ export function ringClockwise ( ring ) {
         return false
     }
 
-    let ringIndex    = 0
-    let area = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ]
+    let ringIndex = 0
+    let area      = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ]
     while ( ++ringIndex < numberOfRingElements ) {
         area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ]
     }
@@ -35,7 +35,7 @@ export function ringClockwise ( ring ) {
  * @param {array.<number>} hole
  * @return {boolean}
  */
-export function ringContainsSome ( ring, hole ) {
+export function ringContainsSome( ring, hole ) {
     if ( isNotArray( ring ) ) { return false }
     if ( isNotArray( hole ) ) { return false }
 
@@ -60,7 +60,7 @@ export function ringContainsSome ( ring, hole ) {
  * @param {array.<number>} point
  * @return {number}
  */
-export function ringContains ( ring, point ) {
+export function ringContains( ring, point ) {
     if ( isNotArray( ring ) ) { return false }
     if ( isNotArray( point ) ) { return false }
 
@@ -96,7 +96,7 @@ export function ringContains ( ring, point ) {
  * @param {array.<number>} p2
  * @return {boolean}
  */
-export function segmentContains ( p0, p1, p2 ) {
+export function segmentContains( p0, p1, p2 ) {
     if ( isNotArray( p0 ) ) { return false }
     if ( isNotArray( p1 ) ) { return false }
     if ( isNotArray( p2 ) ) { return false }
@@ -113,7 +113,7 @@ export function segmentContains ( p0, p1, p2 ) {
         return false
     }
 
-    const t = ( (x20 * x10) + (y20 * y10) ) / ( (x10 * x10) + (y10 * y10) )
+    const t = ( ( x20 * x10 ) + ( y20 * y10 ) ) / ( ( x10 * x10 ) + ( y10 * y10 ) )
 
     return t < 0 || t > 1
            ? false

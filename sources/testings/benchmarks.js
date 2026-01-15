@@ -2,9 +2,8 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  */
-import * as globalDataMap from './primitives'
+import * as globalDataMap from './primitives.js'
 
-/* eslint-disable no-console */
 const Testing = {
 
     DataMap: undefined,
@@ -125,14 +124,12 @@ const Testing = {
 
             // called when the suite starts running
             'onStart': function onStartSuite( /*event*/ ) {
-                //eslint-disable-next-line
                 console.log( `Running ${ this.constructor.name }: ${ this.name }` )
                 this.results = []
             },
 
             // called between running benchmarks
             'onCycle': function onCycleSuite( event ) {
-                //eslint-disable-next-line
                 console.log( `Running Bench: ${ event.target.name }` )
                 this.results.push( event.target )
             },
@@ -170,7 +167,6 @@ const Testing = {
                 } )
 
                 for ( let i = 0, num = this.results.length ; i < num ; i++ ) {
-                    //eslint-disable-next-line
                     console.log( `${ i }: ${ String( this.results[ i ] ) }` )
                 }
 
@@ -178,7 +174,6 @@ const Testing = {
                 const slowest       = this.results[ this.results.length - 1 ]
                 const speedIncrease = ( ( fastest.hz - slowest.hz ) / slowest.hz ) * 100
 
-                //eslint-disable-next-line
                 console.log( `\n${ fastest.name } is ${ Math.round( speedIncrease ) }% fastest than ${ slowest.name }` )
 
                 delete this.results
@@ -333,6 +328,5 @@ const Testing = {
     }
 
 }
-/* eslint-enable no-console */
 
 export { Testing }

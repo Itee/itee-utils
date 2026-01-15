@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu inline">
-					<li><a href="module-Config-EsLint.html">Config-EsLint</a></li><li><a href="module-Config-JsDoc.html">Config-JsDoc</a></li><li><a href="module-Config-Karma-Benchs.html">Config-Karma-Benchs</a></li><li><a href="module-Config-Karma-Units.html">Config-Karma-Units</a></li><li><a href="module-Config-Rollup-Test.html">Config-Rollup-Test</a></li><li><a href="module-configs_Rollup.html">configs/Rollup</a></li><li><a href="module-configs_Rollup-Test.html">configs/Rollup-Test</a></li><li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
+					<li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
 				</ul>
 			</li>
 			
@@ -99,7 +99,7 @@ import {
  * @param {array.&lt;*>} a
  * @returns {array.&lt;*>}
  */
-export function uniq ( a ) {
+export function uniq( a ) {
     if ( isNotArray( a ) ) { return }
 
     const seen = {}
@@ -113,7 +113,7 @@ export function uniq ( a ) {
  * @param {object} source
  * @return {object}
  */
-export function extend ( target, source ) {
+export function extend( target, source ) {
 
     let output
 
@@ -168,7 +168,7 @@ export function extend ( target, source ) {
 /**
  * Remove old inheritance stuff due to es6 class !
  */
-export function serializeObject () {
+export function serializeObject() {
 
     //    var object = {}
     //    var a = this.serializeArray()
@@ -194,7 +194,7 @@ export function serializeObject () {
  * @param {class} ParentClassOrObject
  * @return {*}
  */
-export function extendObject ( ChildClass, ParentClassOrObject ) {
+export function extendObject( ChildClass, ParentClassOrObject ) {
     if ( isUndefined( ChildClass ) ) { return }
     if ( isUndefined( ParentClassOrObject ) ) { return }
 
@@ -262,7 +262,7 @@ export function extendObject ( ChildClass, ParentClassOrObject ) {
  * @param {3dpath} path
  * @param {number} interval
  */
-export function createInterval ( particles, path, interval ) {
+export function createInterval( particles, path, interval ) {
     if ( !particles ) {return}
     if ( !path ) {return}
     if ( !interval ) {return}
@@ -343,7 +343,7 @@ export function createInterval ( particles, path, interval ) {
  * const MealTypes = Meal.types
  * // ['Tartiflette', 'Saint-Emilion', 'Mousse au chocolat' ]
  */
-export function toEnum ( enumValues ) {
+export function toEnum( enumValues ) {
     if ( isNotObject( enumValues ) ) { return }
     if ( isDefined( enumValues.toString ) ) {
         const descriptor = Object.getOwnPropertyDescriptor( enumValues, 'toString' )
@@ -357,7 +357,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
 
                 const keys = Object.keys( this )
                 let result = ''
@@ -373,7 +373,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value ( key ) {
+            value( key ) {
                 return Object.values( this ).includes( key )
             }
         },
@@ -381,7 +381,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.keys( this )
             }
         },
@@ -389,7 +389,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.values( this )
             }
         },
@@ -397,7 +397,7 @@ export function toEnum ( enumValues ) {
             configurable: false,
             enumerable:   false,
             writable:     false,
-            value () {
+            value() {
                 return Object.entries( this )
             }
         }
@@ -446,7 +446,7 @@ export function toEnum ( enumValues ) {
 	</span>
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a>
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
