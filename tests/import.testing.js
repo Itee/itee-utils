@@ -1,8 +1,13 @@
 async function getTestingPackage() {
 
-    const testingPackage = ( typeof global === 'undefined' )
-                           ? await import('itee-utils/sources/testings/benchmarks.js')
-                           : await import('itee-utils')
+    const testingPackage = await import('itee-utils/sources/testings/benchmarks.js')
+
+    // let testingPackage
+    // if ( typeof global === 'undefined' ) {
+    //     testingPackage = await import('itee-utils/sources/testings/benchmarks.js')
+    // } else {
+    //     testingPackage = await import('itee-utils')
+    // }
 
     return testingPackage.Testing
 
