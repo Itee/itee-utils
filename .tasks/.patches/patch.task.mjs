@@ -20,7 +20,7 @@ const {
  */
 const patchTask       = ( done ) => {
 
-    const filePath       = join( '../', 'node_modules/itee-utils/sources/testings/benchmarks.js' )
+    const filePath       = join( '../../', 'node_modules/itee-utils/sources/testings/benchmarks.js' )
     const fileBuffer     = readFileSync( filePath )
     const fileContent    = fileBuffer.toString()
     const updatedContent = fileContent.replace( "import * as globalDataMap from './primitives'", "import * as globalDataMap from './primitives.js'" )
