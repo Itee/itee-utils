@@ -1,8 +1,8 @@
 /**
- * ┳      ┳┳ •┓     ┏┓ ┏┓ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
- * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫ ┃┫  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
- * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
- *                                               
+ * ┳      ┳┳ •┓     ┏┓ ┏┓ ┓      ┏┓ ┳┳┓   ┓  ┓  
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫ ┃  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┻      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
+ *                                              
  * @desc    A library of utility functions use in various Itee projects
  * @author  [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}

@@ -1,3 +1,8 @@
+# [v6.0.1](https://github.com/Itee/itee-utils/compare/v6.0.0...v6.0.1) (2026-01-15)
+
+## 🐛 Bug Fixes
+- [`cc26a6b`](https://github.com/Itee/itee-utils/commit/cc26a6b)  (tests) try to fix broken import for backend due to bad package json main target
+
 # [v6.0.0](https://github.com/Itee/itee-utils/compare/v5.6.0...v6.0.0) (2026-01-15)
 
 ## ✨ New Features
