@@ -1,3 +1,22 @@
+# [v6.0.0](https://github.com/Itee/itee-utils/compare/v5.6.0...v6.0.0) (2026-01-15)
+
+## ✨ New Features
+- [`a0c1245`](https://github.com/Itee/itee-utils/commit/a0c1245)  (tasks) upgrade tasks to latest itee and gulp standards 
+- [`a47cb97`](https://github.com/Itee/itee-utils/commit/a47cb97)  (tasks) update default tasks to latest itee standards 
+- [`a0a39cf`](https://github.com/Itee/itee-utils/commit/a0a39cf)  (tests) remove the need to build backend file to run unit and benches tests 
+
+## 🐛 Bug Fixes
+- [`071d3ce`](https://github.com/Itee/itee-utils/commit/071d3ce)  (gulpfile) fix broken import links 
+- [`230b984`](https://github.com/Itee/itee-utils/commit/230b984)  (gulpfile-refresh) use external script that do not require gulp to be loaded for refreshing it 
+- [`6b0e2aa`](https://github.com/Itee/itee-utils/commit/6b0e2aa)  (compute-unit-tests-task) fix default template for empty units 
+- [`85cbc41`](https://github.com/Itee/itee-utils/commit/85cbc41)  (tasks) fix frontend task run on empty test generation 
+- [`0f83a28`](https://github.com/Itee/itee-utils/commit/0f83a28)  (strings) try to fix side effect 
+- [`10e20d2`](https://github.com/Itee/itee-utils/commit/10e20d2)  (benchmarks) use full filename on import to allow direct nodejs usage 
+- [`c29d142`](https://github.com/Itee/itee-utils/commit/c29d142)  (release) fix release task and update others to latest standards 
+
+## 💥 Breaking Changes
+- [`3b719ed`](https://github.com/Itee/itee-utils/commit/3b719ed)  (node) drop nodejs v18 support and introduce nodejs v24
+
 # [v5.6.0](https://github.com/Itee/itee-utils/compare/v5.5.0...v5.6.0) (2025-10-18)
 
 ## ✨ New Features
