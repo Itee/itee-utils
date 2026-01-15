@@ -1,3 +1,8 @@
+# [v6.0.2](https://github.com/Itee/itee-utils/compare/v6.0.1...v6.0.2) (2026-01-15)
+
+## 🐛 Bug Fixes
+- [`554820b`](https://github.com/Itee/itee-utils/commit/554820b)  (package) apply internal fix to itself
+
 # [v6.0.1](https://github.com/Itee/itee-utils/compare/v6.0.0...v6.0.1) (2026-01-15)
 
 ## 🐛 Bug Fixes
