@@ -12,7 +12,6 @@
  * @requires {@link module: [rollup-plugin-node-resolve]{@link https://github.com/rollup/rollup-plugin-node-resolve}}
  * @requires {@link module: [rollup-plugin-terser]{@link https://github.com/TrySound/rollup-plugin-terser}}
  */
-import alias       from '@rollup/plugin-alias'
 import commonjs    from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import terser      from '@rollup/plugin-terser'
@@ -108,6 +107,22 @@ function _computeIntro() {
 
 }
 
+function getOutputFileExtensionBasedOnFileFormat( format ) {
+
+    let extension
+
+    if ( format === 'cjs' ) {
+        extension = 'cjs'
+    } else if ( format === 'esm' ) {
+        extension = 'mjs'
+    } else {
+        extension = 'js'
+    }
+
+    return extension
+
+}
+
 /**
  * Will create an appropriate configuration object for rollup, related to the given arguments.
  *
@@ -137,7 +152,8 @@ function _createRollupConfigs( options ) {
             const env        = envs[ envIndex ]
             const isProd     = ( env.includes( 'prod' ) )
             const format     = formats[ formatIndex ]
-            const outputPath = ( isProd ) ? join( output, `${ fileName }.${ format }.min.js` ) : join( output, `${ fileName }.${ format }.js` )
+            const extension  = getOutputFileExtensionBasedOnFileFormat( format )
+            const outputPath = ( isProd ) ? join( output, `${ fileName }.min.${ extension }` ) : join( output, `${ fileName }.${ extension }` )
 
             configs.push( {
                 input:     input,
@@ -216,8 +232,8 @@ const configs = {
     'build':                                _createRollupConfigs( {
         input:     join( packageSourcesDirectory, `${ packageName }.js` ),
         output:    packageBuildsDirectory,
-        formats:   [ 'esm', 'cjs', 'iife' ],
-        envs:      [ 'dev', 'prod' ],
+        formats:   [ 'esm', 'cjs' ],
+        envs:      [ 'dev' ],
         sourcemap: true,
         treeshake: true
     } ),
