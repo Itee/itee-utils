@@ -19,9 +19,8 @@
     "url": "https://github.com/Itee/itee-utils.git"
   },
   "type": "module",
-  "main": "builds/itee-utils.cjs.js",
-  "module": "builds/itee-utils.esm.js",
-  "browser": "builds/itee-utils.iife.js",
+  "main": "builds/itee-utils.cjs",
+  "module": "builds/itee-utils.mjs",
   "homepage": "https://github.com/Itee/itee-utils#readme",
   "man": "./docs/index.html",
   "bugs": {
