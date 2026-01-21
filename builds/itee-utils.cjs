@@ -1,7 +1,7 @@
 /**
  * ┳      ┳┳ •┓     ┏┓ ┏┓ ┏┓      ┏┓            ┏┳ 
- * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫ ┏┛  ━━  ┃ ┏┓┏┳┓┏┳┓┏┓┏┓ ┃┏
- * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗━      ┗┛┗┛┛┗┗┛┗┗┗┛┛┗┗┛┛
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫  ┫  ━━  ┃ ┏┓┏┳┓┏┳┓┏┓┏┓ ┃┏
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┗┛┛┗┗┛┗┗┗┛┛┗┗┛┛
  *                                                 
  * @desc    A library of utility functions use in various Itee projects
  * @author  [Tristan Valcke]{@link https://github.com/Itee}
@@ -2511,4 +2511,4 @@ exports.toEnum = toEnum;
 exports.typedArrays = typedArrays;
 exports.uniq = uniq;
 exports.voids = voids;
-//# sourceMappingURL=itee-utils.cjs.js.map
+//# sourceMappingURL=itee-utils.cjs.map
