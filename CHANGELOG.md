@@ -1,3 +1,5 @@
+# [v6.0.3](https://github.com/Itee/itee-utils/compare/v6.0.2...v6.0.3) (2026-01-21)
+
 # [v6.0.2](https://github.com/Itee/itee-utils/compare/v6.0.1...v6.0.2) (2026-01-15)
 
 ## 🐛 Bug Fixes
