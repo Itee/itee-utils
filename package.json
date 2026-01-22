@@ -16,15 +16,15 @@
   "private":         false,
   "repository":      {
     "type": "git",
-    "url":  "https://github.com/Itee/itee-utils.git"
+    "url":  "https://github.com/Itee/utils.git"
   },
   "type":            "module",
-  "main":            "builds/itee-utils.cjs",
-  "module":          "builds/itee-utils.mjs",
-  "homepage":        "https://github.com/Itee/itee-utils#readme",
+  "main":            "builds/utils.cjs",
+  "module":          "builds/utils.mjs",
+  "homepage":        "https://github.com/Itee/utils#readme",
   "man":             "./docs/index.html",
   "bugs":            {
-    "url": "https://github.com/Itee/itee-utils/issues"
+    "url": "https://github.com/Itee/utils/issues"
   },
   "engines":         {
     "node": ">=20"
