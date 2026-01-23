@@ -1,16 +1,636 @@
 /**
- * ┳      ┳┳ •┓     ┏┓ ┏┓ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
- * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫ ┣┓  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
- * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
+ * ┳      ┳┳ •┓     ━┓ ┏┓ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏ ┃ ┃┫ ┃┫  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛ ╹•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
  *                                               
  * @desc    A library of utility functions use in various Itee projects
  * @author  [Itee (Tristan Valcke)]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses}
  * 
  */
-import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isUndefined, isNotObject, isDefined as isDefined$1, isNotArray, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
 import { statSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
+
+/**
+ * ┳      ┓┏  ┓• ┓            ━┓ ┏┓ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
+ * ┃╋┏┓┏┓ ┃┃┏┓┃┓┏┫┏┓╋┏┓┏┓┏  ┓┏ ┃ ┃┫ ┃┫  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
+ * ┻┗┗ ┗ •┗┛┗┻┗┗┗┻┗┻┗┗┛┛ ┛  ┗┛ ╹•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
+ *                                                         
+ * @desc    A library of validation functions use in various Itee projects
+ * @author  [Itee (Tristan Valcke)]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses}
+ * 
+ */
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/arrays/isArray
+ * @desc Export functions to validate if a value is an array or not
+ * @example {@lang javascript}
+ *
+ * import { isArray } from 'itee-validators'
+ *
+ * if( isArray( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is an array
+ *
+ * @param data {*} The data to check against the array type
+ * @returns {boolean} true if data is array, false otherwise
+ */
+function isArray( data ) {
+    return Array.isArray( data )
+}
+
+/**
+ * Check if given data is not an array
+ *
+ * @param data {*} The data to check against the array type
+ * @returns {boolean} true if data is not array, false otherwise
+ */
+function isNotArray( data ) {
+    return !Array.isArray( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/arrays/isEmptyArray
+ * @desc Export function to validate if a value is an array of null length or not
+ * @example
+ *
+ * import { isEmptyArray } from 'itee-validators'
+ *
+ * if( isEmptyArray( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is an empty array
+ *
+ * @param data {*} The data to check against the empty array
+ * @returns {boolean} true if data is an empty array, false otherwise
+ */
+function isEmptyArray( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+
+    return ( data.length === 0 )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isNull
+ * @desc Export function to validate if a value is null or not
+ * @example
+ *
+ * import { isNull } from 'itee-validators'
+ *
+ * if( isNull( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is null
+ *
+ * @param data {*} The data to check against the nullity
+ * @returns {boolean} true if data is null, false otherwise.
+ */
+function isNull( data ) {
+    return ( data === null )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined$1( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
+
+/**
+ * Check if given data is null or undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is null or undefined, false otherwise.
+ */
+function isNotDefined( data ) {
+    return ( ( data === null ) || ( typeof data === 'undefined' ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/numbers/isNumber
+ * @desc Export function to validate if a value is a number, or with special sign
+ * @example
+ *
+ * import { isNumber } from 'itee-validators'
+ *
+ * if( isNumber( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is a number
+ *
+ * @param data {*} The data to check against the maximum safe integer state
+ * @returns {boolean} true if data is a number, false otherwise.
+ */
+function isNumber( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return ( data.constructor === Number )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/objects/isObject
+ * @desc Export function to validate if a value is an object
+ * @example
+ *
+ * import { isObject } from 'itee-validators'
+ *
+ * if( isObject( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is object, false otherwise
+ */
+function isObject( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+
+    return ( data.constructor === Object )
+}
+
+/**
+ * Check if given data is not an object
+ *
+ * @param data {*} The data to check against the object type
+ * @returns {boolean} true if data is not an object, false otherwise
+ */
+function isNotObject( data ) {
+    return !isObject( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings/isString
+ * @desc Export function to validate if a value is a string
+ * @example
+ *
+ * import { isString } from 'itee-validators'
+ *
+ * if( isString( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is a string, false otherwise.
+ */
+function isString$1( data ) {
+    return ( typeof data === 'string' || data instanceof String )
+}
+
+/**
+ * Check if given data is not a string
+ *
+ * @param data {*} The data to check against the string type
+ * @returns {boolean} true if data is not a string, false otherwise.
+ */
+function isNotString$1( data ) {
+    return !isString$1( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isUndefined
+ * @desc Export function to validate if a value is a void
+ * @example
+ *
+ * import { isNull } from 'itee-validators'
+ *
+ * if( isNull( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is undefined
+ *
+ * @param data {*} The data to check against the undefiness
+ * @returns {boolean} true if data is undefined, false otherwise.
+ */
+function isUndefined( data ) {
+    return ( typeof data === 'undefined' )
+}
+
+/**
+ * Check if given data is defined
+ *
+ * @param data {*} The data to check against the undefiness
+ * @returns {boolean} true if data is defined, false otherwise.
+ */
+function isNotUndefined( data ) {
+    return ( typeof data !== 'undefined' )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/arrays/isArrayOfUndefined
+ * @desc Export function to validate if a value is an array of undefined values or not
+ * @example
+ *
+ * import { isArrayOfUndefined } from 'itee-validators'
+ *
+ * if( isArrayOfUndefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is not an empty array where all values are undefined
+ *
+ * @param data {*} The data to check against the array of undefined
+ * @returns {boolean} true if data is not an empty array where all values are undefined, false otherwise
+ */
+function isArrayOfUndefined( data ) {
+
+    if ( isNotArray( data ) ) { return false }
+    if ( isEmptyArray( data ) ) { return false }
+
+    for ( let index = 0, dataLength = data.length ; index < dataLength ; index++ ) {
+        if ( isNotUndefined( data[ index ] ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+// Todo: Neg
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/objects/isEmptyObject
+ * @desc Export function to validate if a value is an empty object
+ * @example
+ *
+ * import { isEmptyObject } from 'itee-validators'
+ *
+ * if( isEmptyObject( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is an empty object
+ *
+ * @param data {*} The data to check against the emptiness of the object
+ * @returns {boolean} true if data is an empty object, false otherwise
+ */
+function isEmptyObject( data ) {
+
+    if ( isNotObject( data ) ) { return false }
+
+    if ( data.length === 0 ) {
+        return true
+    }
+
+    // Otherwise, does it have any properties of its own?
+    for ( let key in data ) {
+        if ( Object.prototype.hasOwnProperty.call( data, key ) ) {
+            return false
+        }
+    }
+
+    return true
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings/isEmptyString
+ * @desc Export function to validate if a value is a empty string
+ * @example
+ *
+ * import { isEmptyString } from 'itee-validators'
+ *
+ * if( isEmptyString( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check if given data is an empty string
+ *
+ * @param data {*} The data to check against the emptiness of the string
+ * @returns {boolean} true if data is an empty string, false otherwise.
+ */
+function isEmptyString( data ) {
+
+    if ( isNotString$1( data ) ) {
+        return false
+    }
+
+    return ( data.length === 0 )
+
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isEmpty
+ * @desc Export function to validate if a value could be considered as empty
+ * @example
+ *
+ * import { isEmpty } from 'itee-validators'
+ *
+ * if( isEmpty( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ * Check emptiness of given data
+ *
+ * See: https://stackoverflow.com/questions/4346186/how-to-determine-if-a-function-is-empty
+ *
+ * @param data {*} The data to check against the emptiness
+ * @returns {boolean} true if data is considered as empty, false otherwise.
+ */
+function isEmpty( data ) {
+
+    if ( isNotDefined( data ) ) { return false }
+    if ( isEmptyString( data ) ) { return true}
+    if ( isEmptyArray( data ) ) { return true }
+    if ( isEmptyObject( data ) ) { return true }
+
+    return false
+
+}
+
+/**
+ * Check fullness of given data
+ *
+ * @param data {*} The data to check against the emptiness
+ * @returns {boolean} true if data is considered as not empty, false otherwise.
+ */
+function isNotEmpty( data ) {
+    return !isEmpty( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/physics/constants
+ * @desc Export constants about temperatures
+ *
+ */
+
+/**
+ * @const
+ * @type {number}
+ * @default 0.00000000045
+ * @desc This value corresponding to the absolute zero kelvin value
+ */
+const ABSOLUTE_ZERO_KELVIN = 0.00000000045;
+
+/**
+ * @const
+ * @type {number}
+ * @default -273.14999999955
+ * @desc This value corresponding to the absolute zero celsius value
+ */
+const ABSOLUTE_ZERO_CELSIUS = -273.14999999955;
+
+/**
+ * @const
+ * @type {number}
+ * @default -459.67
+ * @desc This value corresponding to the absolute zero fahrenheit value
+ */
+const ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/physics/temperatures
+ * @desc Export function to validate if a value is a Celsius temperature
+ * @example
+ *
+ * import { isCelsius } from 'itee-validators'
+ *
+ * if( isCelsius( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isCelsius( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_CELSIUS )
+}
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isNotCelsius( data ) {
+    return !isCelsius( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/physics/temperatures
+ * @desc Export function to validate if a value is a Fahrenheit temperature
+ * @example
+ *
+ * import { isFahrenheit } from 'itee-validators'
+ *
+ * if( isFahrenheit( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isFahrenheit( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_FAHRENHEIT )
+}
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isNotFahrenheit( data ) {
+    return !isFahrenheit( data )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/physics/temperatures
+ * @desc Export function to validate if a value is a kelvin temperature
+ * @example
+ *
+ * import { isKelvin } from 'itee-validators'
+ *
+ * if( isKelvin( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isKelvin( data ) {
+    return ( isNumber( data ) && data >= ABSOLUTE_ZERO_KELVIN )
+}
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isNotKelvin( data ) {
+    return !isKelvin( data )
+}
+
+/**
+ *
+ * @param data {*}
+ * @return {boolean}
+ */
+function isNotTemperature( data ) {
+    return ( isNotKelvin( data ) && isNotCelsius( data ) && isNotFahrenheit( data ) )
+}
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -2220,7 +2840,7 @@ function isInvalidPath( data ) {
  */
 
 
-// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
+// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from '@itee/validators'
 
 function getPathsUnder( directoryPath ) {
     return readdirSync( directoryPath )
