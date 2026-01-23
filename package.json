@@ -66,7 +66,7 @@
     "@itee/validators": "^7.0.0"
   },
   "devDependencies": {
-    "@itee/tasks": "^1.4.4"
+    "@itee/tasks": "^1.4.6"
   },
   "overrides": {
     "semantic-release-gitmoji": {
