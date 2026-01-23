@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Itee Utils v6.0.3 Source: cores/numbers.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cyborg.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="module-sources_cores.html">sources/cores</a></li><li><a href="module-sources_cores_arrays.html">sources/cores/arrays</a></li><li><a href="module-sources_cores_booleans.html">sources/cores/booleans</a></li><li><a href="module-sources_cores_functions.html">sources/cores/functions</a></li><li><a href="module-sources_cores_numbers.html">sources/cores/numbers</a></li><li><a href="module-sources_cores_objects.html">sources/cores/objects</a></li><li><a href="module-sources_cores_strings.html">sources/cores/strings</a></li><li><a href="module-sources_cores_symbols.html">sources/cores/symbols</a></li><li><a href="module-sources_cores_voids.html">sources/cores/voids</a></li><li><a href="module-sources_file-system.html">sources/file-system</a></li><li><a href="module-sources_file-system_files.html">sources/file-system/files</a></li><li><a href="module-sources_geomathics.html">sources/geomathics</a></li><li><a href="module-sources_geomathics_trigonometries.html">sources/geomathics/trigonometries</a></li><li><a href="module-sources_itee-util.html">sources/itee-util</a></li><li><a href="module-sources_physics.html">sources/physics</a></li><li><a href="module-sources_physics_temperatures.html">sources/physics/temperatures</a></li><li><a href="module-sources_testing.html">sources/testing</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu inline">
+					<li><a href="global.html#numberToInternalRepresentation">numberToInternalRepresentation</a></li><li><a href="global.html#ringClockwise">ringClockwise</a></li><li><a href="global.html#ringContains">ringContains</a></li><li><a href="global.html#ringContainsSome">ringContainsSome</a></li><li><a href="global.html#segmentContains">segmentContains</a></li><li><a href="global.html#voids">voids</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: cores/numbers.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/numbers
+ * @description Export the utilities methods about numbers
+ *
+ */
+
+export function getRandom() {
+    return Math.random()
+}
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+export function getRandomFloatExclusive( min = 0.0, max = 1.0 ) {
+    return Math.random() * ( max - min ) + min
+}
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+export function getRandomFloatInclusive( min = 0.0, max = 1.0 ) {
+    return Math.random() * ( max - min + 1.0 ) + min
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (exclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+export function getRandomIntExclusive( min = 0, max = 1 ) {
+    const _min = Math.ceil( min )
+    const _max = Math.floor( max )
+    return ( Math.floor( Math.random() * ( _max - _min ) ) + _min )
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ *
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+export function getRandomIntInclusive( min = 0, max = 1 ) {
+    const _min = Math.ceil( min )
+    const _max = Math.floor( max )
+    return Math.floor( Math.random() * ( _max - _min + 1 ) ) + _min
+}
+
+
+/**
+ * Convert a number to its literral form
+ *
+ * @param {number} value
+ * @returns {string}
+ */
+export function numberToPlainString( value ) {
+
+    const stringValue = String( value )
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+    const exponentialSplits   = stringValue.split( 'e' )
+    const dirtyBase           = exponentialSplits[ 0 ]
+    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 )
+    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase
+    const dotBaseSplits       = unsignedBase.split( '.' )
+    const numberOfSignificant = dotBaseSplits[ 0 ].length
+    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0
+    const base                = dotBaseSplits.join( '' )
+    const dirtyExponent       = exponentialSplits[ 1 ]
+    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 )
+    const exponent            = parseInt( dirtyExponent.slice( 1 ) )
+
+    let result = ( negativeBase ) ? '-' : ''
+    if ( negativeExponant ) {
+
+        result += '0.'
+        result += '0'.repeat( exponent - numberOfSignificant )
+        result += base
+
+    } else {
+        result += base
+        result += '0'.repeat( exponent - numberOfDecimals )
+        result += '.0'
+    }
+
+    return result
+
+}
+
+// #if IS_KEEP_ON_BUILD
+
+export function numberToPlainString_alt0( value ) {
+
+    const stringValue = String( value )
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+    const exponentialSplits   = stringValue.split( 'e' )
+    const dirtyBase           = exponentialSplits[ 0 ]
+    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 )
+    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase
+    const dotBaseSplits       = unsignedBase.split( '.' )
+    const numberOfSignificant = dotBaseSplits[ 0 ].length
+    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0
+    const base                = dotBaseSplits.join( '' )
+    const dirtyExponent       = exponentialSplits[ 1 ]
+    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 )
+    const exponent            = dirtyExponent.slice( 1 )
+
+    let result = ( negativeBase ) ? '-' : ''
+    if ( negativeExponant ) {
+
+        result += '0.'
+        for ( let i = 0, e = parseInt( exponent ) - numberOfSignificant ; i &lt; e ; i++ ) {
+            result += '0'
+        }
+        result += base
+
+    } else {
+        result += base
+        for ( let i = 0, e = parseInt( exponent ) - numberOfDecimals ; i &lt; e ; i++ ) {
+            result += '0'
+        }
+        result += '.0'
+    }
+
+    return result
+
+}
+
+export function numberToPlainString_alt1( value ) {
+
+    const stringValue = String( value )
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+    const exponentialSplits = stringValue.split( 'e' )
+    const dirtyBase         = exponentialSplits[ 0 ]
+    const negativeBase      = ( dirtyBase.indexOf( '-' ) === 0 )
+    const unsignedBase      = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase
+    const base              = unsignedBase.split( '.' ).join( '' )
+    const dirtyExponent     = exponentialSplits[ 1 ]
+    const negativeExponant  = ( dirtyExponent.indexOf( '-' ) === 0 )
+    const exponent          = dirtyExponent.slice( 1 )
+    const exponentLength    = parseInt( exponent ) + 1
+
+    let result = ''
+    if ( negativeExponant ) {
+        result += '0.'
+        result = result.padEnd( exponentLength, '0' )
+        result += base
+    } else {
+        result += base
+        result = result.padEnd( exponentLength, '0' )
+        result += '.0'
+    }
+
+    if ( negativeBase ) {
+        result = `-${ result }`
+    }
+
+    return result
+
+}
+
+export function numberToPlainString_alt2( value ) {
+
+    const stringValue = String( value )
+    if ( !( /\d+\.?\d*e[-+]*\d+/i.test( stringValue ) ) ) { return stringValue }
+
+
+    const exponentialSplits   = stringValue.split( 'e' )
+    const dirtyBase           = exponentialSplits[ 0 ]
+    const negativeBase        = ( dirtyBase.indexOf( '-' ) === 0 )
+    const unsignedBase        = ( negativeBase ) ? dirtyBase.slice( 1 ) : dirtyBase
+    const dotBaseSplits       = unsignedBase.split( '.' )
+    const numberOfSignificant = dotBaseSplits[ 0 ].length
+    const numberOfDecimals    = ( dotBaseSplits[ 1 ] ) ? dotBaseSplits[ 1 ].length : 0
+    const base                = dotBaseSplits.join( '' )
+    const dirtyExponent       = exponentialSplits[ 1 ]
+    const negativeExponant    = ( dirtyExponent.indexOf( '-' ) === 0 )
+    const exponent            = dirtyExponent.slice( 1 )
+    const exponentLength      = parseInt( exponent ) + 1
+    const sign                = ( negativeBase ) ? '-' : ''
+
+    let result = ''
+    if ( negativeExponant ) {
+        result = `${ sign }0.${ Array( exponentLength - numberOfSignificant ).join( 0 ) }${ base }`
+    } else {
+        result = `${ sign + base + Array( exponentLength - numberOfDecimals ).join( 0 ) }.0`
+    }
+
+    return result
+
+}
+
+export function numberToPlainString_alt3( value ) {
+
+    return String( value ).replace(
+        /(-?)(\d*)(?:\.(\d+))?e([+-])(\d+)/,
+        ( matchs, sign, significants, decimals = '', exponentSign, exponent ) => {
+
+            const exponentLength = parseInt( exponent )
+            if ( exponentSign === '-' ) {
+                return `${ sign }0.${ '0'.repeat( exponentLength - significants.length ) }${ significants }${ decimals }`
+                //                return sign + '0.' + Array( exponentLength - significants.length + 1 ).join( 0 ) + significants + decimals
+            } else {
+                return `${ sign + significants + decimals + '0'.repeat( exponentLength - decimals.length ) }.0`
+                //                return sign + significants + decimals + Array( exponentLength - decimals.length + 1 ).join( 0 ) + '.0'
+            }
+        }
+    )
+
+}
+
+export function numberToPlainString_alt4( num ) {
+    const nsign = Math.sign( num )
+    //remove the sign
+    let _num    = Math.abs( num )
+    //if the number is in scientific notation remove it
+    if ( /\d+\.?\d*e[-+]*\d+/i.test( _num ) ) {
+
+        const zero        = '0'
+        const parts       = String( _num ).toLowerCase().split( 'e' ) //split into coeff and exponent
+        const e           = parseInt( parts.pop() ) //store the exponential part
+        let l             = Math.abs( e ) //get the number of zeros
+        const sign        = e / l
+        const coeff_array = parts[ 0 ].split( '.' )
+
+        if ( sign === -1 ) {
+            l -= coeff_array[ 0 ].length
+            if ( l &lt; 0 ) {
+                _num = `${ coeff_array[ 0 ].slice( 0, l ) }.${ coeff_array[ 0 ].slice( l ) }${ coeff_array.length === 2 ? coeff_array[ 1 ] : '' }`
+            } else {
+                _num = `${ zero }.${ new Array( l + 1 ).join( zero ) }${ coeff_array.join( '' ) }`
+            }
+        } else {
+            const dec = coeff_array[ 1 ]
+            if ( dec ) {
+                l -= dec.length
+            }
+            if ( l &lt; 0 ) {
+                _num = `${ coeff_array[ 0 ] + dec.slice( 0, l ) }.${ dec.slice( l ) }`
+            } else {
+                _num = coeff_array.join( '' ) + new Array( l + 1 ).join( zero )
+            }
+        }
+    }
+
+    return nsign &lt; 0 ? `-${ _num }` : _num
+}
+
+// #endif
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o,isArrayOfUndefined as s,isUndefined as a,isNotObject as i,isDefined as l,isNotArray as u,isEmptyString as c,isNotTemperature as f,isNotEmpty as b,isNumber as h}from"itee-validators";import{statSync as p,existsSync as g,readFileSync as d,readdirSync as y}from"node:fs";import v from"node:path";
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/arrays
+ * @description Export the utilities methods about Arrays
+ *
+ */function m(e,t="asc"){const r=e;let n;if("asc"===t)n=(e,t)=>e[r]<t[r]?-1:e[r]>t[r]?1:0;else{if("desc"!==t)throw RangeError(`Got invalid ascending [${t}], but expect one of ['asc','desc']!`);n=(e,t)=>e[r]>t[r]?-1:e[r]<t[r]?1:0}return n}function A(r,n={keepArray:!1,keepNull:!1}){let o;return o=e(r)?n.keepArray?[r]:r:n.keepNull||"object"==typeof r||t(r)?[r]:[],o}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ *
+ */function O(e){let t="";for(let r=128;r>=1;r/=2)t+=e&r?"1":"0";return t}function w(e){if(r(e))return;let t=0;for(let r=7,n=0;r>=0;r--,n++)"1"===e[r]&&(t+=2**n);return t}function M(e){let t=new ArrayBuffer(8),r=new DataView(t);r.setFloat64(0,e);let n="";for(let e=0;e<8;e++)n+=O(r.getUint8(e));return n=`${n.substring(0,1)} ${n.substring(1,12)} ${n.substring(12)}`,n}function j(e){if(n(e))return;if(r(e))return;const t=e.replace(/ /g,"").match(/.{8}/g);if(o(t))return;const a=t.map(e=>w(e));if(s(a))return;let i=new ArrayBuffer(8),l=new DataView(i);for(let e=0;e<8;e++)l.setUint8(e,a[e]);return l.getFloat64(0)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/numbers
+ * @description Export the utilities methods about numbers
+ *
+ */function I(){return Math.random()}function N(e=0,t=1){return Math.random()*(t-e)+e}function E(e=0,t=1){return Math.random()*(t-e+1)+e}function $(e=0,t=1){const r=Math.ceil(e),n=Math.floor(t);return Math.floor(Math.random()*(n-r))+r}function S(e=0,t=1){const r=Math.ceil(e),n=Math.floor(t);return Math.floor(Math.random()*(n-r+1))+r}function x(e){const t=String(e);if(!/\d+\.?\d*e[-+]*\d+/i.test(t))return t;const r=t.split("e"),n=r[0],o=0===n.indexOf("-"),s=(o?n.slice(1):n).split("."),a=s[0].length,i=s[1]?s[1].length:0,l=s.join(""),u=r[1],c=0===u.indexOf("-"),f=parseInt(u.slice(1));let b=o?"-":"";return c?(b+="0.",b+="0".repeat(f-a),b+=l):(b+=l,b+="0".repeat(f-i),b+=".0"),b}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/objects
+ * @description Export the utilities methods about objects
+ */function F(e){if(u(e))return;const t={};return e.filter(e=>!Object.prototype.hasOwnProperty.call(t,e)&&(t[e]=!0))}function D(e,r){let o;if(t(e)&&n(r))o=Object.assign({},e);else if(n(e)&&t(r))o=Object.assign({},r);else if(t(e)&&t(r)){o=Object.assign({},e);const n=Object.keys(r);for(let s=0,a=n.length;s<a;++s){let a=n[s];t(r[a])?a in e?o[a]=D(e[a],r[a]):Object.assign(o,{[a]:r[a]}):Object.assign(o,{[a]:r[a]})}}else o=null;return o}function V(){}function z(e,t){if(!a(e)&&!a(t)){if(e.constructor===Function&&t.constructor===Function)e.prototype=new t,e.prototype.parent=t.prototype,e.prototype.constructor=e;else if(e.constructor===Function&&t.constructor===Object)e.prototype=t,e.prototype.parent=t,e.prototype.constructor=e;else if(e.constructor===Object&&t.constructor===Object)for(let r in t)Object.prototype.hasOwnProperty.call(e,r)&&(t[r].constructor===Object||t[r].constructor===Array)?e[r]=z(e[r],t[r]):e[r]=t[r];else{if(e.constructor!==Array||t.constructor!==Array)throw e.constructor===Object&&t.constructor===Array||e.constructor===Array&&t.constructor===Object?new Error("Cannot perform extend of object with an array"):new Error("Cannot perform extend given parameters...");e=e.concat(t)}return e}}function P(e,t,r){if(!e)return;if(!t)return;if(!r)return;let n=0;setInterval(function(){n>=1?n=0:n+.1>1?n=1:n+=.1;const r=t.getLength();let o,s,a,i=n;for(let n=0,l=e.children.length;n<l;n++)s=e.children[n],o=i/r,o>1&&(o=0),a=t.getPointAt(o),a.y+=.1,s.position.copy(a),i+=1},r)}function L(e){if(!i(e)){if(l(e.toString)){const t=Object.getOwnPropertyDescriptor(e,"toString");if(l(t)&&!1===t.configurable)return}return Object.freeze(Object.defineProperties(e,{toString:{configurable:!1,enumerable:!1,writable:!1,value(){const e=Object.keys(this);let t="";for(let r=0,n=e.length;r<n;r++)t+=`${e[r]}, `;return t=t.slice(0,-2),t}},includes:{configurable:!1,enumerable:!1,writable:!1,value(e){return Object.values(this).includes(e)}},keys:{configurable:!1,enumerable:!1,writable:!1,value(){return Object.keys(this)}},values:{configurable:!1,enumerable:!1,writable:!1,value(){return Object.values(this)}},entries:{configurable:!1,enumerable:!1,writable:!1,value(){return Object.entries(this)}}}))}}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings
+ * @description Export the utilities methods about strings
+ *
+ */function R(e){if(!r(e)&&!c(e))return e.charAt(0).toUpperCase()+e.slice(1)}const U=[{base:"A",letters:"AⒶＡÀÁÂẦẤẪẨÃĀĂẰẮẴẲȦǠÄǞẢÅǺǍȀȂẠẬẶḀĄȺⱯ"},{base:"AA",letters:"Ꜳ"},{base:"AE",letters:"ÆǼǢ"},{base:"AO",letters:"Ꜵ"},{base:"AU",letters:"Ꜷ"},{base:"AV",letters:"ꜸꜺ"},{base:"AY",letters:"Ꜽ"},{base:"B",letters:"BⒷＢḂḄḆɃƂƁ"},{base:"C",letters:"CⒸＣĆĈĊČÇḈƇȻꜾ"},{base:"D",letters:"DⒹＤḊĎḌḐḒḎĐƋƊƉꝹÐ"},{base:"DZ",letters:"ǱǄ"},{base:"Dz",letters:"ǲǅ"},{base:"E",letters:"EⒺＥÈÉÊỀẾỄỂẼĒḔḖĔĖËẺĚȄȆẸỆȨḜĘḘḚƐƎ"},{base:"F",letters:"FⒻＦḞƑꝻ"},{base:"G",letters:"GⒼＧǴĜḠĞĠǦĢǤƓꞠꝽꝾ"},{base:"H",letters:"HⒽＨĤḢḦȞḤḨḪĦⱧⱵꞍ"},{base:"I",letters:"IⒾＩÌÍÎĨĪĬİÏḮỈǏȈȊỊĮḬƗ"},{base:"J",letters:"JⒿＪĴɈ"},{base:"K",letters:"KⓀＫḰǨḲĶḴƘⱩꝀꝂꝄꞢ"},{base:"L",letters:"LⓁＬĿĹĽḶḸĻḼḺŁȽⱢⱠꝈꝆꞀ"},{base:"LJ",letters:"Ǉ"},{base:"Lj",letters:"ǈ"},{base:"M",letters:"MⓂＭḾṀṂⱮƜ"},{base:"N",letters:"NⓃＮǸŃÑṄŇṆŅṊṈȠƝꞐꞤ"},{base:"NJ",letters:"Ǌ"},{base:"Nj",letters:"ǋ"},{base:"O",letters:"OⓄＯÒÓÔỒỐỖỔÕṌȬṎŌṐṒŎȮȰÖȪỎŐǑȌȎƠỜỚỠỞỢỌỘǪǬØǾƆƟꝊꝌ"},{base:"OI",letters:"Ƣ"},{base:"OO",letters:"Ꝏ"},{base:"OU",letters:"Ȣ"},{base:"OE",letters:"Œ"},{base:"oe",letters:"œ"},{base:"P",letters:"PⓅＰṔṖƤⱣꝐꝒꝔ"},{base:"Q",letters:"QⓆＱꝖꝘɊ"},{base:"R",letters:"RⓇＲŔṘŘȐȒṚṜŖṞɌⱤꝚꞦꞂ"},{base:"S",letters:"SⓈＳẞŚṤŜṠŠṦṢṨȘŞⱾꞨꞄ"},{base:"T",letters:"TⓉＴṪŤṬȚŢṰṮŦƬƮȾꞆ"},{base:"TZ",letters:"Ꜩ"},{base:"U",letters:"UⓊＵÙÚÛŨṸŪṺŬÜǛǗǕǙỦŮŰǓȔȖƯỪỨỮỬỰỤṲŲṶṴɄ"},{base:"V",letters:"VⓋＶṼṾƲꝞɅ"},{base:"VY",letters:"Ꝡ"},{base:"W",letters:"WⓌＷẀẂŴẆẄẈⱲ"},{base:"X",letters:"XⓍＸẊẌ"},{base:"Y",letters:"YⓎＹỲÝŶỸȲẎŸỶỴƳɎỾ"},{base:"Z",letters:"ZⓏＺŹẐŻŽẒẔƵȤⱿⱫꝢ"},{base:"a",letters:"aⓐａẚàáâầấẫẩãāăằắẵẳȧǡäǟảåǻǎȁȃạậặḁąⱥɐ"},{base:"aa",letters:"ꜳ"},{base:"ae",letters:"æǽǣ"},{base:"ao",letters:"ꜵ"},{base:"au",letters:"ꜷ"},{base:"av",letters:"ꜹꜻ"},{base:"ay",letters:"ꜽ"},{base:"b",letters:"bⓑｂḃḅḇƀƃɓ"},{base:"c",letters:"cⓒｃćĉċčçḉƈȼꜿↄ"},{base:"d",letters:"dⓓｄḋďḍḑḓḏđƌɖɗꝺ"},{base:"dz",letters:"ǳǆ"},{base:"e",letters:"eⓔｅèéêềếễểẽēḕḗĕėëẻěȅȇẹệȩḝęḙḛɇɛǝ"},{base:"f",letters:"fⓕｆḟƒꝼ"},{base:"g",letters:"gⓖｇǵĝḡğġǧģǥɠꞡᵹꝿ"},{base:"h",letters:"hⓗｈĥḣḧȟḥḩḫẖħⱨⱶɥ"},{base:"hv",letters:"ƕ"},{base:"i",letters:"iⓘｉìíîĩīĭïḯỉǐȉȋịįḭɨı"},{base:"j",letters:"jⓙｊĵǰɉ"},{base:"k",letters:"kⓚｋḱǩḳķḵƙⱪꝁꝃꝅꞣ"},{base:"l",letters:"lⓛｌŀĺľḷḹļḽḻſłƚɫⱡꝉꞁꝇ"},{base:"lj",letters:"ǉ"},{base:"m",letters:"mⓜｍḿṁṃɱɯ"},{base:"n",letters:"nⓝｎǹńñṅňṇņṋṉƞɲŉꞑꞥ"},{base:"nj",letters:"ǌ"},{base:"o",letters:"oⓞｏòóôồốỗổõṍȭṏōṑṓŏȯȱöȫỏőǒȍȏơờớỡởợọộǫǭøǿɔꝋꝍɵ"},{base:"oi",letters:"ƣ"},{base:"ou",letters:"ȣ"},{base:"oo",letters:"ꝏ"},{base:"p",letters:"pⓟｐṕṗƥᵽꝑꝓꝕ"},{base:"q",letters:"qⓠｑɋꝗꝙ"},{base:"r",letters:"rⓡｒŕṙřȑȓṛṝŗṟɍɽꝛꞧꞃ"},{base:"s",letters:"sⓢｓßśṥŝṡšṧṣṩșşȿꞩꞅẛ"},{base:"t",letters:"tⓣｔṫẗťṭțţṱṯŧƭʈⱦꞇ"},{base:"tz",letters:"ꜩ"},{base:"u",letters:"uⓤｕùúûũṹūṻŭüǜǘǖǚủůűǔȕȗưừứữửựụṳųṷṵʉ"},{base:"v",letters:"vⓥｖṽṿʋꝟʌ"},{base:"vy",letters:"ꝡ"},{base:"w",letters:"wⓦｗẁẃŵẇẅẘẉⱳ"},{base:"x",letters:"xⓧｘẋẍ"},{base:"y",letters:"yⓨｙỳýŷỹȳẏÿỷẙỵƴɏỿ"},{base:"z",letters:"zⓩｚźẑżžẓẕƶȥɀⱬꝣ"}];let _={};for(let e=0;e<U.length;e++){const t=U[e].letters,r=U[e].base;for(let e=0;e<t.length;e++)_[t[e]]=r}function k(e){return r(e)?null:e.replace(/[^\u0000-\u007E]/g,e=>_[e]||e)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/geomathics/trigonometries
+ */const T=Math.PI,B=Math.PI/2,C=Math.PI/4,G=T/180,Y=180/T;function Z(e){return e*G}function q(e){return e*Y}function H(e){return e*Y}function X(e){return e*G}function J(e){if(!n(e)&&!i(e))return-Math.atan2(e.x,e.z)}function Q(e){if(!n(e)&&!i(e))return Math.asin(e.y)}function W(e){if(n(e))return;if(i(e))return;const t=e;return{yaw:-(H((r=t,Math.atan2(r.y,r.x)))-90),pitch:H(function(e){return Math.asin(e.z)}(t))};var r}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @see [IFC Standard]{@link http://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/}
+ *
+ */function K(e){if(u(e))return!1;let t=e.length;if(t<4)return!1;let r=0,n=e[t-1][1]*e[0][0]-e[t-1][0]*e[0][1];for(;++r<t;)n+=e[r-1][1]*e[r][0]-e[r-1][0]*e[r][1];return n>=0}function ee(e,t){if(u(e))return!1;if(u(t))return!1;let r=0,n=t.length;do{if(te(e,t[r])>0)return!0}while(++r<n);return!1}function te(e,t){if(u(e))return!1;if(u(t))return!1;let r=t[0],n=t[1],o=-1;for(let s=0,a=e.length,i=a-1;s<a;i=s++){const a=e[s],l=a[0],u=a[1],c=e[i],f=c[0],b=c[1];re(a,c,t)?o=0:u>n!=b>n&&r<(f-l)*(n-u)/(b-u)+l&&(o=-o)}return o}function re(e,t,r){if(u(e))return!1;if(u(t))return!1;if(u(r))return!1;const n=r[0]-e[0],o=r[1]-e[1];if(0===n&&0===o)return!0;const s=t[0]-e[0],a=t[1]-e[1];if(0===s&&0===a)return!1;const i=(n*s+o*a)/(s*s+a*a);return!(i<0||i>1)&&(0===i||1===i||i*s===n&&i*a===o)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/physics/temperatures
+ * @description Export the utilities methods about temperatures
+ * @requires {@link module:sources/cores/numbers}
+ */const ne=1.8,oe=32,se=273.14999999955;function ae(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return(e+se).toFixed(r)}function ie(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return(e*ne+32).toFixed(r)}function le(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return((e-32)/ne).toFixed(r)}function ue(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return((e-32)/ne+se).toFixed(r)}function ce(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return(e-se).toFixed(r)}function fe(e,t){if(f(e))return;const r=b(t)&&h(t)?t:2;return((e-se)*ne+32).toFixed(r)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ */const be={null:null,undefined:void 0,void:void 0},he={true:!0,false:!1},pe={negativeInfinity:Number.NEGATIVE_INFINITY,negativeMaxValue:-Number.MAX_VALUE,negativeMinSafeInteger:Number.MIN_SAFE_INTEGER,negativeMinValue:-Number.MIN_VALUE,negativeHexa:-1193046,negativePow:-200,negativePowWithDecimals:-123.45,negativeFloat:-1.01,negativeInt:-1,negativeZero:-0,negativeNan:-Number.NaN,positiveNan:Number.NaN,positiveZero:0,positiveInt:1,positiveFloat:1.01,positivePowWithDecimals:123.45,positivePow:200,positiveHexa:1193046,epsilon:Number.EPSILON,positiveMinValue:Number.MIN_VALUE,positiveMaxSafeInteger:Number.MAX_SAFE_INTEGER,positiveMaxValue:Number.MAX_VALUE,positiveInfinity:Number.POSITIVE_INFINITY,e:Math.E,ln10:Math.LN10,ln2:Math.LN2,log10e:Math.LOG10E,log2e:Math.LOG2E,pi:Math.PI,sqrt1_2:Math.SQRT1_2,sqrt2:Math.SQRT2},ge=(()=>{const e={empty:"",blank:"      ",stringNull:String(),stringEmpty:String(""),stringBlank:String("    "),foobar:"foobar",stringHexa:"#123456",stringOcta:"00101010"},t=be;for(let r=0,n=t.length;r<n;r++)e[t[r]]=`${t[r]}`;const r=he;for(let t=0,n=r.length;t<n;t++)e[r[t]]=`${r[t]}`;const n=pe;for(let t=0,r=n.length;t<r;t++)e[n[t]]=`${n[t]}`;return e})(),de={anonymousFunction:function(){},namedFunction:function(){},arrowFunction:()=>{}},ye={emptyArray:[],emptyArrayObject:new Array,singleValued:[0],multiValued:[0,1,2],null:[null,null,null],undefined:[void 0,void 0,void 0],void:[void 0,void 0,void 0],voids:Object.values(be),booleans:Object.values(he),numbers:Object.values(pe),strings:Object.values(ge),functions:Object.values(de),objects:[{foo:"bar"},{baz:"qux"}],arrays:[[1,2,3],[4,5,6],[7,8,9]]},ve={int8Array:new Int8Array([1,2,3]),uInt8Array:new Uint8Array([1,2,3]),int16Array:new Int16Array([1,2,3]),uInt16Array:new Uint16Array([1,2,3]),int32Array:new Int32Array([1,2,3]),uInt32Array:new Uint32Array([1,2,3]),float32Array:new Float32Array([1,2,3]),float64Array:new Float64Array([1,2,3])},me={empty:{},instance:new Object,null:{null:null},undefined:{undefined:void 0},foo:{foo:"bar"}};var Ae=Object.freeze({__proto__:null,arrays:ye,booleans:he,functions:de,numbers:pe,objects:me,strings:ge,typedArrays:ve,voids:be});
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ */const Oe={DataMap:void 0,createDataMap:function(e){void 0===e&&(e={voids:[],booleans:[],numbers:[],strings:[],functions:[],arrays:[],typedArrays:[],objects:[]});let t={};for(let r in e){const n=Ae[r];if(void 0===n)throw ReferenceError(`The global data map does not contain element for key: ${r}`);const o=e[r];if(t[r]={},0===o.length)for(let e in n)t[r][e]=n[e];else for(let e=0,s=o.length;e<s;e++)t[r][o[e]]=n[o[e]]}return t},createBenchmarkOptions:function(e){return Oe.DataMap=Oe.createDataMap(e),{onStart:function(){this.benchDataMap=Oe.DataMap},onCycle:function(){},onAbort:function(){console.log(`${this.constructor.name} [${this.name}] onAbort`)},onError:function(e){console.log(`${this.constructor.name} [${this.name}] onError`),console.error(e.message)},onReset:function(){console.log(`${this.constructor.name} [${this.name}] onReset`)},onComplete:function(){delete this.benchDataMap},setup:function(){},teardown:function(){}}},createSuiteOptions:function(){let e;return e={onStart:function(){console.log(`Running ${this.constructor.name}: ${this.name}`),this.results=[]},onCycle:function(e){console.log(`Running Bench: ${e.target.name}`),this.results.push(e.target)},onAbort:function(){},onError:function(){},onReset:function(){},onComplete:function(){this.results.sort((e,t)=>e.hz<t.hz?1:e.hz>t.hz?-1:0);for(let e=0,t=this.results.length;e<t;e++)console.log(`${e}: ${String(this.results[e])}`);const e=this.results[0],t=this.results[this.results.length-1],r=(e.hz-t.hz)/t.hz*100;console.log(`\n${e.name} is ${Math.round(r)}% fastest than ${t.name}`),delete this.results}},e={},e},iterateOverDataMap:function(e){return function(){if(void 0===e)throw new ReferenceError("the method param is null or undefined!");const t=this.benchDataMap;for(let r in t){const n=t[r];if(Array.isArray(n))for(let t of n)try{e(t)}catch(r){const n=null===t?"null":void 0===t?"undefined":t.toString();console.error(`method [${e.name} fail with [${n}] => ${r.message}`)}else for(let t in n){const r=n[t];try{e(r)}catch(t){const n=null===r?"null":void 0===r?"undefined":r.toString();console.error(`method [${e.name} fail with [${n}] => ${t.message}`)}}}}},createDataSet:function(e){void 0===e&&(e={voids:[],booleans:[],numbers:[],strings:[],functions:[],arrays:[],typedArrays:[],objects:[]});let t=[];for(let r in e){const n=Ae[r],o=e[r];if(0===o.length)for(let e in n)t.push(n[e]);else for(let e=0,r=o.length;e<r;e++)t.push(n[o[e]])}return t},createDataSetBenchmarkOptions:function(e){return{setup:function(){this.dataset=Oe.createDataSet()[e]},teardown:function(){delete this.dataset}}},iterateOverDataSet:function(e){return function(){const t=this.dataset;for(let r=0,n=t.length;r<n;r++)e(t[r])}}};
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/strings/isString
+ * @desc Export function to validate if a value is a string
+ * @example
+ *
+ * import { isString } from 'itee-validators'
+ *
+ * if( isString( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function we(e){return!function(e){return"string"==typeof e||e instanceof String}(e)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function Me(e){return null!=e}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/directories/isDirectoryPath
+ * @description Export function to validate if a value is a directories path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isDirectoryPath } from 'itee-validators'
+ *
+ * if( isDirectoryPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function je(e){if(we(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return Me(t)&&t.isDirectory()}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files/isFilePath
+ * @description Export function to validate if a value is a file path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isFilePath } from 'itee-validators'
+ *
+ * if( isFilePath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function Ie(e){if(we(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return Me(t)&&t.isFile()}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/paths/isValidPath
+ * @description Export function to validate if a value is a valid path
+ *
+ * @requires {@link module: [fs]{@link https://nodejs.org/api/fs.html}}
+ *
+ * @example
+ *
+ * import { isValidPath } from 'itee-validators'
+ *
+ * if( isValidPath( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function Ne(e){return!function(e){return g(e)}(e)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/file-system/files
+ * @description This is the files main export entry point.
+ * It exposes all exports of the files validators.
+ *
+ */function Ee(e){return y(e)}function $e(t){const r=e(t)?t:[t];let n=[];for(let e=0,t=r.length;e<t;e++){const t=r[e];if(Ne(t))throw new Error(`The path "${t}" is not valid !`);if(Ie(t))n.push(t);else if(je(t)){const e=Ee(t).map(e=>$e(v.resolve(t,e)));e&&(n=[].concat(...e))}}return n}function Se(e){let t=[];if(Array.isArray(e)){let t;for(let n=0,o=e.length;n<o;n++)t=e[n],r(t)}else r(e);return t;function r(e){if(!xe(e))return void console.error('ES6Converter: Invalid file path "'+e+'"');const n=p(e);var o;n.isFile()?t.push(e):n.isDirectory()?Array.prototype.push.apply(t,void y(o=e).forEach(e=>{r(v.resolve(o,e))})):console.error("Invalid stat object !")}}function xe(e){return g(e)}function Fe(e){if(!xe(e))throw new Error(`Invalid file path "${e}" file does not exist !`);return d(e,"utf8")}function De(e){return Fe(e).replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g,"$1")}function Ve(e,t){let r,n=[];for(let t=0,s=e.length;t<s;t++)r=e[t],o(r)||n.push(r);return n;function o(e){let r,n=!1;for(let o=0,s=t.length;o<s;o++)if(r=t[o],r.indexOf(".")>-1){e.replace(/^.*(\\|\/|\\:)/,"")===r&&(n=!0)}else e.contains(r)&&(n=!0);return n}}function ze(e,t){let r,n=[];for(let o=0,s=e.length;o<s;o++)if(r=e[o],!t||t(r)){{const e=v.extname(r);if(r.indexOf("glsl")>-1||".js"!==e)continue}n.push(r)}return n}export{G as DEG_TO_RAD,ne as FAHRENHEIT_CELSIUS_COEFFICIENT,oe as FAHRENHEIT_CELSIUS_CONSTANTE,se as KELVIN_CELSIUS_CONSTANTE,T as PI,B as PI_2,C as PI_4,Y as RAD_TO_DEG,Oe as Testing,ye as arrays,w as bitsToByte,he as booleans,O as byteToBits,ie as celsiusToFahrenheit,ae as celsiusToKelvin,R as classNameify,W as convertWebGLRotationToTopogicalYawPitch,P as createInterval,q as degreesFromRadians,Z as degreesToRadians,Ve as excludesFilesPaths,D as extend,z as extendObject,le as fahrenheitToCelsius,ue as fahrenheitToKelvin,xe as fileExistForPath,ze as filterJavascriptFiles,de as functions,Fe as getFileForPath,$e as getFilesPathsUnder,Se as getFilesPathsUnder_1,Ee as getPathsUnder,Q as getPitch,I as getRandom,N as getRandomFloatExclusive,E as getRandomFloatInclusive,$ as getRandomIntExclusive,S as getRandomIntInclusive,De as getUncommentedFileForPath,J as getYaw,j as internalRepresentationToNumber,ce as kelvinToCelsius,fe as kelvinToFahrenheit,M as numberToInternalRepresentation,x as numberToPlainString,pe as numbers,me as objects,X as radiansFromDegrees,H as radiansToDegrees,k as removeDiacritics,K as ringClockwise,te as ringContains,ee as ringContainsSome,re as segmentContains,V as serializeObject,m as sortBy,ge as strings,A as toArray,L as toEnum,ve as typedArrays,F as uniq,be as voids};
