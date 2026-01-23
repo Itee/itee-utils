@@ -11,8 +11,8 @@
 'use strict';
 
 var iteeValidators = require('itee-validators');
-var fs = require('fs');
-var path = require('path');
+var node_fs = require('node:fs');
+var path = require('node:path');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
@@ -2033,34 +2033,6 @@ const Testing = {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids/isDefined
- * @desc Export function to validate if a value is a defined or not
- * @example
- *
- * import { isDefined } from 'itee-validators'
- *
- * if( isDefined( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */
-
-/**
- * Check if given data is not null and not undefined
- *
- * @param data {*} The data to check against the existence
- * @returns {boolean} true if data is not null and not undefined, false otherwise.
- */
-function isDefined( data ) {
-    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/strings/isString
  * @desc Export function to validate if a value is a string
  * @example
@@ -2101,6 +2073,34 @@ function isNotString( data ) {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
  * @module sources/file-system/directories/isDirectoryPath
  * @description Export function to validate if a value is a directories path
  *
@@ -2131,7 +2131,7 @@ function isDirectoryPath( path ) {
         // throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
-    const stat = fs.statSync( path, { throwIfNoEntry: false } );
+    const stat = node_fs.statSync( path, { throwIfNoEntry: false } );
     return isDefined( stat ) && stat.isDirectory()
 }
 
@@ -2169,7 +2169,7 @@ function isFilePath( path ) {
         // throw new TypeError( 'Invalid path type! Expect string, buffer or url.' )
     }
 
-    const stat = fs.statSync( path, { throwIfNoEntry: false } );
+    const stat = node_fs.statSync( path, { throwIfNoEntry: false } );
     return isDefined( stat ) && stat.isFile()
 }
 
@@ -2202,7 +2202,7 @@ function isFilePath( path ) {
  * @returns {boolean} true if data is a valid path, false otherwise
  */
 function isValidPath( data ) {
-    return fs.existsSync( data )
+    return node_fs.existsSync( data )
 }
 
 /**
@@ -2229,7 +2229,7 @@ function isInvalidPath( data ) {
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
 function getPathsUnder( directoryPath ) {
-    return fs.readdirSync( directoryPath )
+    return node_fs.readdirSync( directoryPath )
 }
 
 /**
@@ -2302,7 +2302,7 @@ function getFilesPathsUnder_1( filePaths ) {
 
     function getFilesPathsUnderFolder( folder ) {
 
-        fs.readdirSync( folder ).forEach( ( name ) => {
+        node_fs.readdirSync( folder ).forEach( ( name ) => {
 
             const filePath = path__default.default.resolve( folder, name );
             checkStateOf( filePath );
@@ -2318,7 +2318,7 @@ function getFilesPathsUnder_1( filePaths ) {
             return
         }
 
-        const stats = fs.statSync( filePath );
+        const stats = node_fs.statSync( filePath );
         if ( stats.isFile() ) {
 
             files.push( filePath );
@@ -2339,7 +2339,7 @@ function getFilesPathsUnder_1( filePaths ) {
 
 function fileExistForPath( filePath ) {
 
-    return fs.existsSync( filePath )
+    return node_fs.existsSync( filePath )
 
 }
 
@@ -2350,7 +2350,7 @@ function getFileForPath( filePath ) {
         throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
     }
 
-    return fs.readFileSync( filePath, 'utf8' )
+    return node_fs.readFileSync( filePath, 'utf8' )
 
 }
 

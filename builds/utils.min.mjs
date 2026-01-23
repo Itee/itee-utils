@@ -1,4 +1,4 @@
-import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o,isArrayOfUndefined as s,isUndefined as a,isNotObject as i,isDefined as l,isNotArray as u,isEmptyString as c,isNotTemperature as f,isNotEmpty as b,isNumber as h}from"itee-validators";import{statSync as p,existsSync as g,readFileSync as d,readdirSync as y}from"fs";import v from"path";
+import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o,isArrayOfUndefined as s,isUndefined as a,isNotObject as i,isDefined as l,isNotArray as u,isEmptyString as c,isNotTemperature as f,isNotEmpty as b,isNumber as h}from"itee-validators";import{statSync as p,existsSync as g,readFileSync as d,readdirSync as y}from"node:fs";import v from"node:path";
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -69,23 +69,6 @@ import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids/isDefined
- * @desc Export function to validate if a value is a defined or not
- * @example
- *
- * import { isDefined } from 'itee-validators'
- *
- * if( isDefined( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */function we(e){return null!=e}
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/strings/isString
  * @desc Export function to validate if a value is a string
  * @example
@@ -98,7 +81,24 @@ import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o
  *     //...
  * }
  *
- */function Me(e){return!function(e){return"string"==typeof e||e instanceof String}(e)}
+ */function we(e){return!function(e){return"string"==typeof e||e instanceof String}(e)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function Me(e){return null!=e}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -118,7 +118,7 @@ import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o
  *     //...
  * }
  *
- */function je(e){if(Me(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return we(t)&&t.isDirectory()}
+ */function je(e){if(we(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return Me(t)&&t.isDirectory()}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -138,7 +138,7 @@ import{isArray as e,isObject as t,isNotString as r,isNotDefined as n,isNull as o
  *     //...
  * }
  *
- */function Ie(e){if(Me(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return we(t)&&t.isFile()}
+ */function Ie(e){if(we(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const t=p(e,{throwIfNoEntry:!1});return Me(t)&&t.isFile()}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}

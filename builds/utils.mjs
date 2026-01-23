@@ -9,8 +9,8 @@
  * 
  */
 import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isUndefined, isNotObject, isDefined as isDefined$1, isNotArray, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
-import { statSync, existsSync, readFileSync, readdirSync } from 'fs';
-import path from 'path';
+import { statSync, existsSync, readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
@@ -2029,34 +2029,6 @@ const Testing = {
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids/isDefined
- * @desc Export function to validate if a value is a defined or not
- * @example
- *
- * import { isDefined } from 'itee-validators'
- *
- * if( isDefined( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */
-
-/**
- * Check if given data is not null and not undefined
- *
- * @param data {*} The data to check against the existence
- * @returns {boolean} true if data is not null and not undefined, false otherwise.
- */
-function isDefined( data ) {
-    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
-}
-
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/strings/isString
  * @desc Export function to validate if a value is a string
  * @example
@@ -2092,6 +2064,34 @@ function isNotString( data ) {
 }
 
 // #endif
+
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */
+
+/**
+ * Check if given data is not null and not undefined
+ *
+ * @param data {*} The data to check against the existence
+ * @returns {boolean} true if data is not null and not undefined, false otherwise.
+ */
+function isDefined( data ) {
+    return ( ( data !== null ) && ( typeof data !== 'undefined' ) )
+}
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}

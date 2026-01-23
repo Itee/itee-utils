@@ -1,4 +1,4 @@
-"use strict";var e=require("itee-validators"),t=require("fs");function r(e){return e&&e.__esModule?e:{default:e}}var n=r(require("path"));
+"use strict";var e=require("itee-validators"),t=require("node:fs");function r(e){return e&&e.__esModule?e:{default:e}}var n=r(require("node:path"));
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -42,23 +42,6 @@ const m={null:null,undefined:void 0,void:void 0},x={true:!0,false:!1},v={negativ
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/voids/isDefined
- * @desc Export function to validate if a value is a defined or not
- * @example
- *
- * import { isDefined } from 'itee-validators'
- *
- * if( isDefined( value ) ) {
- *     //...
- * } else {
- *     //...
- * }
- *
- */function S(e){return null!=e}
-/**
- * @author [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
  * @module sources/cores/strings/isString
  * @desc Export function to validate if a value is a string
  * @example
@@ -71,7 +54,24 @@ const m={null:null,undefined:void 0,void:void 0},x={true:!0,false:!1},v={negativ
  *     //...
  * }
  *
- */function M(e){return!function(e){return"string"==typeof e||e instanceof String}(e)}
+ */function S(e){return!function(e){return"string"==typeof e||e instanceof String}(e)}
+/**
+ * @author [Tristan Valcke]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ *
+ * @module sources/cores/voids/isDefined
+ * @desc Export function to validate if a value is a defined or not
+ * @example
+ *
+ * import { isDefined } from 'itee-validators'
+ *
+ * if( isDefined( value ) ) {
+ *     //...
+ * } else {
+ *     //...
+ * }
+ *
+ */function M(e){return null!=e}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -91,7 +91,7 @@ const m={null:null,undefined:void 0,void:void 0},x={true:!0,false:!1},v={negativ
  *     //...
  * }
  *
- */function F(e){if(M(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const r=t.statSync(e,{throwIfNoEntry:!1});return S(r)&&r.isDirectory()}
+ */function F(e){if(S(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const r=t.statSync(e,{throwIfNoEntry:!1});return M(r)&&r.isDirectory()}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
@@ -111,7 +111,7 @@ const m={null:null,undefined:void 0,void:void 0},x={true:!0,false:!1},v={negativ
  *     //...
  * }
  *
- */function T(e){if(M(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const r=t.statSync(e,{throwIfNoEntry:!1});return S(r)&&r.isFile()}
+ */function T(e){if(S(e)&&!(e instanceof Buffer)&&!(e instanceof URL))return!1;const r=t.statSync(e,{throwIfNoEntry:!1});return M(r)&&r.isFile()}
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
