@@ -1,3 +1,5 @@
+# [v6.0.6](https://github.com/Itee/utils/compare/v6.0.5...v6.0.6) (2026-01-23)
+
 # [v6.0.5](https://github.com/Itee/utils/compare/v6.0.4...v6.0.5) (2026-01-23)
 
 # [v6.0.4](https://github.com/Itee/utils/compare/v6.0.3...v6.0.4) (2026-01-23)
