@@ -9,7 +9,7 @@
 import {
     isArray,
     isObject
-} from 'itee-validators'
+} from '@itee/validators'
 
 /**
  *

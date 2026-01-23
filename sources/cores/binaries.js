@@ -10,7 +10,7 @@ import {
     isNotDefined,
     isNotString,
     isNull
-} from 'itee-validators'
+} from '@itee/validators'
 
 export function byteToBits( byte ) {
 

@@ -7,7 +7,7 @@
 import {
     isNotDefined,
     isNotObject
-} from 'itee-validators'
+} from '@itee/validators'
 
 export const PI   = Math.PI
 export const PI_2 = Math.PI / 2
