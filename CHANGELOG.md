@@ -1,3 +1,8 @@
+# [v7.0.1](https://github.com/Itee/utils/compare/v7.0.0...v7.0.1) (2026-01-23)
+
+## 🐛 Bug Fixes
+- [`776c499`](https://github.com/Itee/utils/commit/776c499)  (package) apply package override to fix trust publishing
+
 # [v7.0.0](https://github.com/Itee/utils/compare/v6.0.6...v7.0.0) (2026-01-23)
 
 ## 💥 Breaking Changes
