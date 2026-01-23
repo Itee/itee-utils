@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/file-system/files.js</title>
+	<title>Itee Utils v6.0.3 Source: geomathics/trigonometries.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/file-system/files.js</h1>
+		<h1 class="page-title">Source: geomathics/trigonometries.js</h1>
     
 <section>
     <article>
@@ -81,261 +81,267 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/file-system/files
- * @description This is the files main export entry point.
- * It exposes all exports of the files validators.
- *
+ * @module sources/geomathics/trigonometries
  */
-
 import {
-    existsSync,
-    readdirSync,
-    readFileSync,
-    statSync
-}                          from 'fs'
-import { isArray }         from 'itee-validators'
-import { isDirectoryPath } from 'itee-validators/sources/file-system/directories/isDirectoryPath.js'
-import { isFilePath }      from 'itee-validators/sources/file-system/files/isFilePath.js'
-import { isInvalidPath }   from 'itee-validators/sources/file-system/paths/isValidPath.js'
-import path                from 'path'
+    isNotDefined,
+    isNotObject
+} from 'itee-validators'
 
-// import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
+export const PI   = Math.PI
+export const PI_2 = Math.PI / 2
+export const PI_4 = Math.PI / 4
 
-function getPathsUnder( directoryPath ) {
-    return readdirSync( directoryPath )
+export const DEG_TO_RAD = ( PI / 180 )
+export const RAD_TO_DEG = ( 180 / PI )
+
+/**
+ *
+ * @param {number} degrees
+ * @return {number}
+ */
+export function degreesToRadians( degrees ) {
+    return degrees * DEG_TO_RAD
 }
 
 /**
- * Allow to search all files under filePaths in a recursive way
  *
- * @param {Array.&lt;string>|string} paths - The files paths where search files
- * @returns {Array} - The paths of found files
+ * @param {number} radians
+ * @return {number}
  */
-function getFilesPathsUnder( paths ) {
-
-    const _paths = ( isArray( paths ) ) ? paths : [ paths ]
-    let files    = []
-
-    for ( let pathIndex = 0, numberOfPaths = _paths.length ; pathIndex &lt; numberOfPaths ; pathIndex++ ) {
-
-        const localPath = _paths[ pathIndex ]
-
-        if ( isInvalidPath( localPath ) ) {
-
-            throw new Error( `The path "${ localPath }" is not valid !` )
-
-        } else if ( isFilePath( localPath ) ) {
-
-            files.push( localPath )
-
-        } else if ( isDirectoryPath( localPath ) ) {
-
-            const subPaths      = getPathsUnder( localPath )
-            const subFilesPaths = subPaths.map( ( subPath ) => { return getFilesPathsUnder( path.resolve( localPath, subPath ) ) } )
-            if ( subFilesPaths ) {
-                files = [].concat( ...subFilesPaths )
-            }
-
-        } else {
-
-            // Ignoring block device, character device, symbolic link, fifo, and socket
-
-        }
-
-    }
-
-    return files
-
+export function degreesFromRadians( radians ) {
+    return radians * RAD_TO_DEG
 }
 
 /**
- * Return all the files paths under filePaths in a recursive way.
  *
- * @param {string} filePaths - An array of string, representing the base path where looking for get all files paths
- * @return {Array.&lt;string>} - An array of files paths
- * @private
+ * @param {number} radians
+ * @return {number}
  */
-function getFilesPathsUnder_1( filePaths ) {
-
-    let files = []
-
-    if ( Array.isArray( filePaths ) ) {
-
-        let filePath = undefined
-        for ( let pathIndex = 0, numberOfPaths = filePaths.length ; pathIndex &lt; numberOfPaths ; pathIndex++ ) {
-
-            filePath = filePaths[ pathIndex ]
-            checkStateOf( filePath )
-
-        }
-
-    } else {
-
-        checkStateOf( filePaths )
-
-    }
-
-    return files
-
-    function getFilesPathsUnderFolder( folder ) {
-
-        readdirSync( folder ).forEach( ( name ) => {
-
-            const filePath = path.resolve( folder, name )
-            checkStateOf( filePath )
-
-        } )
-
-    }
-
-    function checkStateOf( filePath ) {
-
-        if ( !fileExistForPath( filePath ) ) {
-            console.error( 'ES6Converter: Invalid file path "' + filePath + '"' )
-            return
-        }
-
-        const stats = statSync( filePath )
-        if ( stats.isFile() ) {
-
-            files.push( filePath )
-
-        } else if ( stats.isDirectory() ) {
-
-            Array.prototype.push.apply( files, getFilesPathsUnderFolder( filePath ) )
-
-        } else {
-
-            console.error( 'Invalid stat object !' )
-
-        }
-
-    }
-
-}
-
-function fileExistForPath( filePath ) {
-
-    return existsSync( filePath )
-
-}
-
-function getFileForPath( filePath ) {
-
-    // In case files doesn't exist
-    if ( !fileExistForPath( filePath ) ) {
-        throw new Error( `Invalid file path "${ filePath }" file does not exist !` )
-    }
-
-    return readFileSync( filePath, 'utf8' )
-
-}
-
-function getUncommentedFileForPath( filePath ) {
-
-    return getFileForPath( filePath ).replace( /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/g, '$1' )
-
+export function radiansToDegrees( radians ) {
+    return radians * RAD_TO_DEG
 }
 
 /**
- * Will create an array without the strings in filePaths that are matched in excludes paths
  *
- * @param {Array.&lt;string>} filePaths - An array of string to clean
- * @param {Array.&lt;string>} excludes - The paths to remove
- * @return {Array.&lt;string>} The cleaned filePaths of excludes paths
- * @private
+ * @param {number} degrees
+ * @return {number}
  */
-function excludesFilesPaths( filePaths, excludes ) {
+export function radiansFromDegrees( degrees ) {
+    return degrees * DEG_TO_RAD
+}
 
-    let filteredFilesPath = []
+// PROJECTION 2D/3D
+/**
+ *
+ * @param {Vector} vector
+ * @return {number}
+ */
+export function getYaw( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
-    let filePath = undefined
-    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex &lt; numberOfFilePaths ; filePathIndex++ ) {
-        filePath = filePaths[ filePathIndex ]
-
-        if ( isExclude( filePath ) ) {
-            continue
-        }
-
-        filteredFilesPath.push( filePath )
-
-    }
-
-    return filteredFilesPath
-
-    function isExclude( path ) {
-
-        let isExclude      = false
-        let excludePattern = undefined
-        for ( let i = 0, pathLength = excludes.length ; i &lt; pathLength ; i++ ) {
-
-            excludePattern = excludes[ i ]
-
-            // In case this is a file name it must fully match
-            if ( excludePattern.indexOf( '.' ) > -1 ) {
-
-                const fileName = path.replace( /^.*(\\|\/|\\:)/, '' )
-                if ( fileName === excludePattern ) {
-                    isExclude = true
-                }
-
-            } else if ( path.contains( excludePattern ) ) {
-                isExclude = true
-            }
-
-        }
-
-        return isExclude
-
-    }
-
+    return -Math.atan2( vector.x, vector.z )
 }
 
 /**
- * Will filter file paths a keep only js files
  *
- * @param {Array.&lt;string>} filePaths - An array of path to filter
- * @param {function} filter - An optional filter to apply instead of internal filter
- * @return {Array.&lt;string>} The filtered path with only javascript files
- * @private
+ * @param {Vector} vector
+ * @return {number}
  */
-function filterJavascriptFiles( filePaths, filter ) {
+export function getPitch( vector ) {
+    if ( isNotDefined( vector ) ) { return }
+    if ( isNotObject( vector ) ) { return }
 
-    let filteredFilesPath = []
+    return Math.asin( vector.y )
+}
 
-    let filePath = undefined
-    for ( let filePathIndex = 0, numberOfFilePaths = filePaths.length ; filePathIndex &lt; numberOfFilePaths ; filePathIndex++ ) {
+/**
+ *
+ * @param {Vector} vectorDir
+ * @return {{yaw: number, pitch: number}}
+ */
+export function convertWebGLRotationToTopogicalYawPitch( vectorDir ) {
+    if ( isNotDefined( vectorDir ) ) { return }
+    if ( isNotObject( vectorDir ) ) { return }
 
-        filePath = filePaths[ filePathIndex ]
-
-        // Not a js file like fonts or shaders
-        if ( filter &amp;&amp; !filter( filePath ) ) {
-            continue
-        } else {
-            const fileExtension = path.extname( filePath )
-            if ( filePath.indexOf( 'glsl' ) > -1 || fileExtension !== '.js' ) {
-                continue
-            }
-        }
-
-        filteredFilesPath.push( filePath )
-
+    function getYaw( vector ) {
+        return Math.atan2( vector.y, vector.x )
     }
 
-    return filteredFilesPath
+    function getPitch( vector ) {
+        return Math.asin( vector.z )
+    }
+
+    const topoVectorDir = vectorDir //convertWebglVectorToTopologicVector( vectorDir )
+
+    return {
+        yaw:   -( radiansToDegrees( getYaw( topoVectorDir ) ) - 90 ),
+        pitch: radiansToDegrees( getPitch( topoVectorDir ) )
+    }
 
 }
 
-export {
-    getPathsUnder,
-    getFilesPathsUnder,
-    getFilesPathsUnder_1,
-    fileExistForPath,
-    getFileForPath,
-    getUncommentedFileForPath,
-    excludesFilesPaths,
-    filterJavascriptFiles
-}
+///**
+// * TRIGONOMETRIC CIRCLE CONCEPT WITH INTEGRATED TIMER
+// *
+// * Provide position on any given referential (starting position)
+// * this position is updated every tick on a trigonometric circle of rayon (radius)
+// * and give new position in px about this point in current referential.
+// *
+// * @param settings
+// * @constructor
+// */
+//function TTrigonometricCircle ( settings ) {
+//
+//    var _ = this;
+//
+//    _.options = $.extend( {}, TTrigonometricCircle.DEFAULT_SETTINGS, settings );
+//
+//}
+//
+//Object.assign( TTrigonometricCircle, {
+//
+//    /**
+//     *
+//     */
+//    DEFAULT_SETTINGS: {
+//        angle:       0,
+//        radius:      10
+//    }
+//
+//} )
+//
+//Object.assign( TTrigonometricCircle.prototype, {
+//
+//    /**
+//     *
+//     * @param increment
+//     */
+//    increment ( increment ) {
+//        var _   = this;
+//        _.angle = (increment ? _.angle + increment : _.angle + 1);
+//        if ( _.angle >= 360 ) {
+//            _.angle = 0;
+//        }
+//    },
+//
+//    /**
+//     *
+//     */
+//    getRadius () {
+//        var _ = this;
+//        return _.radius;
+//    },
+//
+//    /**
+//     *
+//     * @return {number}
+//     */
+//    getCosinus () {
+//        var _ = this;
+//        return Math.cos( degreesToRadians( _.angle ) ) * _.radius;
+//    },
+//
+//    /**
+//     *
+//     * @return {number}
+//     */
+//    getSinus () {
+//        var _ = this;
+//        return Math.sin( degreesToRadians( _.angle ) ) * _.radius;
+//    }
+//
+//} )
+//
+///////////
+//
+///**
+// *
+// * @param settings
+// * @constructor
+// */
+//function TTrigonometricCone ( settings ) {
+//
+//    var _ = this;
+//
+//    _.model = $.extend( {}, TTrigonometricCone.DEFAULT_SETTINGS, settings );
+//}
+//
+//Object.assign( TTrigonometricCone, {
+//
+//    /**
+//     *
+//     */
+//    DEFAULT_SETTINGS: {
+//        angle:       0,
+//        height:      10,
+//        radius:      10
+//    }
+//
+//} )
+//
+//Object.assign( TTrigonometricCone.prototype, {
+//
+//    /**
+//     *
+//     * @param increment
+//     */
+//    increment ( increment ) {
+//        var _         = this;
+//        _.model.angle = (increment ? _.model.angle + increment : _.model.angle + 1);
+//        if ( _.model.angle >= 360 ) {
+//            _.model.angle = 0;
+//        }
+//    },
+//
+//    /**
+//     *
+//     */
+//    getRadius () {
+//        var _ = this;
+//        return _.model.radius;
+//    },
+//
+//    /**
+//     *
+//     * @return {number}
+//     */
+//    getCosinus () {
+//        var _ = this;
+//        return Math.cos( degreesToRadians( _.model.angle ) ) * _.model.radius;
+//    },
+//
+//    /**
+//     *
+//     * @return {number}
+//     */
+//    getSinus () {
+//        var _ = this;
+//        return Math.sin( degreesToRadians( _.model.angle ) ) * _.model.radius;
+//    },
+//
+//    /**
+//     *
+//     * @param height
+//     * @return {number}
+//     */
+//    getCosinusForHeight ( height ) {
+//        var _ = this;
+//        return Math.cos( degreesToRadians( _.model.angle ) ) * ((_.model.radius / _.model.height) * Math.abs( height ) );
+//    },
+//
+//    /**
+//     *
+//     * @param height
+//     * @return {number}
+//     */
+//    getSinusForHeight ( height ) {
+//        var _ = this;
+//        return Math.sin( degreesToRadians( _.model.angle ) ) * ((_.model.radius / _.model.height) * Math.abs( height ));
+//    }
+//
+//} )
 </pre>
     </article>
 </section>
@@ -375,7 +381,7 @@ export {
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">

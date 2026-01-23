@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/itee-utils.js</title>
+	<title>Itee Utils v6.0.3 Source: cores/arrays.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/itee-utils.js</h1>
+		<h1 class="page-title">Source: cores/arrays.js</h1>
     
 <section>
     <article>
@@ -81,18 +81,97 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/itee-util
- * @description The main entry point for Itee-Utils, it contains all exports of the library
+ * @module sources/cores/arrays
+ * @description Export the utilities methods about Arrays
+ *
  */
+import {
+    isArray,
+    isObject
+} from 'itee-validators'
 
-export * from './cores/_cores.js'
-export * from './geomathics/_geomathics.js'
-export * from './physics/_physics.js'
-export * from './testings/_testings.js'
+/**
+ *
+ * @param {string} propertyName
+ * @param {ordering} ascending
+ * @returns {Function}
+ */
+export function sortBy( propertyName, ascending = 'asc' ) {
 
-// #if IS_BACKEND_SPECIFIC
-export * from './file-system/_file-system.js'
-// #endif
+    const _propertyName = propertyName
+    let resultSorter    = undefined
+
+    if ( ascending === 'asc' ) {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[ _propertyName ] &lt; b[ _propertyName ] ) {
+                return -1
+            }
+
+            if ( a[ _propertyName ] > b[ _propertyName ] ) {
+                return 1
+            }
+
+            return 0
+
+        }
+
+    } else if ( ascending === 'desc' ) {
+
+        resultSorter = ( a, b ) => {
+
+            if ( a[ _propertyName ] > b[ _propertyName ] ) {
+                return -1
+            }
+
+            if ( a[ _propertyName ] &lt; b[ _propertyName ] ) {
+                return 1
+            }
+
+            return 0
+
+        }
+
+    } else {
+
+        throw RangeError( `Got invalid ascending [${ ascending }], but expect one of ['asc','desc']!` )
+
+    }
+
+    return resultSorter
+
+}
+
+/**
+ * Will wrap the object value in an array, if is not already one, and return empty array in case
+ * where input object is null or undefined.
+ * This function is build to ensure the return value will be always an array
+ *
+ * @param {*} object - The target to return as array
+ * @param {object} [options]
+ * @param {boolean} [options.keepArray=false] - If true, will wrap array too instead of returning it
+ * @param {boolean} [options.keepNull=false] - If true, will wrap null or undefined value too instead of returning empty array
+ * @returns {Array.&lt;*>}
+ */
+export function toArray( object, options = {
+    keepArray: false,
+    keepNull:  false
+} ) {
+
+    let array
+
+    if ( isArray( object ) ) {
+        array = ( options.keepArray ) ? [ object ] : object
+    } else if ( options.keepNull || typeof object === 'object' || isObject( object ) ) {
+        array = [ object ]
+    } else {
+        array = []
+    }
+
+    return array
+
+}
 </pre>
     </article>
 </section>
@@ -132,7 +211,7 @@ export * from './file-system/_file-system.js'
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">

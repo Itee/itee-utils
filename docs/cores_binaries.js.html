@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/times/chrono.js</title>
+	<title>Itee Utils v6.0.3 Source: cores/binaries.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/times/chrono.js</h1>
+		<h1 class="page-title">Source: cores/binaries.js</h1>
     
 <section>
     <article>
@@ -81,72 +81,97 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @file Todo
- *
- * @example Todo
  *
  */
 
+import {
+    isArrayOfUndefined,
+    isNotDefined,
+    isNotString,
+    isNull
+} from 'itee-validators'
 
-class Chrono {
+export function byteToBits( byte ) {
 
-    constructor() {
+    let bits = ''
 
-        this._cache = {}
+    for ( let i = 128 ; i >= 1 ; i /= 2 ) {
 
-    }
-
-    start( key ) {
-
-        this._cache[ key ] = {
-            start: 0,
-            stop:  0
+        if ( byte &amp; i ) {
+            bits += '1'
+        } else {
+            bits += '0'
         }
 
-        this._cache[ key ].start = this._getTimeStamp()
-
     }
 
-    stop( key ) {
-
-        this._cache[ key ].stop = this._getTimeStamp()
-
-    }
-
-    getDurationOf( key ) {
-
-        return this._getDurationInSecond( this._cache[ key ].start, this._cache[ key ].stop )
-
-    }
-
-    getResults() {
-
-        let results = ''
-
-        for ( let [ key, times ] of Object.entries( this._cache ) ) {
-
-            results += `${ key }: ${ times.stop - times.start }ms\n`
-
-        }
-
-        return results
-
-    }
-
-    _getTimeStamp() {
-
-        return window.performance &amp;&amp;
-               window.performance.now &amp;&amp;
-               window.performance.timing &amp;&amp;
-               window.performance.timing.navigationStart ?
-               window.performance.now() + window.performance.timing.navigationStart :
-               Date.now()
-
-    }
+    return bits
 
 }
 
-export { Chrono }
+export function bitsToByte( bits ) {
+    if ( isNotString( bits ) ) { return }
+
+    let byte = 0
+
+    for ( let i = 7, e = 0 ; i >= 0 ; i--, e++ ) {
+
+        if ( bits[ i ] === '1' ) {
+            byte += 2 ** e
+        } else {
+            byte &lt;&lt; 2
+        }
+
+    }
+
+    return byte
+
+}
+
+/**
+ *
+ * @param {number} number - The number to convert in this internal representation
+ * @returns {string}
+ */
+export function numberToInternalRepresentation( number ) {
+
+    //    let buffer  = new Float64Array( [ number ] ).buffer
+    let bufferA = new ArrayBuffer( 8 )
+    let view    = new DataView( bufferA )
+    view.setFloat64( 0, number )
+
+    let internalRepresentation = ''
+    for ( let i = 0 ; i &lt; 8 ; i++ ) {
+        internalRepresentation += byteToBits( view.getUint8( i ) )
+    }
+    internalRepresentation = `${ internalRepresentation.substring( 0, 1 ) } ${ internalRepresentation.substring( 1, 12 ) } ${ internalRepresentation.substring( 12 ) }`
+
+    return internalRepresentation
+
+}
+
+export function internalRepresentationToNumber( string ) {
+
+    if ( isNotDefined( string ) ) { return }
+    if ( isNotString( string ) ) { return }
+    //    if ( isNotDefined( string ) ) { throw ReferenceError( 'string cannot be null or empty !' )}
+
+    const cleanString = string.replace( / /g, '' )
+    const matchs      = cleanString.match( /.{8}/g ) // multiple of eight
+    if ( isNull( matchs ) ) { return }
+
+    const bytes = matchs.map( subString => bitsToByte( subString ) )
+    if ( isArrayOfUndefined( bytes ) ) { return }
+
+    let arrayBuffer = new ArrayBuffer( 8 )
+    let dataView    = new DataView( arrayBuffer )
+    for ( let i = 0 ; i &lt; 8 ; i++ ) {
+        dataView.setUint8( i, bytes[ i ] )
+    }
+
+    return dataView.getFloat64( 0 )
+
+}
 </pre>
     </article>
 </section>
@@ -186,7 +211,7 @@ export { Chrono }
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">

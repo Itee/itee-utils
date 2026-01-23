@@ -1,10 +1,13 @@
 import { expect }       from 'chai'
-import { Testing }      from 'itee-utils/sources/testings/benchmarks.js'
+import { getTestingPackage } from '../../../node_modules/@itee/tasks/sources/utils/testing.js'
 import * as trigonometriesNamespace from '../../../sources/geomathics/trigonometries.js'
+
+const Testing   = await getTestingPackage()
 
 describe( 'trigonometriesUnits', function () {
 
 	let _dataMap
+
 	before( function() {
 		_dataMap = Testing.createDataMap()
 	} )

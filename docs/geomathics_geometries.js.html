@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/cores/booleans.js</title>
+	<title>Itee Utils v6.0.3 Source: geomathics/geometries.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/cores/booleans.js</h1>
+		<h1 class="page-title">Source: geomathics/geometries.js</h1>
     
 <section>
     <article>
@@ -81,10 +81,125 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/cores/booleans
- * @description Export the utilities methods about booleans
+ * @see [IFC Standard]{@link http://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/}
  *
  */
+
+import { isNotArray } from 'itee-validators'
+
+/**
+ *
+ * @param {array.&lt;number>} ring
+ * @return {boolean}
+ */
+export function ringClockwise( ring ) {
+    if ( isNotArray( ring ) ) { return false }
+
+    let numberOfRingElements = ring.length
+    if ( numberOfRingElements &lt; 4 ) {
+        return false
+    }
+
+    let ringIndex = 0
+    let area      = ring[ numberOfRingElements - 1 ][ 1 ] * ring[ 0 ][ 0 ] - ring[ numberOfRingElements - 1 ][ 0 ] * ring[ 0 ][ 1 ]
+    while ( ++ringIndex &lt; numberOfRingElements ) {
+        area += ring[ ringIndex - 1 ][ 1 ] * ring[ ringIndex ][ 0 ] - ring[ ringIndex - 1 ][ 0 ] * ring[ ringIndex ][ 1 ]
+    }
+    return area >= 0
+}
+
+/**
+ *
+ * @param {array.&lt;number>} ring
+ * @param {array.&lt;number>} hole
+ * @return {boolean}
+ */
+export function ringContainsSome( ring, hole ) {
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( hole ) ) { return false }
+
+    let i = 0
+    let n = hole.length
+
+    do {
+
+        if ( ringContains( ring, hole[ i ] ) > 0 ) {
+            return true
+        }
+
+    } while ( ++i &lt; n )
+
+    return false
+
+}
+
+/**
+ *
+ * @param {array.&lt;number>} ring
+ * @param {array.&lt;number>} point
+ * @return {number}
+ */
+export function ringContains( ring, point ) {
+    if ( isNotArray( ring ) ) { return false }
+    if ( isNotArray( point ) ) { return false }
+
+    let x        = point[ 0 ]
+    let y        = point[ 1 ]
+    let contains = -1
+
+    for ( let i = 0, n = ring.length, j = n - 1 ; i &lt; n ; j = i++ ) {
+
+        const pi = ring[ i ]
+        const xi = pi[ 0 ]
+        const yi = pi[ 1 ]
+        const pj = ring[ j ]
+        const xj = pj[ 0 ]
+        const yj = pj[ 1 ]
+
+        if ( segmentContains( pi, pj, point ) ) {
+            contains = 0
+        } else if ( ( ( yi > y ) !== ( yj > y ) ) &amp;&amp; ( ( x &lt; ( xj - xi ) * ( y - yi ) / ( yj - yi ) + xi ) ) ) {
+            contains = -contains
+        }
+
+    }
+
+    return contains
+
+}
+
+/**
+ *
+ * @param {array.&lt;number>} p0
+ * @param {array.&lt;number>} p1
+ * @param {array.&lt;number>} p2
+ * @return {boolean}
+ */
+export function segmentContains( p0, p1, p2 ) {
+    if ( isNotArray( p0 ) ) { return false }
+    if ( isNotArray( p1 ) ) { return false }
+    if ( isNotArray( p2 ) ) { return false }
+
+    const x20 = p2[ 0 ] - p0[ 0 ]
+    const y20 = p2[ 1 ] - p0[ 1 ]
+    if ( x20 === 0 &amp;&amp; y20 === 0 ) {
+        return true
+    }
+
+    const x10 = p1[ 0 ] - p0[ 0 ]
+    const y10 = p1[ 1 ] - p0[ 1 ]
+    if ( x10 === 0 &amp;&amp; y10 === 0 ) {
+        return false
+    }
+
+    const t = ( ( x20 * x10 ) + ( y20 * y10 ) ) / ( ( x10 * x10 ) + ( y10 * y10 ) )
+
+    return t &lt; 0 || t > 1
+           ? false
+           : t === 0 || t === 1
+             ? true
+             : t * x10 === x20 &amp;&amp; t * y10 === y20
+}
 </pre>
     </article>
 </section>
@@ -124,7 +239,7 @@
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">

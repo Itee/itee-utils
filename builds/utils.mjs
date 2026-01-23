@@ -4,12 +4,12 @@
  * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
  *                                               
  * @desc    A library of utility functions use in various Itee projects
- * @author  [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ * @author  [Itee (Tristan Valcke)]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses}
  * 
  */
-import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isNotArray, isUndefined, isNotObject, isDefined as isDefined$1, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
-import { statSync, existsSync, readdirSync, readFileSync } from 'fs';
+import { isArray, isObject, isNotString as isNotString$1, isNotDefined, isNull, isArrayOfUndefined, isUndefined, isNotObject, isDefined as isDefined$1, isNotArray, isEmptyString, isNotTemperature, isNotEmpty, isNumber } from 'itee-validators';
+import { statSync, existsSync, readFileSync, readdirSync } from 'fs';
 import path from 'path';
 
 /**
@@ -2446,4 +2446,4 @@ function filterJavascriptFiles( filePaths, filter ) {
 }
 
 export { DEG_TO_RAD, FAHRENHEIT_CELSIUS_COEFFICIENT, FAHRENHEIT_CELSIUS_CONSTANTE, KELVIN_CELSIUS_CONSTANTE, PI, PI_2, PI_4, RAD_TO_DEG, Testing, arrays, bitsToByte, booleans, byteToBits, celsiusToFahrenheit, celsiusToKelvin, classNameify, convertWebGLRotationToTopogicalYawPitch, createInterval, degreesFromRadians, degreesToRadians, excludesFilesPaths, extend, extendObject, fahrenheitToCelsius, fahrenheitToKelvin, fileExistForPath, filterJavascriptFiles, functions, getFileForPath, getFilesPathsUnder, getFilesPathsUnder_1, getPathsUnder, getPitch, getRandom, getRandomFloatExclusive, getRandomFloatInclusive, getRandomIntExclusive, getRandomIntInclusive, getUncommentedFileForPath, getYaw, internalRepresentationToNumber, kelvinToCelsius, kelvinToFahrenheit, numberToInternalRepresentation, numberToPlainString, numbers, objects, radiansFromDegrees, radiansToDegrees, removeDiacritics, ringClockwise, ringContains, ringContainsSome, segmentContains, serializeObject, sortBy, strings, toArray, toEnum, typedArrays, uniq, voids };
-//# sourceMappingURL=itee-utils.mjs.map
+//# sourceMappingURL=utils.mjs.map

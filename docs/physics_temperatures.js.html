@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/testings/_testings.js</title>
+	<title>Itee Utils v6.0.3 Source: physics/temperatures.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/testings/_testings.js</h1>
+		<h1 class="page-title">Source: physics/temperatures.js</h1>
     
 <section>
     <article>
@@ -81,12 +81,140 @@
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
  *
- * @module sources/testing
- *
+ * @module sources/physics/temperatures
+ * @description Export the utilities methods about temperatures
+ * @requires {@link module:sources/cores/numbers}
  */
 
-export * from './primitives.js'
-export * from './benchmarks.js'
+import {
+    isNotEmpty,
+    isNotTemperature,
+    isNumber
+} from 'itee-validators'
+
+export const FAHRENHEIT_CELSIUS_COEFFICIENT = 1.8
+export const FAHRENHEIT_CELSIUS_CONSTANTE   = 32.0
+export const KELVIN_CELSIUS_CONSTANTE       = 273.14999999955
+
+/**
+ *
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function celsiusToKelvin( celsius, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( celsius + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ *
+ * @param {number} celsius
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function celsiusToFahrenheit( celsius, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( celsius ) ) { return }
+//    if ( isNotTemperature( celsius ) ) { throw new Error( 'Require first operand as an temperature in celsius !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( celsius * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ *
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function fahrenheitToCelsius( fahrenheit, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ *
+ * @param {number} fahrenheit
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function fahrenheitToKelvin( fahrenheit, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( fahrenheit ) ) { return }
+//    if ( isNotTemperature( fahrenheit ) ) { throw new Error( 'Require first operand as an temperature in fahrenheit !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( ( ( fahrenheit - FAHRENHEIT_CELSIUS_CONSTANTE ) / FAHRENHEIT_CELSIUS_COEFFICIENT ) + KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ *
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function kelvinToCelsius( kelvin, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( kelvin - KELVIN_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
+
+/**
+ *
+ * @param {number} kelvin
+ * @param {integer} precisionPointAt
+ * @return {string}
+ */
+export function kelvinToFahrenheit( kelvin, precisionPointAt ) {
+
+    //Check if required parameter is valid
+    if ( isNotTemperature( kelvin ) ) { return }
+//    if ( isNotTemperature( kelvin ) ) { throw new Error( 'Require first operand as an temperature in kelvin !' ) }
+
+    //Check optional parameter precisionPointAt and set it to 2 by default
+    const _precisionPointAt = ( isNotEmpty( precisionPointAt ) &amp;&amp; isNumber( precisionPointAt ) ? precisionPointAt : 2 )
+
+    // Sets the decimal point for the temperature conversion equation
+    return ( ( kelvin - KELVIN_CELSIUS_CONSTANTE ) * FAHRENHEIT_CELSIUS_COEFFICIENT + FAHRENHEIT_CELSIUS_CONSTANTE ).toFixed( _precisionPointAt )
+
+}
 </pre>
     </article>
 </section>
@@ -126,7 +254,7 @@ export * from './benchmarks.js'
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">

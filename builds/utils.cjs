@@ -4,8 +4,8 @@
  * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┗┛┛┗┗┛┗┗┗┛┛┗┗┛┛
  *                                                 
  * @desc    A library of utility functions use in various Itee projects
- * @author  [Tristan Valcke]{@link https://github.com/Itee}
- * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
+ * @author  [Itee (Tristan Valcke)]{@link https://github.com/Itee}
+ * @license [BSD-3-Clause]{@link https://opensource.org/licenses}
  * 
  */
 'use strict';
@@ -2511,4 +2511,4 @@ exports.toEnum = toEnum;
 exports.typedArrays = typedArrays;
 exports.uniq = uniq;
 exports.voids = voids;
-//# sourceMappingURL=itee-utils.cjs.map
+//# sourceMappingURL=utils.cjs.map

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Itee-Utils Source: sources/cores/symbols.js</title>
+	<title>Itee Utils v6.0.3 Source: testings/primitives.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -20,7 +20,7 @@
 <div class="navbar navbar-default navbar-fixed-top ">
 <div class="container">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Itee-Utils</a>
+		<a class="navbar-brand" href="index.html">Itee Utils v6.0.3</a>
 		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -72,7 +72,7 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: sources/cores/symbols.js</h1>
+		<h1 class="page-title">Source: testings/primitives.js</h1>
     
 <section>
     <article>
@@ -80,11 +80,148 @@
             class="sunlight-highlight-javascript linenums">/**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
  * @license [BSD-3-Clause]{@link https://opensource.org/licenses/BSD-3-Clause}
- *
- * @module sources/cores/symbols
- * @description Export the utilities methods about symbols
  */
 
+const voids = {
+    null:      null,
+    undefined: undefined,
+    void:      void ( 0 )
+}
+
+const booleans = {
+    true:  true,
+    false: false
+}
+
+const numbers = {
+    negativeInfinity:        Number.NEGATIVE_INFINITY,
+    negativeMaxValue:        -Number.MAX_VALUE,
+    negativeMinSafeInteger:  Number.MIN_SAFE_INTEGER,
+    negativeMinValue:        -Number.MIN_VALUE,
+    negativeHexa:            -0x123456,
+    negativePow:             -2e+2,
+    negativePowWithDecimals: -1.2345e+2,
+    negativeFloat:           -1.01,
+    negativeInt:             -1,
+    negativeZero:            -0,
+    negativeNan:             -Number.NaN,
+    positiveNan:             Number.NaN,
+    positiveZero:            0,
+    positiveInt:             1,
+    positiveFloat:           1.01,
+    positivePowWithDecimals: 1.2345e+2,
+    positivePow:             2e+2,
+    positiveHexa:            0x123456,
+    epsilon:                 Number.EPSILON,
+    positiveMinValue:        Number.MIN_VALUE,
+    positiveMaxSafeInteger:  Number.MAX_SAFE_INTEGER,
+    positiveMaxValue:        Number.MAX_VALUE,
+    positiveInfinity:        Number.POSITIVE_INFINITY,
+    // others
+    e:                       Math.E,
+    ln10:                    Math.LN10,
+    ln2:                     Math.LN2,
+    log10e:                  Math.LOG10E,
+    log2e:                   Math.LOG2E,
+    pi:                      Math.PI,
+    sqrt1_2:                 Math.SQRT1_2,
+    sqrt2:                   Math.SQRT2
+}
+
+const strings = /*#__PURE__*/( () => {
+
+    const dataMap = {
+        empty:       '',
+        blank:       '      ',
+        stringNull:  String(),
+        stringEmpty: String( '' ),
+        stringBlank: String( '    ' ),
+        foobar:      'foobar',
+        stringHexa:  '#123456',
+        stringOcta:  '00101010'
+    }
+
+    // Convert voids to string
+    const voidDataMap = voids
+    for ( let i = 0, m = voidDataMap.length ; i &lt; m ; i++ ) {
+        dataMap[ voidDataMap[ i ] ] = `${ voidDataMap[ i ] }`
+    }
+
+    // Convert booleans to string
+    const booleanDataMap = booleans
+    for ( let j = 0, n = booleanDataMap.length ; j &lt; n ; j++ ) {
+        dataMap[ booleanDataMap[ j ] ] = `${ booleanDataMap[ j ] }`
+    }
+
+    // Convert numbers to string
+    const numericDataMap = numbers
+    for ( let k = 0, o = numericDataMap.length ; k &lt; o ; k++ ) {
+        dataMap[ numericDataMap[ k ] ] = `${ numericDataMap[ k ] }`
+    }
+
+    return dataMap
+
+} )()
+
+const functions = {
+    anonymousFunction: function () {},
+    namedFunction:     function namedFunction() {},
+    arrowFunction:     () => {}
+}
+
+const arrays = {
+    emptyArray:       [],
+    emptyArrayObject: /*#__PURE__*/new Array(),
+    singleValued:     [ 0 ],
+    multiValued:      [ 0, 1, 2 ],
+    null:             [ null, null, null ],
+    undefined:        [ undefined, undefined, undefined ],
+    void:             [ void ( 0 ), void ( 0 ), void ( 0 ) ],
+    voids:            /*#__PURE__*/Object.values( voids ),
+    booleans:         /*#__PURE__*/Object.values( booleans ),
+    numbers:          /*#__PURE__*/Object.values( numbers ),
+    strings:          /*#__PURE__*/Object.values( strings ),
+    functions:        /*#__PURE__*/Object.values( functions ),
+    objects:          [
+        {
+            foo: 'bar'
+        },
+        {
+            baz: 'qux'
+        }
+    ],
+    arrays: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ] ]
+}
+
+const typedArrays = {
+    int8Array:    new Int8Array( [ 1, 2, 3 ] ),
+    uInt8Array:   new Uint8Array( [ 1, 2, 3 ] ),
+    int16Array:   new Int16Array( [ 1, 2, 3 ] ),
+    uInt16Array:  new Uint16Array( [ 1, 2, 3 ] ),
+    int32Array:   new Int32Array( [ 1, 2, 3 ] ),
+    uInt32Array:  new Uint32Array( [ 1, 2, 3 ] ),
+    float32Array: new Float32Array( [ 1.0, 2.0, 3.0 ] ),
+    float64Array: new Float64Array( [ 1.0, 2.0, 3.0 ] )
+}
+
+const objects = {
+    empty:     {},
+    instance:  new Object(),
+    null:      { null: null },
+    undefined: { undefined: undefined },
+    foo:       { foo: 'bar' }
+}
+
+export {
+    voids,
+    booleans,
+    numbers,
+    strings,
+    functions,
+    arrays,
+    typedArrays,
+    objects,
+}
 </pre>
     </article>
 </section>
@@ -124,7 +261,7 @@
 
 
 	<span class="copyright">
-	Copyright 2015-Present <a href="https://github.com/Itee">Itee</a> (Tristan Valcke)
+	Copyright 2015-Present <a href="https://github.com/Itee">Itee (Tristan Valcke)</a>
 	</span>
 
 <span class="jsdoc-message">
