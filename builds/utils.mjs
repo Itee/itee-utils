@@ -1,7 +1,7 @@
 /**
  * ┳      ┳┳ •┓     ┏┓ ┏┓ ┏┓      ┏┓ ┳┳┓   ┓  ┓  
- * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫  ┫  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
- * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗┛      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
+ * ┃╋┏┓┏┓ ┃┃╋┓┃┏  ┓┏┣┓ ┃┫ ┃┃  ━━  ┣ ┏┃┃┃┏┓┏┫┓┏┃┏┓
+ * ┻┗┗ ┗ •┗┛┗┗┗┛  ┗┛┗┛•┗┛•┗╋      ┗┛┛┛ ┗┗┛┗┻┗┻┗┗ 
  *                                               
  * @desc    A library of utility functions use in various Itee projects
  * @author  [Itee (Tristan Valcke)]{@link https://github.com/Itee}
@@ -2062,8 +2062,6 @@ function isString( data ) {
 function isNotString( data ) {
     return !isString( data )
 }
-
-// #endif
 
 /**
  * @author [Tristan Valcke]{@link https://github.com/Itee}
