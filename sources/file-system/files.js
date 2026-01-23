@@ -13,12 +13,12 @@ import {
     readdirSync,
     readFileSync,
     statSync
-}                          from 'fs'
+}                          from 'node:fs'
 import { isArray }         from 'itee-validators'
 import { isDirectoryPath } from 'itee-validators/sources/file-system/directories/isDirectoryPath.js'
 import { isFilePath }      from 'itee-validators/sources/file-system/files/isFilePath.js'
 import { isInvalidPath }   from 'itee-validators/sources/file-system/paths/isValidPath.js'
-import path                from 'path'
+import path                from 'node:path'
 
 // import { isArray, isDirectoryPath, isFilePath, isInvalidPath } from 'itee-validators'
 
