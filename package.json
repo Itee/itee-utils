@@ -63,7 +63,7 @@
     "semantic-release": "semantic-release --dry-run --no-ci"
   },
   "dependencies": {
-    "itee-validators": "^5.6.0"
+    "itee-validators": "^6.1.2"
   },
   "devDependencies": {
     "@itee/tasks": "^1.4.4"
