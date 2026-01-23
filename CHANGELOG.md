@@ -1,3 +1,8 @@
+# [v7.0.0](https://github.com/Itee/utils/compare/v6.0.6...v7.0.0) (2026-01-23)
+
+## 💥 Breaking Changes
+- [`18e7f85`](https://github.com/Itee/utils/commit/18e7f85)  (package) change package name itee-utils to scoped version @itee/utils
+
 # [v6.0.6](https://github.com/Itee/utils/compare/v6.0.5...v6.0.6) (2026-01-23)
 
 # [v6.0.5](https://github.com/Itee/utils/compare/v6.0.4...v6.0.5) (2026-01-23)
