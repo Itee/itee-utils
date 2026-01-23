@@ -6,7 +6,7 @@
  *
  */
 
-import { isNotArray } from 'itee-validators'
+import { isNotArray } from '@itee/validators'
 
 /**
  *

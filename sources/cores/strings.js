@@ -10,7 +10,7 @@
 import {
     isEmptyString,
     isNotString
-} from 'itee-validators'
+} from '@itee/validators'
 
 /**
  * Set the first char to upper case like a classname

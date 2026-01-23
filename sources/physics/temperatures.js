@@ -11,7 +11,7 @@ import {
     isNotEmpty,
     isNotTemperature,
     isNumber
-} from 'itee-validators'
+} from '@itee/validators'
 
 export const FAHRENHEIT_CELSIUS_COEFFICIENT = 1.8
 export const FAHRENHEIT_CELSIUS_CONSTANTE   = 32.0

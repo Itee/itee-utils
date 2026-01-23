@@ -13,7 +13,7 @@ import {
     isNotObject,
     isObject,
     isUndefined
-} from 'itee-validators'
+} from '@itee/validators'
 
 /**
  *
